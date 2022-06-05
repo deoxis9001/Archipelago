@@ -119,8 +119,8 @@ class TheBindingOfIsaacRebirthWorld(World):
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         item = TheBindingOfIsaacRebirthItem(name, item_id not in range(78031, 78040) and
-                                            item_id not in range(78772, 78775), item_id, self.player)
-        if item_id in range(78772, 78775):
+                                            item_id not in range(78772, 78776), item_id, self.player)
+        if item_id in range(78772, 78776):
             item.trap = True
         return item
 

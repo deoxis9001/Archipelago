@@ -1185,7 +1185,10 @@ async def game_watcher(ctx: Context):
             if itemOutPtr < len(ctx.items_received):
                 item = ctx.items_received[itemOutPtr]
                 itemId = item.item - items_start_id
-                locationId = (item.location - locations_start_id) if item.location >= 0 and bool(ctx.items_handling & 0b010) else 0x00
+                if bool(ctx.items_handling & 0b010):
+                    locationId = (item.location - locations_start_id) if (item.location >= 0 and item.player == ctx.slot) else 0xFF
+                else:
+                    locationId = 0x00 #backward compat
 
                 playerID = item.player if item.player <= SM_ROM_PLAYER_LIMIT else 0
                 snes_buffered_write(ctx, SM_RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes(
@@ -1297,7 +1300,7 @@ async def main():
             import time
             time.sleep(3)
             sys.exit()
-        elif args.diff_file.endswith((".apbp", "apz3")):
+        elif args.diff_file.endswith((".apbp", ".apz3", ".aplttp")):
             adjustedromfile, adjusted = get_alttp_settings(romfile)
             asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
         else:

@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, Choice
+from Options import Option, DefaultOnToggle, Range, Choice, AssembleOptions, DeathLink
 
 
 class TotalLocations(Range):
@@ -35,6 +35,8 @@ class Goal(Choice):
     option_dogma = 11
     option_beast = 12
     option_mother = 13
+    option_delirium = 14
+    option_required_locations = 15
 
 
 class ItemPickupStep(Range):
@@ -46,10 +48,67 @@ class ItemPickupStep(Range):
     range_end = 5
     default = 1
 
+class AdditonalBossRewards(DefaultOnToggle):
+    """If enabled all goal bosses will reward additional checks.
+    The amount of checks if determined on how deep the boss in the run:
+    Mom = 1
+    Mom's Heart/Boss Rush = 2
+    Isaac/Satan/Hush = 3
+    Blue Baby/The Lamb = 4
+    Mega Satan/Mother/Beast/Delirium = 5
+    exception:
+    Dogma = 0
+    """
+    display_name = "Additional Boss Rewards"
+
+class TrapPercentage(Range):
+    """Replaces a percentage of junk items with traps"""
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+class ItemChanceMeta(AssembleOptions):
+    def __new__(mcs, name, bases, attrs):
+        if 'item_name' in attrs:
+            attrs["display_name"] = f"{attrs['item_name']} Chance"
+        attrs["range_start"] = 0
+        attrs["range_end"] = 100
+
+        return super(ItemChanceMeta, mcs).__new__(mcs, name, bases, attrs)
+
+
+class TrapChance(Range, metaclass=ItemChanceMeta):
+    item_name: str
+    default = 20
+
+
+class TrapChanceTrollBombs(TrapChance):
+    """Sets the chance/ratio of troll bombs traps"""
+    item_name = "Troll Bombs Trap"
+
+class TrapChanceTeleport(TrapChance):
+    """Sets the chance/ratio of teleport traps"""
+    item_name = "Teleport Trap"
+
+class TeleportTrapCanError(DefaultOnToggle):
+    """Can a teleport trap teleport to an Error Room?"""
+    display_name = "Teleport Trap can teleport to Error Room"
+
+class TrapChanceRetroVision(TrapChance):
+    """Sets the chance/ratio of retro vision traps"""
+    item_name = "Retro Vision Trap"
+
+class TrapChanceCurse(TrapChance):
+    """Sets the chance/ratio of curse traps"""
+    item_name = "Curse Trap"
+
 
 tobir_options: typing.Dict[str, type(Option)] = {
     "total_locations": TotalLocations,
     "required_locations": RequiredLocationsPercent,
     "goal": Goal,
-    "item_pickup_step": ItemPickupStep
+    "item_pickup_step": ItemPickupStep,
+    "additional_boss_rewards": AdditonalBossRewards,
+    "death_link": DeathLink,
 }

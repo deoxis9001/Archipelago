@@ -7,7 +7,6 @@ from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial
 from .Options import tobir_options
 from ..AutoWorld import World, WebWorld
 
-client_version = 1
 
 
 class TheBindingOfIsaacRebirthWeb(WebWorld):
@@ -17,7 +16,7 @@ class TheBindingOfIsaacRebirthWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Ijwu"]
+        ["Cyb3R"]
     )]
 
 
@@ -33,53 +32,58 @@ class TheBindingOfIsaacRebirthWorld(World):
     location_name_to_id = location_table
 
     data_version = 3
-    forced_auto_forfeit = True
     web = TheBindingOfIsaacRebirthWeb()
 
     def generate_basic(self):
         item_wights_table = {
+            # item (major)
             "Treasure Room Item": 100,
             "Shop Item": 100,
-            "Boss Item": 100,
-            "Devil Deal Item": 100,
-            "Angle Deal Item": 100,
-            "Secret Room Item": 100,
-            "Library Item": 100,
-            "Curse Room Item": 100,
-            "Planetarium Item": 100,
+            "Boss Item": 80,
+            "Devil Deal Item": 60,
+            "Angle Deal Item": 60,
+            "Secret Room Item": 80,
+            "Library Item": 40,
+            "Curse Room Item": 40,
+            "Planetarium Item": 20,
             # item (expirimental)
-            "Shell Game Item": 100,
-            "Golden Chest Item": 100,
-            "Red Chest Item": 100,
-            "Beggar Item": 100,
-            "Demon Baggar Item": 100,
-            "Key Master Item": 100,
-            "Battery Bum Item": 100,
-            "Mom's Chest Item": 100,
-            "Greed Treasure Room Item": 100,
-            "Greed Boss Item": 100,
-            "Greed Shop Item": 100,
-            "Greed Devil Deal Item": 100,
-            "Greed Angel Deal Item": 100,
-            "Greed Curse Room Item": 100,
-            "Greed Secret Room Item": 100,
-            "Crane Game Item": 100,
-            "Ultra Secret Room Item": 100,
-            "Bomb Bum Item": 100,
-            "Old Chest Item": 100,
-            "Baby Shop Item": 100,
-            "Wooden Chest Item": 100,
-            "Rotten Beggar Item": 100,
-            # other
-            "Random Pickup": 100,
+            "Shell Game Item": 0,
+            "Golden Chest Item": 60,
+            "Red Chest Item": 60,
+            "Beggar Item": 0,
+            "Demon Baggar Item": 0,
+            "Key Master Item": 0,
+            "Battery Bum Item": 0,
+            "Mom's Chest Item": 0,
+            "Greed Treasure Room Item": 0,
+            "Greed Boss Item": 0,
+            "Greed Shop Item": 0,
+            "Greed Devil Deal Item": 0,
+            "Greed Angel Deal Item": 0,
+            "Greed Curse Room Item": 0,
+            "Greed Secret Room Item": 0,
+            "Crane Game Item": 0,
+            "Ultra Secret Room Item": 0,
+            "Bomb Bum Item": 0,
+            "Old Chest Item": 0,
+            "Baby Shop Item": 0,
+            "Wooden Chest Item": 0,
+            "Rotten Beggar Item": 0,
+            # other junk
+            "Random Pickup": 0,
             "Random Heart": 100,
             "Random Coin": 100,
             "Random Bomb": 100,
             "Random Key": 100,
-            "Random Card": 100,
-            "Random Pill": 100,
-            "Random Chest": 100,
-            "Random Trinket": 100,
+            "Random Card": 90,
+            "Random Pill": 90,
+            "Random Chest": 85,
+            "Random Trinket": 80,
+            # Traps
+            "Troll Bomb Trap": 50,
+            "Teleport Trap": 50,
+            "Retro Vision Trap": 50,
+            "Curse Trap": 50,
         }
 
         # Generate item pool
@@ -107,13 +111,20 @@ class TheBindingOfIsaacRebirthWorld(World):
             "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
             "requiredLocations": self.world.required_locations[self.player].value,
-            "goal": self.world.goal[self.player].value
+            "goal": self.world.goal[self.player].value,
+            "additionalBossRewards": self.world.additional_boss_rewards[self.player].value,
+            "deathLink": self.world.death_link[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
-        item = TheBindingOfIsaacRebirthItem(name, True, item_id, self.player)
+        item = TheBindingOfIsaacRebirthItem(name, item_id not in range(78031, 78040) and
+                                            item_id not in range(78772, 78775), item_id, self.player)
+        if item_id in range(78772, 78775):
+            item.trap = True
         return item
+
+
 
 
 def create_events(world: MultiWorld, player: int, total_locations: int):

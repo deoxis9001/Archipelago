@@ -32,7 +32,6 @@ class TheBindingOfIsaacRebirthWorld(World):
     location_name_to_id = location_table
 
     data_version = 3
-    forced_auto_forfeit = True
     web = TheBindingOfIsaacRebirthWeb()
 
     def generate_basic(self):

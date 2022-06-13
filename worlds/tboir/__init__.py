@@ -1,12 +1,12 @@
 import string
-from .Items import TheBindingOfIsaacRebirthItem, item_table
+from .Items import TheBindingOfIsaacRebirthItem, item_table, default_weights, default_junk_items_weights, \
+    default_trap_items_weights
 from .Locations import location_table, TheBindingOfIsaacRebirthLocation, base_location_table
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial
 from .Options import tobir_options
 from ..AutoWorld import World, WebWorld
-
 
 
 class TheBindingOfIsaacRebirthWeb(WebWorld):
@@ -28,70 +28,46 @@ class TheBindingOfIsaacRebirthWorld(World):
     options = tobir_options
     topology_present = False
 
-    item_name_to_id = item_table
+    item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = location_table
 
     data_version = 3
+    forced_auto_forfeit = True
     web = TheBindingOfIsaacRebirthWeb()
 
     def generate_basic(self):
-        item_wights_table = {
-            # item (major)
-            "Treasure Room Item": 100,
-            "Shop Item": 100,
-            "Boss Item": 80,
-            "Devil Deal Item": 60,
-            "Angle Deal Item": 60,
-            "Secret Room Item": 80,
-            "Library Item": 40,
-            "Curse Room Item": 40,
-            "Planetarium Item": 20,
-            # item (expirimental)
-            "Shell Game Item": 0,
-            "Golden Chest Item": 60,
-            "Red Chest Item": 60,
-            "Beggar Item": 0,
-            "Demon Baggar Item": 0,
-            "Key Master Item": 0,
-            "Battery Bum Item": 0,
-            "Mom's Chest Item": 0,
-            "Greed Treasure Room Item": 0,
-            "Greed Boss Item": 0,
-            "Greed Shop Item": 0,
-            "Greed Devil Deal Item": 0,
-            "Greed Angel Deal Item": 0,
-            "Greed Curse Room Item": 0,
-            "Greed Secret Room Item": 0,
-            "Crane Game Item": 0,
-            "Ultra Secret Room Item": 0,
-            "Bomb Bum Item": 0,
-            "Old Chest Item": 0,
-            "Baby Shop Item": 0,
-            "Wooden Chest Item": 0,
-            "Rotten Beggar Item": 0,
-            # other junk
-            "Random Pickup": 0,
-            "Random Heart": 100,
-            "Random Coin": 100,
-            "Random Bomb": 100,
-            "Random Key": 100,
-            "Random Card": 90,
-            "Random Pill": 90,
-            "Random Chest": 85,
-            "Random Trinket": 80,
-            # Traps
-            "Troll Bomb Trap": 50,
-            "Teleport Trap": 50,
-            "Retro Vision Trap": 50,
-            "Curse Trap": 50,
-        }
 
         # Generate item pool
         itempool = []
 
+        junk_item_count = round(
+            self.world.total_locations[self.player] * (self.world.junk_percentage[self.player] / 100))
+        collectable_item_count = self.world.total_locations[self.player] - junk_item_count
+
+        if self.world.item_weights[self.player] == 1:
+            item_weights = {name: val for name, val in self.world.custom_item_weights[self.player].value.items()}
+        else:
+            item_weights = default_weights
+
+        # Fill non-junk items
+        itempool += self.world.random.choices(list(item_weights.keys()), weights=list(item_weights.values()),
+                                              k=collectable_item_count)
+
+        trap_item_count = round(junk_item_count * (self.world.trap_percentage[self.player] / 100))
+        junk_item_count = junk_item_count - trap_item_count
+
+        trap_weights = {name: val for name, val in self.world.trap_item_weights[self.player].value.items()}
+        junk_weights = {name: val for name, val in self.world.custom_junk_item_weights[self.player].value.items()}
+
+        # Fill traps
+        itempool += self.world.random.choices(list(trap_weights.keys()), weights=list(trap_weights.values()),
+                                              k=trap_item_count)
+
         # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(item_wights_table.keys()), weights=list(item_wights_table.values()),
-                                              k=self.world.total_locations[self.player])
+        itempool += self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()),
+                                              k=junk_item_count)
+
+        assert len(itempool) == self.world.total_locations[self.player]
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
@@ -108,23 +84,20 @@ class TheBindingOfIsaacRebirthWorld(World):
     def fill_slot_data(self):
         return {
             "itemPickupStep": self.world.item_pickup_step[self.player].value,
-            "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for i in range(16)),
+            "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
             "totalLocations": self.world.total_locations[self.player].value,
             "requiredLocations": self.world.required_locations[self.player].value,
             "goal": self.world.goal[self.player].value,
             "additionalBossRewards": self.world.additional_boss_rewards[self.player].value,
-            "deathLink": self.world.death_link[self.player].value
+            "deathLink": self.world.death_link[self.player].value,
+            "teleportTrapCanError": self.world.teleport_trap_can_error[self.player].value
         }
 
     def create_item(self, name: str) -> Item:
-        item_id = item_table[name]
-        item = TheBindingOfIsaacRebirthItem(name, item_id not in range(78031, 78040) and
-                                            item_id not in range(78772, 78776), item_id, self.player)
-        if item_id in range(78772, 78776):
-            item.trap = True
+        item_data = item_table[name]
+        item = TheBindingOfIsaacRebirthItem(name, item_data.is_progression, item_data.id, self.player)
+        item.trap = item_data.is_trap
         return item
-
-
 
 
 def create_events(world: MultiWorld, player: int, total_locations: int):

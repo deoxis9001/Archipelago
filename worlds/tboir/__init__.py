@@ -4,7 +4,7 @@ from .Items import TheBindingOfIsaacRebirthItem, item_table, default_weights, de
 from .Locations import location_table, TheBindingOfIsaacRebirthLocation, base_location_table
 from .Rules import set_rules
 
-from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial
+from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial, ItemClassification
 from .Options import tobir_options
 from ..AutoWorld import World, WebWorld
 
@@ -94,8 +94,7 @@ class TheBindingOfIsaacRebirthWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        item = TheBindingOfIsaacRebirthItem(name, item_data.is_progression, item_data.id, self.player)
-        item.trap = item_data.is_trap
+        item = TheBindingOfIsaacRebirthItem(name, item_data.classification, item_data.id, self.player)
         return item
 
 

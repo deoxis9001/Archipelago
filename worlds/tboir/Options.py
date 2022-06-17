@@ -117,7 +117,7 @@ class CustomItemWeights(CustomItemWeightsBase):
     default = default_weights
 
     def __init__(self, value: typing.Dict[str, int]):
-        if any(not item_table[key].is_progression for key in value.keys()):
+        if any(not item_table[key].is_progression() for key in value.keys()):
             raise Exception("Cannot include non progression items")
         super(CustomItemWeights, self).__init__(value)
 
@@ -133,9 +133,9 @@ class CustomJunkItemWeights(CustomItemWeightsBase):
     default = default_junk_items_weights
 
     def __init__(self, value: typing.Dict[str, int]):
-        if any(item_table[key].is_progression for key in value.keys()):
+        if any(item_table[key].is_progression() for key in value.keys()):
             raise Exception("Cannot include progression items")
-        if any(item_table[key].is_trap for key in value.keys()):
+        if any(item_table[key].is_trap() for key in value.keys()):
             raise Exception("Cannot include trap items")
         super(CustomJunkItemWeights, self).__init__(value)
 
@@ -151,7 +151,7 @@ class TrapItemWeights(CustomItemWeightsBase):
     default = default_trap_items_weights
 
     def __init__(self, value: typing.Dict[str, int]):
-        if any(not item_table[key].is_trap for key in value.keys()):
+        if any(not item_table[key].is_trap() for key in value.keys()):
             raise Exception("Cannot include non trap items")
         super(TrapItemWeights, self).__init__(value)
 

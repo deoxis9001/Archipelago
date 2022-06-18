@@ -99,14 +99,15 @@ class TheBindingOfIsaacRebirthWorld(World):
 
 
 def create_events(world: MultiWorld, player: int, total_locations: int):
-    num_of_events = total_locations // 25
-    if total_locations / 25 == num_of_events:
+    locations_per_event = 25
+    num_of_events = total_locations // locations_per_event
+    if total_locations / locations_per_event == num_of_events:
         num_of_events -= 1
     for i in range(num_of_events):
-        event_loc = TheBindingOfIsaacRebirthLocation(player, f"Pickup{(i + 1) * 25}", None,
+        event_loc = TheBindingOfIsaacRebirthLocation(player, f"Pickup{(i + 1) * locations_per_event}", None,
                                                      world.get_region('In Run', player))
-        event_loc.place_locked_item(TheBindingOfIsaacRebirthItem(f"Pickup{(i + 1) * 25}", True, None, player))
-        event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * 25) - 1}", player))
+        event_loc.place_locked_item(TheBindingOfIsaacRebirthItem(f"Pickup{(i + 1) * locations_per_event}", ItemClassification.progression, None, player))
+        event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * locations_per_event) - 1}", player))
         world.get_region('In Run', player).locations.append(event_loc)
 
 

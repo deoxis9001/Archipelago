@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, Choice, AssembleOptions, DeathLink, ItemDict, OptionDict
+from Options import Option, DefaultOnToggle, Range, Choice, DeathLink, OptionDict
 from worlds.tboir import default_weights, default_junk_items_weights, item_table
 from worlds.tboir.Items import default_trap_items_weights
 
@@ -9,15 +9,15 @@ class TotalLocations(Range):
     display_name = "Total Locations"
     range_start = 10
     range_end = 500
-    default = 20
+    default = 100
 
 
-class RequiredLocationsPercent(Range):
-    """Number of location checks which are required to beat the game."""
-    display_name = "Total Locations"
+class RequiredLocations(Range):
+    """Number of location checks required to beat the game."""
+    display_name = "Required Locations"
     range_start = 1
     range_end = 100
-    default = 80
+    default = 50
 
 
 class Goal(Choice):
@@ -158,7 +158,7 @@ class TrapItemWeights(CustomItemWeightsBase):
 
 tobir_options: typing.Dict[str, type(Option)] = {
     "total_locations": TotalLocations,
-    "required_locations": RequiredLocationsPercent,
+    "required_locations": RequiredLocations,
     "item_pickup_step": ItemPickupStep,
     "goal": Goal,
     "item_weights": ItemWeights,

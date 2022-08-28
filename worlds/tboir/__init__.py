@@ -1,4 +1,6 @@
+import logging
 import string
+
 from .Items import TheBindingOfIsaacRebirthItem, item_table, default_weights, default_junk_items_weights, \
     default_trap_items_weights
 from .Locations import location_table, TheBindingOfIsaacRebirthLocation, base_location_table
@@ -25,17 +27,24 @@ class TheBindingOfIsaacRebirthWorld(World):
     todo
     """
     game: str = "The Binding of Isaac Rebirth"
-    options = tobir_options
+    option_definitions = tobir_options
     topology_present = False
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    data_version = 3
+    data_version = 4
     web = TheBindingOfIsaacRebirthWeb()
 
-    def generate_basic(self):
+    def generate_early(self) -> None:
+        if self.world.required_locations[self.player].value > self.world.total_locations[self.player].value:
+            self.world.total_locations[self.player].value = self.world.required_locations[self.player].value
 
+    def generate_basic(self):
+        if not self.world.player_name[self.player].isalnum():
+            logging.warning(f"The name {self.world.player_name[self.player]} for a TBoI contains non-alphanumerical "
+                            f"characters. You are not guaranteed to be able to enter the name ingame and may have to "
+                            f"edit the games savefile to connect.")
         # Generate item pool
         itempool = []
 
@@ -78,7 +87,7 @@ class TheBindingOfIsaacRebirthWorld(World):
 
     def create_regions(self):
         create_regions(self.world, self.player)
-        create_events(self.world, self.player, int(self.world.total_locations[self.player]))
+        create_events(self.world, self.player, int(self.world.total_locations[self.player].value))
 
     def fill_slot_data(self):
         return {
@@ -106,8 +115,11 @@ def create_events(world: MultiWorld, player: int, total_locations: int):
     for i in range(num_of_events):
         event_loc = TheBindingOfIsaacRebirthLocation(player, f"Pickup{(i + 1) * locations_per_event}", None,
                                                      world.get_region('In Run', player))
-        event_loc.place_locked_item(TheBindingOfIsaacRebirthItem(f"Pickup{(i + 1) * locations_per_event}", ItemClassification.progression, None, player))
-        event_loc.access_rule(lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * locations_per_event) - 1}", player))
+        event_loc.place_locked_item(
+            TheBindingOfIsaacRebirthItem(f"Pickup{(i + 1) * locations_per_event}", ItemClassification.progression, None,
+                                         player))
+        event_loc.access_rule(
+            lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * locations_per_event) - 1}", player))
         world.get_region('In Run', player).locations.append(event_loc)
 
 
@@ -117,11 +129,11 @@ def create_regions(world, player: int):
         create_region(world, player, 'Menu', None, ['New Run']),
         create_region(world, player, 'In Run',
                       [location for location in base_location_table] +
-                      [f"ItemPickup{i}" for i in range(1, 1 + world.total_locations[player])])
+                      [f"ItemPickup{i}" for i in range(1, 1 + world.total_locations[player].value)])
     ]
 
     world.get_entrance("New Run", player).connect(world.get_region("In Run", player))
-    world.get_location("Victory", player).place_locked_item(TheBindingOfIsaacRebirthItem("Victory", True, None, player))
+    world.get_location("Victory", player).place_locked_item(TheBindingOfIsaacRebirthItem("Victory", ItemClassification.progression, None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):

@@ -272,8 +272,7 @@ class FF6WCWorld(World):
         drag_c = str(self.world.DragonCount[self.player]) + "." + str(self.world.DragonCount[self.player])
         objective_flag = f'-oa=2.3.3.2.{char_c}.4.{esper_c}.6.{drag_c}'
         placement_file = os.path.join(output_directory,
-                                      'ff6wc' + self.world.seed_name + str(self.player) + '.json')
-        placement_file2 = os.path.join('.', 'ff6wc' + self.world.seed_name + str(self.player) + '.json')
+                                      'ff6wc' + self.world.seed_name + str(self.player) + '.ff6placements')
         with open(placement_file, "w") as file:
             json.dump(locations, file, indent=2)
         output_file = os.path.join(output_directory,f"{self.world.seed_name}{self.player}.diff")

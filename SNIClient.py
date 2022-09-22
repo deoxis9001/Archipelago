@@ -34,7 +34,7 @@ from worlds.smz3.Rom import ROM_PLAYER_LIMIT as SMZ3_ROM_PLAYER_LIMIT
 from worlds.ff6wc.Rom import ROM_PLAYER_LIMIT as FF6WC_ROM_PLAYER_LIMIT
 from worlds.ff6wc.Rom import ROM_NAME as FF6WC_ROM_NAME
 from worlds.ff6wc import Rom as FF6Rom
-from worlds.tloz import Rom as TLoZRom
+
 import Utils
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Patch import GAME_ALTTP, GAME_SM, GAME_SMZ3, GAME_FF6WC, GAME_TLOZ, GAME_DKC3

@@ -23,9 +23,11 @@ def ap_id_to_oot_data(ap_id):
 
 
 def oot_is_item_of_type(item, item_type):
-    if not isinstance(item, OOTItem):
-        return False
-    return item.type == item_type
+    if isinstance(item, OOTItem):
+        return item.type == item_type
+    if isinstance(item, str):
+        return item in item_table and item_table[item][0] == item_type
+    return False
 
 
 class OOTItem(Item):
@@ -49,7 +51,6 @@ class OOTItem(Item):
         self.type = type
         self.index = index
         self.special = special or {}
-        self.looks_like_item = None
         self.price = special.get('price', None) if special else None
         self.internal = False
 

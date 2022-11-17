@@ -33,72 +33,72 @@ class TheBindingOfIsaacRebirthWorld(World):
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    data_version = 4
+    data_version = 5
     web = TheBindingOfIsaacRebirthWeb()
 
     def generate_early(self) -> None:
-        if self.world.required_locations[self.player].value > self.world.total_locations[self.player].value:
-            self.world.total_locations[self.player].value = self.world.required_locations[self.player].value
+        if self.multiworld.required_locations[self.player].value > self.multiworld.total_locations[self.player].value:
+            self.multiworld.total_locations[self.player].value = self.multiworld.required_locations[self.player].value
 
     def generate_basic(self):
-        if not self.world.player_name[self.player].isalnum():
-            logging.warning(f"The name {self.world.player_name[self.player]} for a TBoI contains non-alphanumerical "
+        if not self.multiworld.player_name[self.player].isalnum():
+            logging.warning(f"The name {self.multiworld.player_name[self.player]} for a TBoI contains non-alphanumerical "
                             f"characters. You are not guaranteed to be able to enter the name ingame and may have to "
                             f"edit the games savefile to connect.")
         # Generate item pool
         itempool = []
 
         junk_item_count = round(
-            self.world.total_locations[self.player] * (self.world.junk_percentage[self.player] / 100))
-        collectable_item_count = self.world.total_locations[self.player] - junk_item_count
+            self.multiworld.total_locations[self.player] * (self.multiworld.junk_percentage[self.player] / 100))
+        collectable_item_count = self.multiworld.total_locations[self.player] - junk_item_count
 
-        if self.world.item_weights[self.player] == 1:
-            item_weights = {name: val for name, val in self.world.custom_item_weights[self.player].value.items()}
+        if self.multiworld.item_weights[self.player] == 1:
+            item_weights = {name: val for name, val in self.multiworld.custom_item_weights[self.player].value.items()}
         else:
             item_weights = default_weights
 
         # Fill non-junk items
-        itempool += self.world.random.choices(list(item_weights.keys()), weights=list(item_weights.values()),
+        itempool += self.multiworld.random.choices(list(item_weights.keys()), weights=list(item_weights.values()),
                                               k=collectable_item_count)
 
-        trap_item_count = round(junk_item_count * (self.world.trap_percentage[self.player] / 100))
+        trap_item_count = round(junk_item_count * (self.multiworld.trap_percentage[self.player] / 100))
         junk_item_count = junk_item_count - trap_item_count
 
-        trap_weights = {name: val for name, val in self.world.trap_item_weights[self.player].value.items()}
-        junk_weights = {name: val for name, val in self.world.custom_junk_item_weights[self.player].value.items()}
+        trap_weights = {name: val for name, val in self.multiworld.trap_item_weights[self.player].value.items()}
+        junk_weights = {name: val for name, val in self.multiworld.custom_junk_item_weights[self.player].value.items()}
 
         # Fill traps
-        itempool += self.world.random.choices(list(trap_weights.keys()), weights=list(trap_weights.values()),
+        itempool += self.multiworld.random.choices(list(trap_weights.keys()), weights=list(trap_weights.values()),
                                               k=trap_item_count)
 
         # Fill remaining items with randomly generated junk
-        itempool += self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()),
+        itempool += self.multiworld.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()),
                                               k=junk_item_count)
 
-        assert len(itempool) == self.world.total_locations[self.player]
+        assert len(itempool) == self.multiworld.total_locations[self.player]
 
         # Convert itempool into real items
         itempool = list(map(lambda name: self.create_item(name), itempool))
 
-        self.world.itempool += itempool
+        self.multiworld.itempool += itempool
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_regions(self):
-        create_regions(self.world, self.player)
-        create_events(self.world, self.player, int(self.world.total_locations[self.player].value))
+        create_regions(self.multiworld, self.player)
+        create_events(self.multiworld, self.player, int(self.multiworld.total_locations[self.player].value))
 
     def fill_slot_data(self):
         return {
-            "itemPickupStep": self.world.item_pickup_step[self.player].value,
-            "seed": "".join(self.world.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
-            "totalLocations": self.world.total_locations[self.player].value,
-            "requiredLocations": self.world.required_locations[self.player].value,
-            "goal": self.world.goal[self.player].value,
-            "additionalBossRewards": self.world.additional_boss_rewards[self.player].value,
-            "deathLink": self.world.death_link[self.player].value,
-            "teleportTrapCanError": self.world.teleport_trap_can_error[self.player].value
+            "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
+            "seed": "".join(self.multiworld.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
+            "totalLocations": self.multiworld.total_locations[self.player].value,
+            "requiredLocations": self.multiworld.required_locations[self.player].value,
+            "goal": self.multiworld.goal[self.player].value,
+            "additionalBossRewards": self.multiworld.additional_boss_rewards[self.player].value,
+            "deathLink": self.multiworld.death_link[self.player].value,
+            "teleportTrapCanError": self.multiworld.teleport_trap_can_error[self.player].value
         }
 
     def create_item(self, name: str) -> Item:

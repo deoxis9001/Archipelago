@@ -38,6 +38,8 @@ trap_items = {
     "Teleport Trap": ItemData(78773, ItemClassification.trap),
     "Retro Vision Trap": ItemData(78774, ItemClassification.trap),
     "Curse Trap": ItemData(78775, ItemClassification.trap),
+    #"Paralysis Trap": ItemData(78776, ItemClassification.trap),
+    "Wavy Cap Trap": ItemData(78777, ItemClassification.trap),
 }
 
 # 78000 - 78???
@@ -813,6 +815,8 @@ default_trap_items_weights = {
     "Teleport Trap": 20,
     "Retro Vision Trap": 20,
     "Curse Trap": 20,
+    #"Paralysis Trap": 20,
+    "Wavy Cap Trap": 20
 }
 
 default_junk_items_weights = {

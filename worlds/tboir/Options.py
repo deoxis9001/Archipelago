@@ -16,7 +16,7 @@ class RequiredLocations(Range):
     """Number of location checks required to beat the game."""
     display_name = "Required Locations"
     range_start = 1
-    range_end = 100
+    range_end = 500
     default = 50
 
 

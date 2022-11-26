@@ -17,8 +17,8 @@ class ItemData(typing.NamedTuple):
 
 
 
-class TheBindingOfIsaacRebirthItem(Item):
-    game: str = "The Binding of Isaac Rebirth"
+class TheBindingOfIsaacRepentanceItem(Item):
+    game: str = "The Binding of Isaac Repentance"
 
 
 junk_items = {
@@ -832,7 +832,6 @@ default_junk_items_weights = {
 }
 
 default_weights = {
-    # item (major)
     "Treasure Room Item": 10,
     "Shop Item": 10,
     "Boss Item": 8,
@@ -842,29 +841,9 @@ default_weights = {
     "Library Item": 4,
     "Curse Room Item": 4,
     "Planetarium Item": 1,
-    # item (experimental)
-    "Shell Game Item": 0,
     "Golden Chest Item": 6,
     "Red Chest Item": 6,
-    "Beggar Item": 0,
-    "Demon Baggar Item": 0,
-    "Key Master Item": 0,
-    "Battery Bum Item": 0,
-    "Mom's Chest Item": 0,
-    "Greed Treasure Room Item": 0,
-    "Greed Boss Item": 0,
-    "Greed Shop Item": 0,
-    "Greed Devil Deal Item": 0,
-    "Greed Angel Deal Item": 0,
-    "Greed Curse Room Item": 0,
-    "Greed Secret Room Item": 0,
-    "Crane Game Item": 0,
-    "Ultra Secret Room Item": 0,
-    "Bomb Bum Item": 0,
-    "Old Chest Item": 0,
-    "Baby Shop Item": 0,
-    "Wooden Chest Item": 0,
-    "Rotten Beggar Item": 0,
+
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.id: name for name, data in item_table.items() if data.id}

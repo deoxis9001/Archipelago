@@ -9,7 +9,7 @@ class TotalLocations(Range):
     display_name = "Total Locations"
     range_start = 10
     range_end = 500
-    default = 100
+    default = 150
 
 
 class RequiredLocations(Range):

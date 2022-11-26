@@ -1,9 +1,9 @@
 import logging
 import string
 
-from .Items import TheBindingOfIsaacRebirthItem, item_table, default_weights, default_junk_items_weights, \
+from .Items import TheBindingOfIsaacRepentanceItem, item_table, default_weights, default_junk_items_weights, \
     default_trap_items_weights
-from .Locations import location_table, TheBindingOfIsaacRebirthLocation, base_location_table
+from .Locations import location_table, TheBindingOfIsaacRepentanceLocation, base_location_table
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial, ItemClassification
@@ -11,10 +11,10 @@ from .Options import tobir_options
 from ..AutoWorld import World, WebWorld
 
 
-class TheBindingOfIsaacRebirthWeb(WebWorld):
+class TheBindingOfIsaacRepentanceWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the The Binding Of Isaac Rebirth integration for Archipelago multiworld games.",
+        "A guide to setting up the The Binding Of Isaac Repentance integration for Archipelago multiworld games.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -22,11 +22,11 @@ class TheBindingOfIsaacRebirthWeb(WebWorld):
     )]
 
 
-class TheBindingOfIsaacRebirthWorld(World):
+class TheBindingOfIsaacRepentanceWorld(World):
     """
     todo
     """
-    game: str = "The Binding of Isaac Rebirth"
+    game: str = "The Binding of Isaac Repentance"
     option_definitions = tobir_options
     topology_present = False
 
@@ -34,7 +34,7 @@ class TheBindingOfIsaacRebirthWorld(World):
     location_name_to_id = location_table
 
     data_version = 5
-    web = TheBindingOfIsaacRebirthWeb()
+    web = TheBindingOfIsaacRepentanceWeb()
 
     def generate_early(self) -> None:
         if self.multiworld.required_locations[self.player].value > self.multiworld.total_locations[self.player].value:
@@ -103,7 +103,7 @@ class TheBindingOfIsaacRebirthWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        item = TheBindingOfIsaacRebirthItem(name, item_data.classification, item_data.id, self.player)
+        item = TheBindingOfIsaacRepentanceItem(name, item_data.classification, item_data.id, self.player)
         return item
 
 
@@ -113,10 +113,10 @@ def create_events(world: MultiWorld, player: int, total_locations: int):
     if total_locations / locations_per_event == num_of_events:
         num_of_events -= 1
     for i in range(num_of_events):
-        event_loc = TheBindingOfIsaacRebirthLocation(player, f"Pickup{(i + 1) * locations_per_event}", None,
+        event_loc = TheBindingOfIsaacRepentanceLocation(player, f"Pickup{(i + 1) * locations_per_event}", None,
                                                      world.get_region('In Run', player))
         event_loc.place_locked_item(
-            TheBindingOfIsaacRebirthItem(f"Pickup{(i + 1) * locations_per_event}", ItemClassification.progression, None,
+            TheBindingOfIsaacRepentanceItem(f"Pickup{(i + 1) * locations_per_event}", ItemClassification.progression, None,
                                          player))
         event_loc.access_rule(
             lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * locations_per_event) - 1}", player))
@@ -133,7 +133,7 @@ def create_regions(world, player: int):
     ]
 
     world.get_entrance("New Run", player).connect(world.get_region("In Run", player))
-    world.get_location("Victory", player).place_locked_item(TheBindingOfIsaacRebirthItem("Victory", ItemClassification.progression, None, player))
+    world.get_location("Victory", player).place_locked_item(TheBindingOfIsaacRepentanceItem("Victory", ItemClassification.progression, None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
@@ -142,7 +142,7 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     if locations:
         for location in locations:
             loc_id = location_table[location]
-            location = TheBindingOfIsaacRebirthLocation(player, location, loc_id, ret)
+            location = TheBindingOfIsaacRepentanceLocation(player, location, loc_id, ret)
             ret.locations.append(location)
     if exits:
         for exit in exits:

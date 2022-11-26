@@ -1,7 +1,7 @@
 from BaseClasses import Location
 import typing
 
-class TheBindingOfIsaacRebirthLocation(Location):
+class TheBindingOfIsaacRepentanceLocation(Location):
     game: str = "The Binding of Isaac Rebirth"
 
 
@@ -10,7 +10,7 @@ base_location_table = {
 }
 
 item_pickups = {
-    f"ItemPickup{i}": 78000+i for i in range(0, 500)
+    f"ItemPickup{i+1}": 78000+i for i in range(0, 500)
 }
 
 location_table = {**base_location_table, **item_pickups}

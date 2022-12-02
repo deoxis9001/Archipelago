@@ -42,9 +42,9 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
     def generate_basic(self):
         if not self.multiworld.player_name[self.player].isalnum():
-            logging.warning(f"The name {self.multiworld.player_name[self.player]} for a TBoI contains non-alphanumerical "
-                            f"characters. You are not guaranteed to be able to enter the name ingame and may have to "
-                            f"edit the games savefile to connect.")
+            logging.warning(f"The name {self.multiworld.player_name[self.player]} for a TBoI world contains "
+                            f"non-alphanumerical characters. You are not guaranteed to be able to enter the name "
+                            f"ingame and may have to edit the games savefile to connect.")
         # Generate item pool
         itempool = []
 
@@ -98,7 +98,9 @@ class TheBindingOfIsaacRepentanceWorld(World):
             "goal": self.multiworld.goal[self.player].value,
             "additionalBossRewards": self.multiworld.additional_boss_rewards[self.player].value,
             "deathLink": self.multiworld.death_link[self.player].value,
-            "teleportTrapCanError": self.multiworld.teleport_trap_can_error[self.player].value
+            "teleportTrapCanError": self.multiworld.teleport_trap_can_error[self.player].value,
+            "fullNoteAmount": self.multiworld.full_note_amount[self.player].value,
+            "noteMarkRequireHardMode": self.multiworld.note_marks_require_hard_mode[self.player].value
         }
 
     def create_item(self, name: str) -> Item:

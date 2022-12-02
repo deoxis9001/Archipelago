@@ -38,7 +38,7 @@ trap_items = {
     "Teleport Trap": ItemData(78773, ItemClassification.trap),
     "Retro Vision Trap": ItemData(78774, ItemClassification.trap),
     "Curse Trap": ItemData(78775, ItemClassification.trap),
-    #"Paralysis Trap": ItemData(78776, ItemClassification.trap),
+    "Paralysis Trap": ItemData(78776, ItemClassification.trap),
     "Wavy Cap Trap": ItemData(78777, ItemClassification.trap),
 }
 
@@ -815,7 +815,7 @@ default_trap_items_weights = {
     "Teleport Trap": 20,
     "Retro Vision Trap": 20,
     "Curse Trap": 20,
-    #"Paralysis Trap": 20,
+    "Paralysis Trap": 20,
     "Wavy Cap Trap": 20
 }
 
@@ -843,7 +843,6 @@ default_weights = {
     "Planetarium Item": 1,
     "Golden Chest Item": 6,
     "Red Chest Item": 6,
-
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.id: name for name, data in item_table.items() if data.id}

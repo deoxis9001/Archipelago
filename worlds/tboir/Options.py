@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, Choice, DeathLink, OptionDict
+from Options import Option, DefaultOnToggle, Toggle, Range, Choice, DeathLink, OptionDict
 from worlds.tboir import default_weights, default_junk_items_weights, item_table
 from worlds.tboir.Items import default_trap_items_weights
 
@@ -39,7 +39,19 @@ class Goal(Choice):
     option_mother = 13
     option_delirium = 14
     option_required_locations = 15
+    option_full_notes = 16
 
+
+class FullNoteAmount(Range):
+    """Number of full notes needed to beat the game (if goal is full notes). """
+    display_name = "Full Note Amount"
+    range_start = 1
+    range_end = 34
+    default = 1
+
+class NoteMarksRequireHardMode(Toggle):
+    """If set on Note Marks are only considered complete if the run was on hard mode"""
+    display_name = "Note marks require hard mode"
 
 class ItemPickupStep(Range):
     """Number of items to pick up before an AP Check is completed.
@@ -161,6 +173,8 @@ tobir_options: typing.Dict[str, type(Option)] = {
     "required_locations": RequiredLocations,
     "item_pickup_step": ItemPickupStep,
     "goal": Goal,
+    "full_note_amount": FullNoteAmount,
+    "note_marks_require_hard_mode": NoteMarksRequireHardMode,
     "item_weights": ItemWeights,
     "custom_item_weights": CustomItemWeights,
     "junk_percentage": JunkPercentage,

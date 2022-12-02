@@ -43,6 +43,10 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 The Player Settings page on the website allows you to configure your personal settings and export a config file from
 them. Player settings page: [The Binding of Isaac: Repentance Player Settings Page](/games/The%20Binding%20of%20Isaac%20Repentance/player-settings)
 
+**NOTE:** For The Binding of Isaac: Repentance it is recommended to not use any special characters in your name since
+you may not be able to input the name ingame. This can be worked around by modifying the games savefile and 
+entering the name there. 
+
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML

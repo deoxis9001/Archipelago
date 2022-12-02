@@ -18,9 +18,15 @@ In The Binding of Isaac: Repentance the goal is always tied to a configurable am
 just collecting that amount or beating a (also configurable) ending boss after collecting that amount. To reach that 
 goal you will probably have to do multiple runs. 
 
+## Does the mod affect my saves?
+
+It does not. If you want to clear later bosses and don't want to bother with unlocking, you can use the 
+[isaac-save-insaller by Zamiell](https://github.com/Zamiell/isaac-save-installer) to install a fully-unlocked save file 
+and backup you old saves.
+
 ## Can you play multiplayer?
 
-Hopefully
+ToDo: needs testing
 
 ## What Risk of Rain items can appear in other players' worlds?
 
@@ -70,4 +76,4 @@ that you try to collect will be replaced with a ``AP Check`` item which will be 
 
 ## Is Archipelago compatible with other The Binding of Isaac: Repentance mods?
 
-Hopefully
+ToDo: Needs testing

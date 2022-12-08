@@ -49,14 +49,17 @@ class FullNoteAmount(Range):
     range_end = 34
     default = 1
 
+
 class NoteMarksRequireHardMode(Toggle):
     """If set on Note Marks are only considered complete if the run was on hard mode"""
     display_name = "Note marks require hard mode"
 
+
 class ItemPickupStep(Range):
     """Number of items to pick up before an AP Check is completed.
-    Setting to 1 means every other pickup.
-    Setting to 2 means every third pickup. So on..."""
+    Setting to 1 means every pickup,
+    Setting to 2 means every other pickup,
+    Setting to 3 means every third pickup and so on..."""
     display_name = "Item Pickup Step"
     range_start = 1
     range_end = 5
@@ -102,11 +105,10 @@ class ItemWeights(Choice):
     """Preset choices for determining the weights of the item pool."""
     display_name = "Item Weights"
     option_default = 0
-    option_custom = 1
+    option_custom = 99
 
 
 class CustomItemWeightsBase(OptionDict):
-    verify_item_name = True
 
     def __init__(self, value: typing.Dict[str, int]):
         if len(value) <= 0:
@@ -120,52 +122,35 @@ class CustomItemWeightsBase(OptionDict):
 
 class CustomItemWeights(CustomItemWeightsBase):
     """
-    Put your custom item weights here. Format is item_name: weighting. Leave empty for default weighting.<br>These
+    Put your custom item weights here. Format is item_name: weighting. Leave empty for default weighting. These
     weights are only for progression items. For junk and trap items use Custom Junk Item Weights and Trap Item
     Weights.
     """
-    verify_item_name = True
     display_name = "Custom Item Weights"
     default = default_weights
-
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(not item_table[key].is_progression() for key in value.keys()):
-            raise Exception("Cannot include non progression items")
-        super(CustomItemWeights, self).__init__(value)
+    valid_keys = {key for (key, value) in item_table.items() if value.is_progression()}
 
 
 class CustomJunkItemWeights(CustomItemWeightsBase):
     """
-    Put your custom junk item weights here. Format is item_name: weighting. Leave empty for default weighting.<br>These
+    Put your custom junk item weights here. Format is item_name: weighting. Leave empty for default weighting. These
     weights are only for junk items. For progression and trap items use Custom Item Weights and Trap Item
     Weights.
     """
-    verify_item_name = True
     display_name = "Custom Junk Item Weights"
     default = default_junk_items_weights
-
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(item_table[key].is_progression() for key in value.keys()):
-            raise Exception("Cannot include progression items")
-        if any(item_table[key].is_trap() for key in value.keys()):
-            raise Exception("Cannot include trap items")
-        super(CustomJunkItemWeights, self).__init__(value)
+    valid_keys = {key for key, value in item_table.items() if value.is_filler()}
 
 
 class TrapItemWeights(CustomItemWeightsBase):
     """
-    Put your custom trap item weights here. Format is item_name: weighting. Leave empty for default weighting.<br>These
+    Put your custom trap item weights here. Format is item_name: weighting. Leave empty for default weighting. These
     weights are only for trap items. For progression and junk items use Custom Item Weights and Custom Junk Item
     Weights.
     """
-    verify_item_name = True
     display_name = "Custom Trap Item Weights"
     default = default_trap_items_weights
-
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(not item_table[key].is_trap() for key in value.keys()):
-            raise Exception("Cannot include non trap items")
-        super(TrapItemWeights, self).__init__(value)
+    valid_keys = {key for key, value in item_table.items() if value.is_trap()}
 
 
 tobir_options: typing.Dict[str, type(Option)] = {

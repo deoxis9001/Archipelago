@@ -52,7 +52,7 @@ class TheBindingOfIsaacRepentanceWorld(World):
             self.multiworld.total_locations[self.player] * (self.multiworld.junk_percentage[self.player] / 100))
         collectable_item_count = self.multiworld.total_locations[self.player] - junk_item_count
 
-        if self.multiworld.item_weights[self.player] == 1:
+        if self.multiworld.item_weights[self.player] == 99:
             item_weights = {name: val for name, val in self.multiworld.custom_item_weights[self.player].value.items()}
         else:
             item_weights = default_weights

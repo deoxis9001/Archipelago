@@ -17,7 +17,7 @@
 
 After installing *The Binding of Isaac: Rebirth* via Steam locate its installation folder by right-clicking it your
 Steam Library and choosing *Manage* -> *Browse local files*. If it does not exist already create a folder named *mods*
-inside the installation folder. Inside this folder place the *The Binding of Isaac AP Mod* zip file. If you download 
+inside the installation folder. Inside this folder unpack the *The Binding of Isaac AP Mod* zip file. If you download 
 Mod Config Menu via GitHub/gitlab you will have to place the folder in zip file inside the *mods* folder. 
 If you used SteamWorkshop for Mod Config Menu you don't need to place anything into the *mods* folder.
 

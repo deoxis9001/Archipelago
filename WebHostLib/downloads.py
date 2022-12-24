@@ -88,6 +88,8 @@ def download_slot_file(room_id, player_id: int):
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apsm64ex"
         elif slot_data.game == "The Legend of Zelda":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.aptloz"
+        elif slot_data.game == "Final Fantasy 6 Worlds Collide":
+            fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_SP.apff6wc"
         elif slot_data.game == "Dark Souls III":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}.json"
         else:

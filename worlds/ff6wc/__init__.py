@@ -312,8 +312,11 @@ class FF6WCWorld(World):
         print(self.player)
         os.system(f"python ./worlds/ff6wc/WorldsCollide/wc.py {wc_args}")
         print(output_file)
-        patch = FF6WCDeltaPatch(os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending, player=self.player,
-                                player_name=self.multiworld.player_name[self.player], patched_path=output_file)
+        patch = FF6WCDeltaPatch(
+            os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending,
+            player=self.player,
+            player_name=self.multiworld.player_name[self.player],
+            patched_path=output_file)
         self.rom_name_available_event.set()
         patch.write()
 

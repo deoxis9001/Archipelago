@@ -276,10 +276,10 @@ class FF6WCWorld(World):
         drag_c = str(self.multiworld.DragonCount[self.player]) + "." + str(self.multiworld.DragonCount[self.player])
         objective_flag = f'-oa=2.3.3.2.{char_c}.4.{esper_c}.6.{drag_c}'
         placement_file = os.path.join(output_directory,
-                                      f'{self.multiworld.get_out_file_name_base(self.player)}' + '.ff6placements')
+                                      f'{self.multiworld.get_out_file_name_base(self.player)}' + '.txt')
         with open(placement_file, "w") as file:
             json.dump(locations, file, indent=2)
-        output_file = os.path.join(output_directory,f"{self.multiworld.get_out_file_name_base(self.player)}.diff")
+        output_file = os.path.join(output_directory,f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
         wc_args = [
             '-i="Final Fantasy III (USA).sfc"',
             f"-ap={placement_file}",
@@ -309,9 +309,7 @@ class FF6WCWorld(World):
         # -oa 2.3.3.2.4.12.4.10.26.6.1.8 is characters/espers/dragons
         # (2.4.12 is Characters, 4-12; 4.10.26 is Espers, 10-26, 6.1.8 is Dragons, 1-8)
         # -ob 30.8.8.1.1.11.8 is Get All SwdTechs after Doma.
-        print(self.player)
         os.system(f"python ./worlds/ff6wc/WorldsCollide/wc.py {wc_args}")
-        print(output_file)
         patch = FF6WCDeltaPatch(
             os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending,
             player=self.player,
@@ -319,6 +317,7 @@ class FF6WCWorld(World):
             patched_path=output_file)
         self.rom_name_available_event.set()
         patch.write()
+        os.remove(output_file)
 
 
     def modify_multidata(self, multidata: dict):

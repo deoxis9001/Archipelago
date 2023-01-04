@@ -2,9 +2,9 @@ import typing
 import logging
 from logging import Logger
 
-
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
+
 if typing.TYPE_CHECKING:
     from SNIClient import SNIContext
 else:
@@ -12,6 +12,7 @@ else:
 from worlds.ff6wc import Rom
 
 snes_logger: Logger = logging.getLogger("SNES")
+
 
 class FF6WCClient(SNIClient):
     game: str = "Final Fantasy 6 Worlds Collide"
@@ -21,7 +22,6 @@ class FF6WCClient(SNIClient):
 
     def __init__(self):
         super()
-
 
     async def validate_rom(self, ctx: SNIContext) -> bool:
         from SNIClient import snes_read
@@ -155,5 +155,4 @@ class FF6WCClient(SNIClient):
                             color(ctx.player_names[item.player], 'yellow'),
                             ctx.location_names[item.location]))
                         break
-
         await snes_flush_writes(ctx)

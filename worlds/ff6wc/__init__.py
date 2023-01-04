@@ -9,6 +9,7 @@ import logging
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification
 from . import Logic
 from .Rom import FF6WCDeltaPatch
+from .Client import FF6WCClient
 from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 from ..AutoWorld import World, LogicMixin
 from NetUtils import SlotType

@@ -6,7 +6,7 @@ from Patch import APDeltaPatch
 
 NA10HASH = 'e986575b98300f721ce27c180264d890'
 ROM_PLAYER_LIMIT = 65535
-ROM_NAME = 0x303F00
+ROM_NAME = 0x00FFC0
 event_flag_base_address = 0xF51e80
 bit_positions = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80]
 esper_bit_base_address = 0xF51A69
@@ -15,7 +15,7 @@ character_recruited_bit_base_address = 0xf51EDE
 item_types_base_address = 0xF51869
 item_quantities_base_address = 0xF51969
 items_received_address = 0xF511E5
-map_index_address = 0xF5000082
+map_index_address = 0xF50082
 espers = [ # This is the internal order of the Espers in the game. Editing this will break things.
     "Ramuh", "Ifrit", "Shiva",
     "Siren", "Terrato", "Shoat",

@@ -17,7 +17,7 @@ snes_logger: Logger = logging.getLogger("SNES")
 class FF6WCClient(SNIClient):
     game: str = "Final Fantasy 6 Worlds Collide"
     location_index: int = 0
-    location_names: typing.List = Rom.event_flag_location_names.keys()
+    location_names: typing.List = list(Rom.event_flag_location_names)
     location_ids = None
 
     def __init__(self):

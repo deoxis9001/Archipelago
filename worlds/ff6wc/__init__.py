@@ -27,7 +27,7 @@ class FF6WCWorld(World):
     base_id = 6000
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = location_table
+    location_name_to_id = {name: index for index, name in enumerate(location_table)}
 
     all_characters = [
             'TERRA', 'LOCKE', 'CYAN', 'SHADOW', 'EDGAR',
@@ -109,9 +109,9 @@ class FF6WCWorld(World):
         for name, id in self.location_name_to_id.items():
             if name in Locations.dragon_events:
                 id = None
-            if name in Locations.kefka_checks.keys():
+            if name in Locations.kefka_checks:
                 final_dungeon.locations.append(self.create_location(name, id, final_dungeon))
-            elif name in Locations.accomplishment_data.keys():
+            elif name in Locations.accomplishment_data:
                 final_dungeon.locations.append(self.create_location(name, None, final_dungeon, True))
             else:
                 world_map.locations.append(self.create_location(name, id, world_map))
@@ -156,7 +156,7 @@ class FF6WCWorld(World):
         }
         # Set every character locked check to require that character.
         for check_name, checks in check_list.items():
-            for check, id in checks.items():
+            for check in checks:
                 if check_name == "TERRA":
                     set_rule(self.multiworld.get_location(check, self.player),
                              lambda state: state._ff6wc_has_terra(self.player))

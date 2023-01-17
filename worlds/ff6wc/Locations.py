@@ -1,125 +1,452 @@
-terra_checks = {
-    'Whelk': 1,
-    'Lete River': 2,
-    'Sealed Gate': 3,
-    'Zozo': 4,
-    'Mobliz': 5
-}
+major_terra_checks = [
+    "Whelk",
+    "Lete River",
+    "Sealed Gate",
+    "Zozo",
+    "Mobliz"
+]
 
-locke_checks = {
-    'South Figaro Cave': 6,
-    'Narshe Weapon Shop 1': 7,
-    "Narshe Weapon Shop 2": 8,
-    'Phoenix Cave': 9,
-    'Red Dragon': 10,
-    "Red Dragon Status": 11
-}
+major_locke_checks = [
+    "South Figaro Cave",
+    "Narshe Weapon Shop 1",
+    "Narshe Weapon Shop 2",
+    "Phoenix Cave",
+    "Red Dragon",
+    "Red Dragon Status"
+]
 
-cyan_checks = {
-    'Doma Castle Siege': 12,
-    'Dream Stooges': 13,
-    'Wrexsoul': 14,
-    'Doma Castle Throne': 15,
-    'Mt. Zozo': 16,
-    'Storm Dragon': 17,
-    "Storm Dragon Status": 18
-}
+major_cyan_checks = [
+    "Doma Castle Siege",
+    "Dream Stooges",
+    "Wrexsoul",
+    "Doma Castle Throne",
+    "Mt. Zozo",
+    "Storm Dragon",
+    "Storm Dragon Status"
+]
 
-shadow_checks = {
-    'Gau Father House': 19,
-    'Imperial Air Force': 20,
-    'AtmaWeapon': 21,
-    'Nerapa': 22,
-    'Veldt Cave': 23
-}
+major_shadow_checks = [
+    "Gau Father House",
+    "Imperial Air Force",
+    "AtmaWeapon",
+    "Nerapa",
+    "Veldt Cave"
+]
 
-edgar_checks = {
-    'Figaro Castle Throne': 24,
-    'Figaro Castle Basement': 25,
-    'Ancient Castle': 26,
-    'Blue Dragon': 27,
-    "Blue Dragon Status": 28
-}
+major_edgar_checks = [
+    "Figaro Castle Throne",
+    "Figaro Castle Basement",
+    "Ancient Castle",
+    "Blue Dragon",
+    "Blue Dragon Status"
+]
 
-sabin_checks = {
-    'Mt. Kolts': 29,
-    'Collapsing House': 30,
-    'Baren Falls': 31,
-    'Imperial Camp': 32,
-    'Phantom Train': 33
-}
+major_sabin_checks = [
+    "Mt. Kolts",
+    "Collapsing House",
+    "Baren Falls",
+    "Imperial Camp",
+    "Phantom Train"
+]
 
-celes_checks = {
-    'South Figaro': 34,
-    'Ifrit and Shiva': 35,
-    'Number 024': 36,
-    'Cranes': 37,
-    'Opera House': 38
-}
+major_celes_checks = [
+    "South Figaro",
+    "Ifrit and Shiva",
+    "Number 024",
+    "Cranes",
+    "Opera House"
+]
 
-strago_checks = {
-    'Burning House': 39,
-    "Ebot's Rock": 40,
-    'MagiMaster': 41,
-    'Gem Box': 42
-}
+major_strago_checks = [
+    "Burning House",
+    "Ebot's Rock",
+    "MagiMaster",
+    "Gem Box"
+]
 
-relm_checks = {
-    'Esper Mountain': 43,
-    "Owzer Mansion": 44
-}
+major_relm_checks = [
+    "Esper Mountain",
+    "Owzer Mansion"
+]
 
-setzer_checks = {
-    'Kohlingen': 45,
-    "Daryl's Tomb": 46
-}
+major_setzer_checks = [
+    "Kohlingen",
+    "Daryl's Tomb"
+]
 
-mog_checks = {
-    'Lone Wolf 1': 47,
-    "Lone Wolf 2": 48
-}
+major_mog_checks = [
+    "Lone Wolf 1",
+    "Lone Wolf 2"
+]
 
-gau_checks = {
-    'Veldt': 49,
-    'Serpent Trench': 50
-}
+major_gau_checks = [
+    "Veldt",
+    "Serpent Trench"
+]
 
-gogo_checks = {
-    "Gogo's Cave": 51
-}
+major_gogo_checks = [
+    "Gogo's Cave"
+]
 
-umaro_checks = {
-    "Umaro's Cave": 52
-}
+major_umaro_checks = [
+    "Umaro's Cave"
+]
 
-generic_checks = {
-    'Kefka at Narshe': 53,
-    'Tzen Thief': 54,
-    'Doom Gaze': 55,
-    'Tritoch': 56,
-    'Auction House 10kGP': 57,
-    'Auction House 20kGP': 58,
-    'Dirt Dragon': 59,
-    'White Dragon': 60,
-    'Ice Dragon': 61,
-    "Dirt Dragon Status": 62,
-    "White Dragon Status": 63,
-    "Ice Dragon Status": 64
-}
+major_generic_checks = [
+    "Kefka at Narshe",
+    "Tzen Thief",
+    "Doom Gaze",
+    "Tritoch",
+    "Auction House 10kGP",
+    "Auction House 20kGP",
+    "Dirt Dragon",
+    "White Dragon",
+    "Ice Dragon",
+    "Dirt Dragon Status",
+    "White Dragon Status",
+    "Ice Dragon Status"
+]
 
-kefka_checks = {
-    'Atma': 65,
-    "Skull Dragon": 66,
-    "Gold Dragon": 67,
-    "Skull Dragon Status": 68,
-    "Gold Dragon Status": 69
-}
+major_kefka_checks = [
+    "Atma",
+    "Skull Dragon",
+    "Gold Dragon",
+    "Skull Dragon Status",
+    "Gold Dragon Status"
+]
+minor_terra_checks = [
+    "Sealed Gate Basement 1",
+    "Sealed Gate Basement 2 Bottom",
+    "Sealed Gate Basement 2 Top",
+    "Sealed Gate Basement 3 Bottom Left",
+    "Sealed Gate Basement 3 Island",
+    "Sealed Gate Basement 3 Plaza",
+    "Sealed Gate Basement 3 Hidden Passage",
+    "Sealed Gate Basement 3 Bridge",
+    "Sealed Gate Entrance",
+    "Sealed Gate Save Point",
+    "Sealed Gate Treasure Room Left",
+    "Sealed Gate Treasure Room Upper Left",
+    "Sealed Gate Treasure Room Upper Floor Left",
+    "Sealed Gate Treasure Room Upper Floor Right",
+    "Imperial Base First Row Right",
+    "Imperial Base First Row Left"
+    "Imperial Base Stove",
+    "Imperial Base Second Row Far Right",
+    "Imperial Base Second Row Right",
+    "Imperial Base Second Row Left",
+    "Imperial Base Second Row Far Left",
+    "Imperial Base Third Row",
+    "Imperial Base Fourth Row Left",
+    "Imperial Base Fourth Row Right",
+    "Imperial Base Fifth Row Left",
+    "Imperial Base Fifth Row Right",
+    "Imperial Base Bottom Right Hidden Chest"
+]
 
-accomplishment_data = {
-    "Kefka's Tower": 70,
-    'Beat Final Kefka': 71
+minor_locke_checks = [
+    "Phoenix Cave Lower Cavern East Pool Island",
+    "Phoenix Cave Lower Cavern East Pool Bridge",
+    "Phoenix Cave Lower Cavern Spikes",
+    "Phoenix Cave Lower Cavern Rock Jumping",
+    "Phoenix Cave Lower Cavern Cool Lava",
+    "Phoenix Cave Upper Cavern Spikes",
+    "Phoenix Cave Upper Cavern Hidden Room",
+    "Phoenix Cave Upper Cavern Across Bridge",
+    "Phoenix Cave Upper Cavern Near Red Dragon",
+]
 
-}
+minor_cyan_checks = [
+    "Cyan's Dream Phantom Train Fourth Car Upper Right",
+    "Cyan's Dream Phantom Train Fourth Car Upper Left",
+    "Cyan's Dream Phantom Train Fourth Car Middle",
+    "Cyan's Dream Phantom Train Third Car Bottom Right",
+    "Cyan's Dream Phantom Train Third Car Middle",
+    "Mt. Zozo East Cavern Middle",
+    "Mt. Zozo East Cavern Right",
+    "Mt. Zozo East Cavern Lower Left",
+    "Mt. Zozo East Cavern Upper",
+    "Mt. Zozo Treasure Slope",
+    "Mt. Zozo Cyan's Room"
+]
+
+minor_shadow_checks = [
+    "Floating Continent North Path",
+    "Floating Continent Lower Path",
+    "Floating Continent Northeast of Save",
+    "Floating Continent Escape"
+]
+
+minor_edgar_checks = [
+    "Ancient Cave North Cavern Left",
+    "Ancient Cave North Cavern Right",
+    "Ancient Cave South Cavern Bottom",
+    "Ancient Cave South Cavern Top",
+    "Ancient Cave West Cavern Bottom",
+    "Ancient Cave West Cavern Left",
+    "Ancient Castle Treasure Room Left",
+    "Ancient Castle Treasure Room Right",
+    "Ancient Castle Jail",
+    "Figaro Castle Basement 2 Treasure Room",
+    "Figaro Castle Basement 3 Treasure Room Far Left",
+    "Figaro Castle Basement 3 Treasure Room Left",
+    "Figaro Castle Basement 3 Treasure Room Right",
+    "Figaro Castle Basement 3 Treasure Room Far Right",
+    "Figaro Castle Basement 3 Treasure Room Statue",
+]
+
+minor_sabin_checks = [
+    "Imperial Camp Kick Chest",
+    "Imperial Camp Central Tent Left",
+    "Imperial Camp Central Tent Right",
+    "Imperial Camp Central Tent Back",
+    "Phantom Train Caboose",
+    "Phantom Train Dining Car",
+    "Phantom Train Fourth Car East",
+    "Phantom Train Fourth Car West Invisible Chest",
+    "Phantom Train Third Car Far Left Chest",
+    "Phantom Train Third Car Left Chest",
+    "Phantom Train Third Car Right Chest",
+    "Phantom Train Third Car Far Right Chest",
+    "Collapsing House First Floor Top Right",
+    "Collapsing House First Floor Middle",
+    "Collapsing House First Floor Top Left",
+    "Collapsing House First Floor Left",
+    "Collapsing House First Floor Bottom Left",
+    "Collapsing House Basement Bottom",
+    "Collapsing House Basement Left",
+    "Collapsing House Basement Right",
+]
+
+minor_celes_checks = [
+    "Magitek Factory North Upper Left",
+    "Magitek Factory North Right Side Pipe",
+    "Magitek Factory North Lower Landing",
+    "Magitek Factory North Across Conveyor Belt",
+    "Magitek Factory North Near Crate",
+    "Magitek Factory North Lower Balcony",
+    "Magitek Factory South Secret Room Left",
+    "Magitek Factory South Secret Room Right",
+    "Magitek Factory South Lower Balcony",
+    "Magitek Factory South Hidden Chest",
+    "Magitek Factory South Lower Left",
+    "Magitek Factory South Bottom Left",
+    "Magitek Factory Specimen Room"
+]
+
+minor_strago_checks = [
+    "Burning House First Chest",
+    "Burning House Second Chest",
+]
+
+minor_relm_checks = [
+    "Esper Mountain Entrance Cavern",
+    "Esper Mountain Outside Bridge",
+    "Esper Mountain Side Slope",
+    "Esper Mountain Treasure Slope",
+    "Owzer's Basement Left Door",
+    "Owzer's Basement Door Trio"
+]
+
+minor_setzer_checks = [
+    "Darill's Tomb Basement 2 Southeast",
+    "Darill's Tomb Basement 2 Southwest",
+    "Darill's Tomb Basement 3 Center",
+    "Darill's Tomb Basement 3 Right",
+    "Darill's Tomb Pre-Boss Room Left",
+    "Darill's Tomb Pre-Boss Room Right"
+]
+
+minor_mog_checks = [
+]
+
+minor_gau_checks = [
+    "Serpent Trench First Branch",
+    "Serpent Trench Second Branch",
+]
+
+minor_gogo_checks = [
+    "Zone Eater Crusher Room Right",
+    "Zone Eater Crusher Room Middle",
+    "Zone Eater Crusher Room Left",
+    "Zone Eater Jumping Room",
+    "Zone Eater Lower Cavern Left",
+    "Zone Eater Lower Cavern Right",
+    "Zone Eater Triple Bridge Right",
+    "Zone Eater Triple Bridge Middle",
+    "Zone Eater Triple Bridge Left",
+]
+
+minor_umaro_checks = [
+]
+
+minor_generic_checks = [
+    "Albrook Armor Shop Left",
+    "Albrook Armor Shop Right",
+    "Albrook Cafe Clock",
+    "Albrook Inn Barrel",
+    "Albrook Weapon Shop Pot",
+    "Albrook Docks Crate",
+    "Doma Castle Cyan's Bedroom",
+    "Doma Castle Lower Hall Pot",
+    "Doma Castle Southeast Tower Left",
+    "Doma Castle Southeast Tower Right",
+    "Doma Castle West Sleeping Quarters Chest",
+    "Doma Castle West Sleeping Quarters Clock",
+    "Dragon's Neck Cabin Pot",
+    "Duncan's Cabin Bucket",
+    "Fanatics' Tower Seventeenth Floor",
+    "Fanatics' Tower Twenty-sixth Floor",
+    "Fanatics' Tower Thirty-fifth Floor",
+    "Fanatics' Tower Seventh Floor",
+    "Fanatics' Tower Eighth Floor",
+    "Figaro Castle East Room",
+    "Figaro Castle Library",
+    "Figaro Castle East Shop Left",
+    "Figaro Castle East Shop Right",
+    "Figaro Castle Upper Hall",
+    "Figaro Castle West Shop",
+    "Owzer's House Pot",
+    "Kohlingen Old Man's House",
+    "Kohlingen Rachel's House Clock",
+    "Maranda Crate Left",
+    "Maranda Crate Bottom Right",
+    "Mobliz Letter Quest",
+    "Mobliz Post OFfice Clock",
+    "Mobliz House Barrel",
+    "Mt. Kolts Exit",
+    "Mt. Kolts Hidden Cavern",
+    "Mt. Kolts West Face South",
+    "Mt. Kolts West Face North",
+    "Narshe Arvis's Clock",
+    "Narshe Elder's Clock",
+    "Narshe Adventuring School Battle Tactics",
+    "Narshe Adventuring School Environmental Science Chest",
+    "Narshe Adventuring School Environmental Science Pot",
+    "Narshe Adventuring School Advanced Battle Tactics Chest",
+    "Narshe Treasure House South Chest",
+    "Narshe Treasure House Middle Right",
+    "Narshe Treasure House Middle Left",
+    "Narshe Treasure House Top Right",
+    "Narshe Treasure House Top Middle",
+    "Narshe Treasure House Top Left",
+    "Narshe Mines East Right"
+    "Narshe Mines East Left",
+    "Narshe Moogle Lair",
+    "Umaro's Cave Basement 1 Lower Left",
+    "Umaro's Cave Basement 1 Left Central",
+    "Umaro's Cave Basement 2 Lower Left",
+    "Nikeah Inn Clock",
+    "Returners' Hideout Banon's Room",
+    "Returners' Hideout Bedroom",
+    "Returners' Hideout Main Room Pot",
+    "Returners' Hideout North Room Bottom Left",
+    "Returners' Hideout North Room Bottom Right",
+    "Returners' Hideout North Room Upper Left",
+    "Returners' Hideout North Room Bucket",
+    "Returners' Hideout North Room Pot",
+    "Returners' Hideout North Room Secret Room",
+    "South Figaro Basements Hidden Path Entrance",
+    "South Figaro Basements Hidden Path North Left",
+    "South Figaro Basements Hidden Path North Right",
+    "South Figaro Basements Hidden Path South",
+    "South Figaro Basements 2 South",
+    "South Figaro Basements 2 Northeast",
+    "South Figaro Basements 2 Hidden Chest",
+    "South Figaro Old Man's Bucket",
+    "South Figaro Secret Path Clock",
+    "South Figaro Chocobo Stable Box",
+    "South Figaro Chocobo Stable Barrel",
+    "South Figaro Shoreline Box",
+    "South Figaro Barrel Near Cafe",
+    "South Figaro Box Near Cafe",
+    "South Figaro Arsenal Barrel",
+    "South Figaro Wall Barrel",
+    "South Figaro Mansion Exit Barrel",
+    "South Figaro Mansion Basement West Cell",
+    "South Figaro Mansion Basement East Cell",
+    "South Figaro Mansion Basement East Room Left",
+    "South Figaro Mansion Basement East Room Below Clock",
+    "South Figaro Mansion Basement East Room Right",
+    "South Figaro Mansion Basement East Room Far Right",
+    "South Figaro Cave Eastern Passage",
+    "South Figaro Cave Southwest Passage",
+    "South Figaro Cave Eastern Bridge",
+    "Thamasa Strago's House Near Table",
+    "Thamasa Item Shop Barrel",
+    "Thamasa Relic Shop Barrel",
+    "Thamasa Inn Barrel",
+    "Thamasa Strago's House Barrel",
+    "Thamasa Elder's House Barrel",
+    "Veldt Cave North Upper Left",
+    "Veldt Cave North Hidden Room",
+    "Veldt Cave South Lower Left",
+    "Zozo Armor Shop",
+    "Zozo Cafe",
+    "Zozo Clock Puzzle",
+    "Zozo Relic Shop Seventh Floor",
+    "Zozo West Tower North Left Pot",
+    "Zozo West Tower North Right Pot",
+    "Zozo Relic Shop Thirteenth Floor",
+    "Zozo Esper Room Left",
+    "Zozo Esper Room Right",
+]
+
+minor_kefka_checks = [
+    "Kefka's Tower Group 3 Balcony Left",
+    "Kefka's Tower Group 3 Balcony Right",
+    "Kefka's Tower Group 3 Entrance Stairs",
+    "Kefka's Tower Group 3 Hidden Room",
+    "Kefka's Tower Group 1 Metal Switchback",
+    "Kefka's Tower Group 1 Landing Area",
+    "Kefka's Tower Group 2 Left Area Top",
+    "Kefka's Tower Group 2 Left Area Bottom",
+    "Kefka's Tower Group 3 Right Path",
+    "Kefka's Tower Group 3 After Magitek Left",
+    "Kefka's Tower Group 3 After Magitek Right",
+    "Kefka's Tower Group 1 Winding Path",
+    "Kefka's Tower Poltergeist Hidden Chest",
+    "Kefka's Tower Group 2 Outside Switchback",
+    "Kefka's Tower Group 2 Pipe Output",
+    "Kefka's Tower Group 2 Switch Room"
+]
+
+terra_checks = [*major_terra_checks, *minor_terra_checks]
+locke_checks = [*major_locke_checks, *minor_locke_checks]
+cyan_checks = [*major_cyan_checks, *minor_cyan_checks]
+shadow_checks = [*major_shadow_checks, *minor_shadow_checks]
+edgar_checks = [*major_edgar_checks, *minor_edgar_checks]
+sabin_checks = [*major_sabin_checks, *minor_sabin_checks]
+celes_checks = [*major_celes_checks, *minor_celes_checks]
+strago_checks = [*major_strago_checks, *minor_strago_checks]
+relm_checks = [*major_relm_checks, *minor_relm_checks]
+setzer_checks = [*major_setzer_checks, *minor_setzer_checks]
+mog_checks = [*major_mog_checks, *minor_mog_checks]
+gau_checks = [*major_gau_checks, *minor_gau_checks]
+gogo_checks = [*major_gogo_checks, *minor_gogo_checks]
+umaro_checks = [*major_umaro_checks, *minor_umaro_checks]
+generic_checks = [*major_generic_checks, *minor_generic_checks]
+kefka_checks = [*major_kefka_checks, *minor_kefka_checks]
+
+minor_checks = [
+    *minor_terra_checks, *minor_locke_checks, *minor_cyan_checks, *minor_shadow_checks, *minor_edgar_checks,
+    *minor_sabin_checks, *minor_celes_checks, *minor_strago_checks, *minor_relm_checks, *minor_setzer_checks,
+    *minor_mog_checks, *minor_gau_checks, *minor_gogo_checks, *minor_umaro_checks,
+    *minor_generic_checks, *minor_kefka_checks
+]
+
+major_checks = [
+    *major_terra_checks, *major_locke_checks, *major_cyan_checks, *major_shadow_checks, *major_edgar_checks,
+    *major_sabin_checks, *major_celes_checks, *major_strago_checks, *major_relm_checks, *major_setzer_checks,
+    *major_mog_checks, *major_gau_checks, *major_gogo_checks, *major_umaro_checks,
+    *major_generic_checks, *major_kefka_checks
+]
+
+accomplishment_data = [
+    "Kefka's Tower",
+    "Beat Final Kefka"
+
+]
 
 dragon_events = [
     "Red Dragon Status",
@@ -143,11 +470,11 @@ dragon_events_link = {
     "Gold Dragon": "Gold Dragon Status"
 }
 
-location_table = {
-    **terra_checks, **locke_checks, **cyan_checks, **shadow_checks, **edgar_checks, **sabin_checks, **celes_checks,
-    **strago_checks, **relm_checks, **setzer_checks, **mog_checks, **gau_checks, **gogo_checks, **umaro_checks,
-    **kefka_checks, **generic_checks, **accomplishment_data
-}
+location_table = [
+    *terra_checks, *locke_checks, *cyan_checks, *shadow_checks, *edgar_checks, *sabin_checks, *celes_checks,
+    *strago_checks, *relm_checks, *setzer_checks, *mog_checks, *gau_checks, *gogo_checks, *umaro_checks,
+    *kefka_checks, *generic_checks, *accomplishment_data
+]
 
 dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
            "White Dragon", "Ice Dragon", "Skull Dragon", "Gold Dragon"]
@@ -155,7 +482,8 @@ dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
 # Except for Cranes, Magimaster, Imperial Air Force, AtmaWeapon, Veldt
 # Most are the first one, so we only need to note the exceptions
 item_only_checks = list(dragons)
-item_only_checks.extend(("Narshe Weapon Shop 2", "Gem Box", "Atma"))
+item_only_checks.extend(["Narshe Weapon Shop 2", "Gem Box", "Atma"])
+item_only_checks.extend(minor_checks)
 no_item_checks = ["Cranes", "MagiMaster", "Imperial Air Force", "AtmaWeapon", "Veldt"]
 no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Wrexsoul", "Doma Castle Throne",
                        "Doom Gaze", "Nerapa", "Ifrit and Shiva", "Number 024", "Narshe Weapon Shop 1",

@@ -57,7 +57,7 @@ class FF6WCClient(SNIClient):
             self.location_index = 0
         location_name = self.location_names[self.location_index]
         location_id = self.location_ids[location_name]
-        event_byte, event_bit = Rom.get_event_flag_value(location_id)
+        event_byte, event_bit = Rom.get_event_flag_value(Rom.event_flag_location_names[location_name])
         event_data = await snes_read(ctx, event_byte, 1)
 
         if event_data is not None:

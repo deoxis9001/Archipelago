@@ -130,7 +130,7 @@ minor_terra_checks = [
     "Sealed Gate Treasure Room Upper Floor Left",
     "Sealed Gate Treasure Room Upper Floor Right",
     "Imperial Base First Row Right",
-    "Imperial Base First Row Left"
+    "Imperial Base First Row Left",
     "Imperial Base Stove",
     "Imperial Base Second Row Far Right",
     "Imperial Base Second Row Right",
@@ -153,12 +153,11 @@ minor_locke_checks = [
     "Phoenix Cave Upper Cavern Spikes",
     "Phoenix Cave Upper Cavern Hidden Room",
     "Phoenix Cave Upper Cavern Across Bridge",
-    "Phoenix Cave Upper Cavern Near Red Dragon",
+    "Phoenix Cave Upper Cavern Near Red Dragon"
 ]
 
 minor_cyan_checks = [
     "Cyan's Dream Phantom Train Fourth Car Upper Right",
-    "Cyan's Dream Phantom Train Fourth Car Upper Left",
     "Cyan's Dream Phantom Train Fourth Car Middle",
     "Cyan's Dream Phantom Train Third Car Bottom Right",
     "Cyan's Dream Phantom Train Third Car Middle",
@@ -186,13 +185,15 @@ minor_edgar_checks = [
     "Ancient Cave West Cavern Left",
     "Ancient Castle Treasure Room Left",
     "Ancient Castle Treasure Room Right",
+    "Ancient Castle East Room",
+    "Ancient Castle Library",
     "Ancient Castle Jail",
     "Figaro Castle Basement 2 Treasure Room",
     "Figaro Castle Basement 3 Treasure Room Far Left",
     "Figaro Castle Basement 3 Treasure Room Left",
     "Figaro Castle Basement 3 Treasure Room Right",
     "Figaro Castle Basement 3 Treasure Room Far Right",
-    "Figaro Castle Basement 3 Treasure Room Statue",
+    "Figaro Castle Basement 3 Treasure Room Statue"
 ]
 
 minor_sabin_checks = [
@@ -202,7 +203,6 @@ minor_sabin_checks = [
     "Imperial Camp Central Tent Back",
     "Phantom Train Caboose",
     "Phantom Train Dining Car",
-    "Phantom Train Fourth Car East",
     "Phantom Train Fourth Car West Invisible Chest",
     "Phantom Train Third Car Far Left Chest",
     "Phantom Train Third Car Left Chest",
@@ -215,7 +215,7 @@ minor_sabin_checks = [
     "Collapsing House First Floor Bottom Left",
     "Collapsing House Basement Bottom",
     "Collapsing House Basement Left",
-    "Collapsing House Basement Right",
+    "Collapsing House Basement Right"
 ]
 
 minor_celes_checks = [
@@ -236,7 +236,7 @@ minor_celes_checks = [
 
 minor_strago_checks = [
     "Burning House First Chest",
-    "Burning House Second Chest",
+    "Burning House Second Chest"
 ]
 
 minor_relm_checks = [
@@ -262,19 +262,14 @@ minor_mog_checks = [
 
 minor_gau_checks = [
     "Serpent Trench First Branch",
-    "Serpent Trench Second Branch",
+    "Serpent Trench Second Branch"
 ]
 
 minor_gogo_checks = [
     "Zone Eater Crusher Room Right",
     "Zone Eater Crusher Room Middle",
     "Zone Eater Crusher Room Left",
-    "Zone Eater Jumping Room",
-    "Zone Eater Lower Cavern Left",
-    "Zone Eater Lower Cavern Right",
-    "Zone Eater Triple Bridge Right",
-    "Zone Eater Triple Bridge Middle",
-    "Zone Eater Triple Bridge Left",
+    "Zone Eater Jumping Room"
 ]
 
 minor_umaro_checks = [
@@ -300,8 +295,6 @@ minor_generic_checks = [
     "Fanatics' Tower Thirty-fifth Floor",
     "Fanatics' Tower Seventh Floor",
     "Fanatics' Tower Eighth Floor",
-    "Figaro Castle East Room",
-    "Figaro Castle Library",
     "Figaro Castle East Shop Left",
     "Figaro Castle East Shop Right",
     "Figaro Castle Upper Hall",
@@ -381,6 +374,11 @@ minor_generic_checks = [
     "Veldt Cave North Upper Left",
     "Veldt Cave North Hidden Room",
     "Veldt Cave South Lower Left",
+    "Zone Eater Lower Cavern Left",
+    "Zone Eater Lower Cavern Right",
+    "Zone Eater Triple Bridge Right",
+    "Zone Eater Triple Bridge Middle",
+    "Zone Eater Triple Bridge Left",
     "Zozo Armor Shop",
     "Zozo Cafe",
     "Zozo Clock Puzzle",
@@ -389,7 +387,7 @@ minor_generic_checks = [
     "Zozo West Tower North Right Pot",
     "Zozo Relic Shop Thirteenth Floor",
     "Zozo Esper Room Left",
-    "Zozo Esper Room Right",
+    "Zozo Esper Room Right"
 ]
 
 minor_kefka_checks = [

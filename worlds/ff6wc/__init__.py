@@ -157,48 +157,8 @@ class FF6WCWorld(World):
         # Set every character locked check to require that character.
         for check_name, checks in check_list.items():
             for check in checks:
-                if check_name == "TERRA":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_terra(self.player))
-                elif check_name == "LOCKE":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_locke(self.player))
-                elif check_name == "CYAN":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_cyan(self.player))
-                elif check_name == "SHADOW":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_shadow(self.player))
-                elif check_name == "EDGAR":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_edgar(self.player))
-                elif check_name == "SABIN":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_sabin(self.player))
-                elif check_name == "CELES":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_celes(self.player))
-                elif check_name == "STRAGO":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_strago(self.player))
-                elif check_name == "RELM":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_relm(self.player))
-                elif check_name == "SETZER":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_setzer(self.player))
-                elif check_name == "GAU":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_gau(self.player))
-                elif check_name == "MOG":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_mog(self.player))
-                elif check_name == "GOGO":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_gogo(self.player))
-                elif check_name == "UMARO":
-                    set_rule(self.multiworld.get_location(check, self.player),
-                             lambda state: state._ff6wc_has_umaro(self.player))
+                set_rule(self.multiworld.get_location(check, self.player),
+                         lambda state: state.has(check_name, self.player))
 
         for check in Locations.item_only_checks:
             add_item_rule(self.multiworld.get_location(check, self.player),
@@ -222,13 +182,7 @@ class FF6WCWorld(World):
             add_item_rule(self.multiworld.get_location(dragon_event, self.player),
                           lambda state: state.can_reach(str(dragon), 'Location', self.player))
 
-        set_rule(self.multiworld.get_region("Menu", self.player), lambda state: True)
-        set_rule(self.multiworld.get_region("World Map", self.player), lambda state: True)
-        set_rule(self.multiworld.get_entrance("Airship", self.player), lambda state: True)
         set_rule(self.multiworld.get_entrance("Kefka's Tower Landing", self.player),
-                 lambda state: state._ff6wc_has_enough_characters(self.multiworld, self.player)
-                               and state._ff6wc_has_enough_espers(self.multiworld, self.player))
-        set_rule(self.multiworld.get_region("Kefka's Tower", self.player),
                  lambda state: state._ff6wc_has_enough_characters(self.multiworld, self.player)
                                and state._ff6wc_has_enough_espers(self.multiworld, self.player))
         set_rule(self.multiworld.get_location("Beat Final Kefka", self.player),
@@ -338,28 +292,3 @@ class FF6WCItem(Item):
 class FF6WCLocation(Location):
     game = 'Final Fantasy 6 Worlds Collide'
 
-
-class PlandoItem(NamedTuple):
-    item: str
-    location: str
-    world: Union[bool, str] = False  # False -> own world, True -> not own world
-    from_pool: bool = True  # if item should be removed from item pool
-    force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item.
-
-    def warn(self, warning: str):
-        if self.force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
-            logging.warning(f'{warning}')
-        else:
-            logging.debug(f'{warning}')
-
-    def failed(self, warning: str, exception=Exception):
-        if self.force in ['true', 'fail', 'failure']:
-            raise exception(warning)
-        else:
-            self.warn(warning)
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both

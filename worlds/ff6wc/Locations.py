@@ -313,7 +313,7 @@ minor_generic_checks = [
     "Mt. Kolts West Face North",
     "Narshe Arvis's Clock",
     "Narshe Elder's Clock",
-    "Narshe Adventuring School Battle Tactics",
+    "Narshe Adventuring School Battle Tactics Chest",
     "Narshe Adventuring School Environmental Science Chest",
     "Narshe Adventuring School Environmental Science Pot",
     "Narshe Adventuring School Advanced Battle Tactics Chest",
@@ -482,7 +482,7 @@ dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
 item_only_checks = list(dragons)
 item_only_checks.extend(["Narshe Weapon Shop 2", "Gem Box", "Atma"])
 item_only_checks.extend(minor_checks)
-no_item_checks = ["Cranes", "MagiMaster", "Imperial Air Force", "AtmaWeapon", "Veldt"]
+no_item_checks = ["Cranes", "MagiMaster", "Imperial Air Force", "Nerapa", "Veldt"]
 no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Wrexsoul", "Doma Castle Throne",
-                       "Doom Gaze", "Nerapa", "Ifrit and Shiva", "Number 024", "Narshe Weapon Shop 1",
+                       "Doom Gaze", "AtmaWeapon", "Ifrit and Shiva", "Number 024", "Narshe Weapon Shop 1",
                        "Tritoch", "Tzen Thief"]

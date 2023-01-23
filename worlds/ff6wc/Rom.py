@@ -110,13 +110,17 @@ treasure_chest_data = {
     "Narshe Treasure House Top Right": (0x1E40, 6),
     "Narshe Treasure House Top Middle": (0x1E40, 5),
     "Narshe Treasure House Top Left": (0x1E40, 4),
-    "Narshe Mines East Right": (0x1E41, 3),
-    "Narshe Mines East Left": (0x1E41, 4),
-    "Narshe Moogle Lair": (0x1E41, 5),
+    "Narshe West Mines Right WoB": (0x1E41, 3), #TODO: Fix this address
+    "Narshe West Mines Left WoB": (0x1E41, 4), #TODO: Fix this address
+    "Narshe Moogle Lair WoB": (0x1E41, 5), #TODO: Fix this address
+    "Narshe West Mines Right WoR": (0x1E41, 3), #TODO: Fix this address
+    "Narshe West Mines Left WoR": (0x1E41, 4), #TODO: Fix this address
+    "Narshe Moogle Lair WoR": (0x1E41, 5), #TODO: Fix this address
     "Albrook Armor Shop Left": (0x1E4C, 5),
     "Albrook Armor Shop Right": (0x1E4C, 6),
     "Albrook Cafe Clock": (0x1E4C, 7),
-    "Albrook Inn Barrel": (0x1E4C, 2),
+    "Albrook Inn Barrel WoB": (0x1E4C, 2), # Fix this address
+    "Albrook Inn Barrel WoR": (0x1E4C, 2), # Fix this address
     "Albrook Weapon Shop Pot": (0x1E4C, 4),
     "Albrook Docks Crate": (0x1E4C, 3),
     "Ancient Cave North Cavern Left": (0x1E58, 5),
@@ -287,23 +291,34 @@ treasure_chest_data = {
     "South Figaro Basements 2 Hidden Chest": (0x1E5F, 6),
     "South Figaro Old Man's Bucket": (0x1E43, 6),
     "South Figaro Secret Path Clock": (0x1E43, 7),
-    "South Figaro Chocobo Stable Box": (0x1E43, 1),
-    "South Figaro Chocobo Stable Barrel": (0x1E43, 0),
-    "South Figaro Shoreline Box": (0x1E5C, 6),
-    "South Figaro Barrel Near Cafe": (0x1E42, 6),
-    "South Figaro Box Near Cafe": (0x1E42, 7),
-    "South Figaro Arsenal Barrel": (0x1E42, 5),
-    "South Figaro Wall Barrel": (0x1E5C, 7),
-    "South Figaro Mansion Exit Barrel": (0x1E42, 4),
+    "South Figaro Chocobo Stable Box WoB": (0x1E43, 1), #TODO: Fix this address
+    "South Figaro Chocobo Stable Barrel WoB": (0x1E43, 0), #TODO: Fix this address
+    "South Figaro Shoreline Box WoB": (0x1E5C, 6), #TODO: Fix this address
+    "South Figaro Barrel Near Cafe WoB": (0x1E42, 6), #TODO: Fix this address
+    "South Figaro Box Near Cafe WoB": (0x1E42, 7), #TODO: Fix this address
+    "South Figaro Arsenal Barrel WoB": (0x1E42, 5), #TODO: Fix this address
+    "South Figaro Wall Barrel WoB": (0x1E5C, 7), #TODO: Fix this address
+    "South Figaro Mansion Exit Barrel WoB": (0x1E42, 4), #TODO: Fix this address
+    "South Figaro Chocobo Stable Box WoR": (0x1E43, 1), #TODO: Fix this address
+    "South Figaro Chocobo Stable Barrel WoR": (0x1E43, 0), #TODO: Fix this address
+    "South Figaro Shoreline Box WoR": (0x1E5C, 6), #TODO: Fix this address
+    "South Figaro Barrel Near Cafe WoR": (0x1E42, 6), #TODO: Fix this address
+    "South Figaro Box Near Cafe WoR": (0x1E42, 7), #TODO: Fix this address
+    "South Figaro Arsenal Barrel WoR": (0x1E42, 5), #TODO: Fix this address
+    "South Figaro Wall Barrel WoR": (0x1E5C, 7), #TODO: Fix this address
+    "South Figaro Mansion Exit Barrel": (0x1E42, 4), #TODO: Fix this address
     "South Figaro Mansion Basement West Cell": (0x1E5F, 4),
     "South Figaro Mansion Basement East Cell": (0x1E60, 0),
     "South Figaro Mansion Basement East Room Left": (0x1E43, 2),
     "South Figaro Mansion Basement East Room Below Clock": (0x1E43, 4),
     "South Figaro Mansion Basement East Room Right": (0x1E43, 3),
     "South Figaro Mansion Basement East Room Far Right": (0x1E43, 5),
-    "South Figaro Cave Eastern Passage": (0x1E4C, 1),
-    "South Figaro Cave Southwest Passage": (0x1E42, 2),
-    "South Figaro Cave Eastern Bridge": (0x1E42, 3),
+    "South Figaro Cave Eastern Passage WoB": (0x1E4C, 1), #TODO: Fix this address
+    "South Figaro Cave Southwest Passage WoB": (0x1E42, 2), #TODO: Fix this address
+    "South Figaro Cave Eastern Bridge WoB": (0x1E42, 3), #TODO: Fix this address
+    "South Figaro Cave Eastern Passage WoR": (0x1E4C, 1), #TODO: Fix this address
+    "South Figaro Cave Southwest Passage WoR": (0x1E42, 2), #TODO: Fix this address
+    "South Figaro Cave Eastern Bridge WoR": (0x1E42, 3), #TODO: Fix this address
     "Thamasa Strago's House Near Table": (0x1E5C, 3),
     "Thamasa Item Shop Barrel": (0x1E5F, 1),
     "Thamasa Relic Shop Barrel": (0x1E5F, 0),

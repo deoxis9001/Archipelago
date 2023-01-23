@@ -440,6 +440,15 @@ major_checks = [
     *major_generic_checks, *major_kefka_checks
 ]
 
+fanatics_tower_checks = [
+    "Fanatics' Tower Seventeenth Floor",
+    "Fanatics' Tower Twenty-sixth Floor",
+    "Fanatics' Tower Thirty-fifth Floor",
+    "Fanatics' Tower Seventh Floor",
+    "Fanatics' Tower Eighth Floor",
+    "Gem Box"
+]
+
 accomplishment_data = [
     "Kefka's Tower",
     "Beat Final Kefka"

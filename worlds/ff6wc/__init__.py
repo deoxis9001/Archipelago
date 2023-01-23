@@ -158,7 +158,7 @@ class FF6WCWorld(World):
         for check_name, checks in check_list.items():
             for check in checks:
                 set_rule(self.multiworld.get_location(check, self.player),
-                         lambda state: state.has(check_name, self.player))
+                         lambda state, character=check_name: state.has(character, self.player))
 
         for check in Locations.item_only_checks:
             add_item_rule(self.multiworld.get_location(check, self.player),

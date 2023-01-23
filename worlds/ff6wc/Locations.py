@@ -177,6 +177,9 @@ minor_shadow_checks = [
 ]
 
 minor_edgar_checks = [
+    "South Figaro Cave Eastern Passage WoR",
+    "South Figaro Cave Southwest Passage WoR",
+    "South Figaro Cave Eastern Bridge WoR",
     "Ancient Cave North Cavern Left",
     "Ancient Cave North Cavern Right",
     "Ancient Cave South Cavern Bottom",
@@ -377,9 +380,6 @@ minor_generic_checks = [
     "South Figaro Cave Eastern Passage WoB",
     "South Figaro Cave Southwest Passage WoB",
     "South Figaro Cave Eastern Bridge WoB",
-    "South Figaro Cave Eastern Passage WoR",
-    "South Figaro Cave Southwest Passage WoR",
-    "South Figaro Cave Eastern Bridge WoR",
     "Thamasa Strago's House Near Table",
     "Thamasa Item Shop Barrel",
     "Thamasa Relic Shop Barrel",

@@ -110,11 +110,11 @@ treasure_chest_data = {
     "Narshe Treasure House Top Right": (0x1E40, 6),
     "Narshe Treasure House Top Middle": (0x1E40, 5),
     "Narshe Treasure House Top Left": (0x1E40, 4),
-    "Narshe Mines East Right WoB": (0x1E41, 3), #TODO: Fix this address
-    "Narshe Mines East Left WoB": (0x1E41, 4), #TODO: Fix this address
+    "Narshe West Mines Right WoB": (0x1E41, 3), #TODO: Fix this address
+    "Narshe West Mines Left WoB": (0x1E41, 4), #TODO: Fix this address
     "Narshe Moogle Lair WoB": (0x1E41, 5), #TODO: Fix this address
-    "Narshe Mines East Right WoR": (0x1E41, 3), #TODO: Fix this address
-    "Narshe Mines East Left WoR": (0x1E41, 4), #TODO: Fix this address
+    "Narshe West Mines Right WoR": (0x1E41, 3), #TODO: Fix this address
+    "Narshe West Mines Left WoR": (0x1E41, 4), #TODO: Fix this address
     "Narshe Moogle Lair WoR": (0x1E41, 5), #TODO: Fix this address
     "Albrook Armor Shop Left": (0x1E4C, 5),
     "Albrook Armor Shop Right": (0x1E4C, 6),

@@ -97,7 +97,7 @@ class FF6WCClient(SNIClient):
                 character_recruited = character_recruit_data[0] & character_recruit_bit
                 if not (character_initialized and character_recruited):
                     character_name = Rom.characters[character_index]
-                    character_ap_id = ctx.item_names[character_name]
+                    character_ap_id = item_id
                     character_item = next((item for item in ctx.items_received if item.item == character_ap_id),
                                           None)
                     if character_item is not None:
@@ -107,8 +107,8 @@ class FF6WCClient(SNIClient):
                         snes_buffered_write(ctx, character_recruit_byte, bytes([new_recruit_data]))
                         snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
                         snes_logger.info('Received %s from %s (%s)' % (
-                            color(ctx.item_names[character_item.item], 'red', 'bold'),
-                            color(ctx.player_names[character_item.player], 'yellow'),
+                            ctx.item_names[character_item.item],
+                            ctx.player_names[character_item.player],
                             ctx.location_names[character_item.location]))
             elif item_name in Rom.espers:
                 esper_index = Rom.espers.index(item_name)
@@ -124,8 +124,8 @@ class FF6WCClient(SNIClient):
 
                     snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
                     snes_logger.info('Received %s from %s (%s)' % (
-                        color(ctx.item_names[item.item], 'red', 'bold'),
-                        color(ctx.player_names[item.player], 'yellow'),
+                        ctx.item_names[item.item],
+                        ctx.player_names[item.player],
                         ctx.location_names[item.location]))
 
             else:
@@ -151,8 +151,8 @@ class FF6WCClient(SNIClient):
                         snes_buffered_write(ctx, amount_destination, bytes([amount]))
                         snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
                         snes_logger.info('Received %s from %s (%s)' % (
-                            color(item_name, 'red', 'bold'),
-                            color(ctx.player_names[item.player], 'yellow'),
+                            item_name,
+                            ctx.player_names[item.player],
                             ctx.location_names[item.location]))
                         break
         await snes_flush_writes(ctx)

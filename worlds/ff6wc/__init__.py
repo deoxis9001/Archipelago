@@ -183,8 +183,8 @@ class FF6WCWorld(World):
                           lambda state: state.can_reach(str(dragon), 'Location', self.player))
 
         for location in Locations.fanatics_tower_checks:
-            add_item_rule(self.multiworld.get_location(location, self.player),
-                          lambda state: state.has_group("espers", 4))
+            add_rule(self.multiworld.get_location(location, self.player),
+                          lambda state: state.has_group("espers", self.player, 4))
 
         set_rule(self.multiworld.get_entrance("Kefka's Tower Landing", self.player),
                  lambda state: state._ff6wc_has_enough_characters(self.multiworld, self.player)

@@ -327,11 +327,11 @@ minor_generic_checks = [
     "Narshe Treasure House Top Right",
     "Narshe Treasure House Top Middle",
     "Narshe Treasure House Top Left",
-    "Narshe Mines East Right WoB"
-    "Narshe Mines East Left WoB",
+    "Narshe West Mines Right WoB"
+    "Narshe West Mines Left WoB",
     "Narshe Moogle Lair WoB",
-    "Narshe Mines East Right WoR"
-    "Narshe Mines East Left WoR",
+    "Narshe West Mines Right WoR"
+    "Narshe West Mines Left WoR",
     "Narshe Moogle Lair WoR",
     "Umaro's Cave Basement 1 Lower Left",
     "Umaro's Cave Basement 1 Left Central",

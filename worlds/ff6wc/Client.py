@@ -79,10 +79,10 @@ class FF6WCClient(SNIClient):
                     await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [treasure_id]}])
 
 
-        items_received_data = await snes_read(ctx, Rom.items_received_address, 1)
+        items_received_data = await snes_read(ctx, Rom.items_received_address, 2)
         if items_received_data is None:
             return
-        items_received_amount = items_received_data[0]
+        items_received_amount = int.from_bytes(items_received_data, "big")
         if items_received_amount >= len(ctx.items_received):
             return
         else:

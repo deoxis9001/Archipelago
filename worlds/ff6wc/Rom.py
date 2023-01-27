@@ -622,40 +622,6 @@ treasure_chest_data = {
     "Zozo Esper Room Right": (0x1E48, 7, 140)
 }
 
-item_ingame_ids = {
-    'ValiantKnife': 9,
-    'Illumina': 26,
-    'Ragnarok Sword': 27,
-    'Pearl Lance': 33,
-    'Aura Lance': 35,
-    'Magus Rod': 60,
-    'Fixed Dice': 82,
-    'Aegis Shld': 94,
-    'Flame Shld': 96,
-    'Ice Shld': 97,
-    'Thunder Shld': 98,
-    'Genji Shld': 100,
-    'Paladin Shld': 103,
-    'Force Shld': 104,
-    'Red Cap': 120,
-    'Cat Hood': 128,
-    'Genji Helmet': 129,
-    'Force Armor': 148,
-    'Genji Armor': 154,
-    'Minerva': 156,
-    'BehemothSuit': 161,
-    'Snow Muffler': 162,
-    'Economizer': 206,
-    'Genji Glove': 209,
-    'Offering': 211,
-    'Gem Box': 216,
-    'Dragon Horn': 217,
-    'Marvel Shoes': 224,
-    'Exp. Egg': 228,
-    'ArchplgoItem': 231
-}
-
-
 class FF6WCDeltaPatch(APDeltaPatch):
     hash = NA10HASH
     game = "Final Fantasy 6 Worlds Collide"

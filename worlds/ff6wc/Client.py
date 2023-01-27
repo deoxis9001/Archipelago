@@ -147,13 +147,13 @@ class FF6WCClient(SNIClient):
                     print("slot" + str(i) + ":" + str(slot))
                     quantity = item_quantities_data[i]
                     exists = False
-                    if slot == Rom.item_ingame_ids[item_name]:
+                    if slot == Rom.item_name_id[item_name]:
                         exists = True
                     if (slot == 255 or quantity == 0 or exists == True):
                         reserved_slots.append(i)
                         type_destination = Rom.item_types_base_address + i
                         amount_destination = Rom.item_quantities_base_address + i
-                        type_id = Rom.item_ingame_ids[item_name]
+                        type_id = Rom.item_name_id[item_name]
                         amount = quantity + 1
                         snes_buffered_write(ctx, type_destination, bytes([type_id]))
                         snes_buffered_write(ctx, amount_destination, bytes([amount]))

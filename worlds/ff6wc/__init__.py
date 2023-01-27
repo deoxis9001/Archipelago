@@ -2,6 +2,7 @@ import json
 import os
 import random
 import shutil
+import subprocess
 import threading
 from typing import NamedTuple, Union
 import logging
@@ -26,7 +27,7 @@ class FF6WCWorld(World):
     data_version = 1
     base_id = 6000
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
+    item_name_to_id = {name: index for index, name in enumerate(item_table)}
     location_name_to_id = {name: index for index, name in enumerate(location_table)}
 
     all_characters = [
@@ -71,6 +72,9 @@ class FF6WCWorld(World):
 
     def create_item(self, name: str):
         return FF6WCItem(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+
+    def create_good_filler_item(self, name: str):
+        return FF6WCItem(name, ItemClassification.useful, self.item_name_to_id[name], self.player)
 
     def create_filler_item(self, name: str):
         return FF6WCItem(name, ItemClassification.filler, self.item_name_to_id[name], self.player)
@@ -160,6 +164,10 @@ class FF6WCWorld(World):
                 set_rule(self.multiworld.get_location(check, self.player),
                          lambda state, character=check_name: state.has(character, self.player))
 
+        for check in Locations.major_checks:
+            add_item_rule(self.multiworld.get_location(check, self.player),
+                          lambda item: item.name not in Items.okay_items)
+
         for check in Locations.item_only_checks:
             add_item_rule(self.multiworld.get_location(check, self.player),
                           lambda item: item.name not in self.item_name_groups["characters"]
@@ -209,9 +217,29 @@ class FF6WCWorld(World):
             self.multiworld.get_unfilled_locations(self.player)) - len(
             [item for item in self.multiworld.itempool if item.player == self.player])
         filler_pool = []
-        for item in Items.filler_items:
+        for item in Items.items:
             filler_pool.append(item)
-        self.multiworld.itempool += [self.create_item(random.choice(filler_pool)) for i in range(0, filler_count)]
+        self.multiworld.itempool += [self.create_item(random.choice(filler_pool)) for _ in range(0, filler_count)]
+
+    def post_fill(self) -> None:
+        spheres = list(self.multiworld.get_spheres())
+        sphere_count = len(spheres)
+        upgrade_base = sphere_count * 2
+        for current_sphere_count, sphere in enumerate(spheres):
+            for location in sphere:
+                if location.item.player == self.player:
+                    if self.multiworld.random.randint(0, upgrade_base) < current_sphere_count:
+                        self.upgrade_item(location.item)
+        return
+
+    def upgrade_item(self, item: Item):
+        if item.name in Items.okay_items:
+            new_item = self.multiworld.random.choice(Items.good_items)
+            new_item_id = self.item_name_to_id[new_item]
+            item.name = new_item
+            item.code = new_item_id
+            item.classification = ItemClassification.useful
+        return
 
     def generate_output(self, output_directory: str):
         locations = dict()
@@ -219,9 +247,16 @@ class FF6WCWorld(World):
         for region in self.multiworld.regions:
             if region.player == self.player:
                 for location in region.locations:
-                    locations[location.name] = "Archipelago Item"
+                    if location.name in Locations.minor_checks:
+                        try:
+                            location_name = Rom.treasure_chest_data[location.name][2]
+                        except IndexError:
+                            print(location.name)
+                    else:
+                        location_name = location.name
+                    locations[location_name] = "Archipelago Item"
                     if location.item.player == self.player:
-                        locations[location.name] = location.item.name
+                        locations[location_name] = location.item.name
         self.rom_name_text = f'6WC{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
         self.romName = bytearray(self.rom_name_text, 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
@@ -268,7 +303,7 @@ class FF6WCWorld(World):
         # -oa 2.3.3.2.4.12.4.10.26.6.1.8 is characters/espers/dragons
         # (2.4.12 is Characters, 4-12; 4.10.26 is Espers, 10-26, 6.1.8 is Dragons, 1-8)
         # -ob 30.8.8.1.1.11.8 is Get All SwdTechs after Doma.
-        os.system(f"python ./worlds/ff6wc/WorldsCollide/wc.py {wc_args}")
+        subprocess.run(f"python ./worlds/ff6wc/WorldsCollide/wc.py {wc_args}")
         patch = FF6WCDeltaPatch(
             os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending,
             player=self.player,

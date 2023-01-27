@@ -141,7 +141,8 @@ minor_terra_checks = [
     "Imperial Base Fourth Row Right",
     "Imperial Base Fifth Row Left",
     "Imperial Base Fifth Row Right",
-    "Imperial Base Bottom Right Hidden Chest"
+    "Imperial Base Bottom Right Hidden Chest",
+    "Mobliz Shelter Pot"
 ]
 
 minor_locke_checks = [
@@ -204,9 +205,7 @@ minor_sabin_checks = [
     "Imperial Camp Central Tent Left",
     "Imperial Camp Central Tent Right",
     "Imperial Camp Central Tent Back",
-    "Phantom Train Caboose",
     "Phantom Train Dining Car",
-    "Phantom Train Fourth Car West Invisible Chest",
     "Phantom Train Third Car Far Left Chest",
     "Phantom Train Third Car Left Chest",
     "Phantom Train Third Car Right Chest",
@@ -282,8 +281,7 @@ minor_generic_checks = [
     "Albrook Armor Shop Left",
     "Albrook Armor Shop Right",
     "Albrook Cafe Clock",
-    "Albrook Inn Barrel WoB",
-    "Albrook Inn Barrel WoR",
+    "Albrook Inn Barrel",
     "Albrook Weapon Shop Pot",
     "Albrook Docks Crate",
     "Doma Castle Cyan's Bedroom",
@@ -308,8 +306,7 @@ minor_generic_checks = [
     "Kohlingen Rachel's House Clock",
     "Maranda Crate Left",
     "Maranda Crate Bottom Right",
-    "Mobliz Letter Quest",
-    "Mobliz Post OFfice Clock",
+    "Mobliz Post Office Clock",
     "Mobliz House Barrel",
     "Mt. Kolts Exit",
     "Mt. Kolts Hidden Cavern",
@@ -327,10 +324,10 @@ minor_generic_checks = [
     "Narshe Treasure House Top Right",
     "Narshe Treasure House Top Middle",
     "Narshe Treasure House Top Left",
-    "Narshe West Mines Right WoB"
+    "Narshe West Mines Right WoB",
     "Narshe West Mines Left WoB",
     "Narshe Moogle Lair WoB",
-    "Narshe West Mines Right WoR"
+    "Narshe West Mines Right WoR",
     "Narshe West Mines Left WoR",
     "Narshe Moogle Lair WoR",
     "Umaro's Cave Basement 1 Lower Left",

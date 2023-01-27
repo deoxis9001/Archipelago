@@ -16,7 +16,6 @@ snes_logger: Logger = logging.getLogger("SNES")
 
 class FF6WCClient(SNIClient):
     game: str = "Final Fantasy 6 Worlds Collide"
-    location_index: int = 0
     location_names: typing.List = list(Rom.event_flag_location_names)
     location_ids = None
 
@@ -52,21 +51,33 @@ class FF6WCClient(SNIClient):
         if self.location_ids is None:
             self.location_ids = dict((v, k) for k, v in ctx.location_names.items())
 
-        self.location_index += 1
-        if self.location_index >= len(Rom.event_flag_location_names):
-            self.location_index = 0
-        location_name = self.location_names[self.location_index]
-        location_id = self.location_ids[location_name]
-        event_byte, event_bit = Rom.get_event_flag_value(Rom.event_flag_location_names[location_name])
-        event_data = await snes_read(ctx, event_byte, 1)
+        for location_index in range(len(Rom.event_flag_location_names)):
+            location_name = self.location_names[location_index]
+            location_id = self.location_ids[location_name]
+            event_byte, event_bit = Rom.get_event_flag_value(Rom.event_flag_location_names[location_name])
+            event_data = await snes_read(ctx, event_byte, 1)
 
-        if event_data is not None:
-            event_done = event_data[0] & event_bit
-            if event_done and location_id not in ctx.locations_checked:
-                ctx.locations_checked.add(location_id)
-                snes_logger.info(
-                    f'New Check: {location_name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-                await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+            if event_data is not None:
+                event_done = event_data[0] & event_bit
+                if event_done and location_id not in ctx.locations_checked:
+                    ctx.locations_checked.add(location_id)
+                    snes_logger.info(
+                        f'New Check: {location_name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+
+        treasure_data = await snes_read(ctx, Rom.treasure_chest_base_address, 40)
+
+        if treasure_data is not None:
+            for chest in Rom.treasure_chest_data.keys():
+                treasure_byte, treasure_bit = Rom.get_treasure_chest_bit(chest)
+                treasure_found = treasure_data[treasure_byte] & treasure_bit
+                treasure_id = self.location_ids[chest]
+                if treasure_found and treasure_id not in ctx.locations_checked:
+                    ctx.locations_checked.add(treasure_id)
+                    snes_logger.info(
+                        f'New Check: {chest} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [treasure_id]}])
+
 
         items_received_data = await snes_read(ctx, Rom.items_received_address, 1)
         if items_received_data is None:
@@ -78,9 +89,6 @@ class FF6WCClient(SNIClient):
             item = ctx.items_received[items_received_amount]
             item_name = ctx.item_names[item.item]
             item_id = item.item
-            print(item_name)
-            print(items_received_amount)
-            print(len(ctx.items_received))
             if item_name in Rom.characters:
                 character_index = Rom.characters.index(item_name)
                 character_init_byte, character_init_bit = Rom.get_character_initialized_bit(character_index)

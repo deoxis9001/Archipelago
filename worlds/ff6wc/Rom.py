@@ -15,7 +15,7 @@ character_intialized_bit_base_address = 0xF51EDC
 character_recruited_bit_base_address = 0xF51EDE
 item_types_base_address = 0xF51869
 item_quantities_base_address = 0xF51969
-items_received_address = 0xF51FFC
+items_received_address = 0xF51DC9
 map_index_address = 0xF50082
 espers = [  # This is the internal order of the Espers in the game. Editing this will break things.
     "Ramuh", "Ifrit", "Shiva",

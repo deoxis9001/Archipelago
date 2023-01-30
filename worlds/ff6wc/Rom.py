@@ -366,7 +366,7 @@ treasure_chest_data = {
     "Narshe Adventuring School Advanced Battle Tactics Chest": (0x1E51, 4, 74),
     "Narshe Adventuring School Battle Tactics Chest": (0x1E51, 3, 75),
     "Narshe Adventuring School Environmental Science Chest": (0x1E51, 2, 76),
-    "Narshe Adventuring School Environmental Science Pot": (0x1E51, 5, 66),
+    "Narshe Adventuring School Environmental Science Pot": (0x1E51, 5, 77),
     "Narshe Treasure House South Chest": (0x1E41, 1, 8),
     "Narshe Treasure House Middle Right": (0x1E41, 0, 7),
     "Narshe Treasure House Middle Left": (0x1E40, 7, 6),

@@ -552,7 +552,7 @@ treasure_chest_data = {
     "South Figaro Basements Hidden Path North Right": (0x1E44, 3, 60),
     "South Figaro Basements Hidden Path South": (0x1E44, 1, 58),
     "South Figaro Basements 2 South": (0x1E5F, 7, 64),
-    "South Figaro Basements 2 Northeast": (0x1E5F, 5, 66),
+    "South Figaro Basements 2 Northeast": (0x1E5F, 5, 62),
     "South Figaro Basements 2 Hidden Chest": (0x1E5F, 6, 63),
     "South Figaro Old Man's Bucket": (0x1E43, 6, 55),
     "South Figaro Secret Path Clock": (0x1E43, 7, 56),

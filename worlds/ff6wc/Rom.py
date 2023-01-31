@@ -461,7 +461,7 @@ treasure_chest_data = {
     "Imperial Base Second Row Far Left": (0x1E4E, 0, 242),
     "Imperial Base Third Row": (0x1E4E, 4, 246),
     "Imperial Base Fourth Row Left": (0x1E4E, 5, 247),
-    "Imperial Base Fourth Row Right": (0x1E4E, 6, 24),
+    "Imperial Base Fourth Row Right": (0x1E4E, 6, 248),
     "Imperial Base Fifth Row Left": (0x1E4E, 7, 249),
     "Imperial Base Fifth Row Right": (0x1E4F, 0, 250),
     "Imperial Base Bottom Right Hidden Chest": (0x1E60, 1, 252),

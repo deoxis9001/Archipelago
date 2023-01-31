@@ -242,10 +242,6 @@ minor_strago_checks = [
 ]
 
 minor_relm_checks = [
-    "Esper Mountain Entrance Cavern",
-    "Esper Mountain Outside Bridge",
-    "Esper Mountain Side Slope",
-    "Esper Mountain Treasure Slope",
     "Owzer's Basement Left Door",
     "Owzer's Basement Door Trio"
 ]
@@ -275,6 +271,9 @@ minor_gogo_checks = [
 ]
 
 minor_umaro_checks = [
+    "Umaro's Cave Basement 1 Lower Left",
+    "Umaro's Cave Basement 1 Left Central",
+    "Umaro's Cave Basement 2 Lower Left"
 ]
 
 minor_generic_checks = [
@@ -292,6 +291,10 @@ minor_generic_checks = [
     "Doma Castle West Sleeping Quarters Clock",
     "Dragon's Neck Cabin Pot",
     "Duncan's Cabin Bucket",
+    "Esper Mountain Entrance Cavern",
+    "Esper Mountain Outside Bridge",
+    "Esper Mountain Side Slope",
+    "Esper Mountain Treasure Slope",
     "Fanatics' Tower Seventeenth Floor",
     "Fanatics' Tower Twenty-sixth Floor",
     "Fanatics' Tower Thirty-fifth Floor",
@@ -330,9 +333,6 @@ minor_generic_checks = [
     "Narshe West Mines Right WoR",
     "Narshe West Mines Left WoR",
     "Narshe Moogle Lair WoR",
-    "Umaro's Cave Basement 1 Lower Left",
-    "Umaro's Cave Basement 1 Left Central",
-    "Umaro's Cave Basement 2 Lower Left",
     "Nikeah Inn Clock",
     "Returners' Hideout Banon's Room",
     "Returners' Hideout Bedroom",

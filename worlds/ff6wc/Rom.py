@@ -543,7 +543,7 @@ treasure_chest_data = {
     "Returners' Hideout North Room Bottom Right": (0x1E45, 7, 84),
     "Returners' Hideout North Room Upper Left": (0x1E45, 5, 82),
     "Returners' Hideout North Room Bucket": (0x1E45, 3, 80),
-    "Returners' Hideout North Room Pot": (0x1E45, 4, 78),
+    "Returners' Hideout North Room Pot": (0x1E45, 4, 81),
     "Returners' Hideout North Room Secret Room": (0x1E46, 1, 86),
     "Serpent Trench First Branch": (0X1E47, 7, 118),
     "Serpent Trench Second Branch": (0x1E48, 0, 119),

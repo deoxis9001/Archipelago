@@ -437,7 +437,6 @@ treasure_chest_data = {
     "Fanatics' Tower Thirty-fifth Floor": (0x1E56, 7, 234),
     "Fanatics' Tower Seventh Floor": (0x1E57, 1, 235),
     "Fanatics' Tower Eighth Floor": (0x1E56, 4, 230),
-    "Fanatics' Tower Top Floor": (0x1E57, 0, 231),
     "Figaro Castle East Shop Left": (0x1E41, 6, 17),
     "Figaro Castle East Shop Right": (0x1E41, 7, 18),
     "Figaro Castle Upper Hall": (0x1E42, 1, 20),

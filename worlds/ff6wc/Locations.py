@@ -275,6 +275,9 @@ minor_gogo_checks = [
 ]
 
 minor_umaro_checks = [
+    "Umaro's Cave Basement 1 Lower Left",
+    "Umaro's Cave Basement 1 Left Central",
+    "Umaro's Cave Basement 2 Lower Left"
 ]
 
 minor_generic_checks = [
@@ -330,9 +333,6 @@ minor_generic_checks = [
     "Narshe West Mines Right WoR",
     "Narshe West Mines Left WoR",
     "Narshe Moogle Lair WoR",
-    "Umaro's Cave Basement 1 Lower Left",
-    "Umaro's Cave Basement 1 Left Central",
-    "Umaro's Cave Basement 2 Lower Left",
     "Nikeah Inn Clock",
     "Returners' Hideout Banon's Room",
     "Returners' Hideout Bedroom",

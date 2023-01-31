@@ -242,10 +242,6 @@ minor_strago_checks = [
 ]
 
 minor_relm_checks = [
-    "Esper Mountain Entrance Cavern",
-    "Esper Mountain Outside Bridge",
-    "Esper Mountain Side Slope",
-    "Esper Mountain Treasure Slope",
     "Owzer's Basement Left Door",
     "Owzer's Basement Door Trio"
 ]
@@ -295,6 +291,10 @@ minor_generic_checks = [
     "Doma Castle West Sleeping Quarters Clock",
     "Dragon's Neck Cabin Pot",
     "Duncan's Cabin Bucket",
+    "Esper Mountain Entrance Cavern",
+    "Esper Mountain Outside Bridge",
+    "Esper Mountain Side Slope",
+    "Esper Mountain Treasure Slope",
     "Fanatics' Tower Seventeenth Floor",
     "Fanatics' Tower Twenty-sixth Floor",
     "Fanatics' Tower Thirty-fifth Floor",

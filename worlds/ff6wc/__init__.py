@@ -12,13 +12,18 @@ from . import Logic
 from .Rom import FF6WCDeltaPatch
 from .Client import FF6WCClient
 from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
-from ..AutoWorld import World, LogicMixin
+from ..AutoWorld import World, LogicMixin, WebWorld
 from NetUtils import SlotType
 from .Locations import location_table
 from .Items import item_table
-from .Options import ff6wc_options
+from .Options import ff6wc_options, generate_flagstring
 import Utils
 
+from .WorldsCollide import wc
+
+
+class FF6WCWeb(WebWorld):
+    theme = "dirt"
 
 class FF6WCWorld(World):
     option_definitions = ff6wc_options
@@ -26,14 +31,15 @@ class FF6WCWorld(World):
     topology_present = False
     data_version = 1
     base_id = 6000
+    web = FF6WCWeb()
 
     item_name_to_id = {name: index for index, name in enumerate(item_table)}
     location_name_to_id = {name: index for index, name in enumerate(location_table)}
 
     all_characters = [
-            'TERRA', 'LOCKE', 'CYAN', 'SHADOW', 'EDGAR',
-            'SABIN', 'CELES', 'STRAGO', 'RELM', 'SETZER',
-            'MOG', 'GAU', 'GOGO', 'UMARO'
+            'Terra', 'Locke', 'Cyan', 'Shadow', 'Edgar',
+            'Sabin', 'Celes', 'Strago', 'Relm', 'Setzer',
+            'Mog', 'Gau', 'Gogo', 'Umaro'
         ]
 
     all_espers = [
@@ -88,18 +94,21 @@ class FF6WCWorld(World):
         return return_location
 
     def generate_early(self):
-        chosen_starting_characters = [
-            str.upper(self.multiworld.StartingCharacter1[self.player].current_key),
-            str.upper(self.multiworld.StartingCharacter2[self.player].current_key),
-            str.upper(self.multiworld.StartingCharacter3[self.player].current_key),
-            str.upper(self.multiworld.StartingCharacter4[self.player].current_key)
+        starting_characters = [
+            self.multiworld.StartingCharacter1[self.player].current_key,
+            self.multiworld.StartingCharacter2[self.player].current_key,
+            self.multiworld.StartingCharacter3[self.player].current_key,
+            self.multiworld.StartingCharacter4[self.player].current_key
         ]
-        chosen_starting_characters = chosen_starting_characters[0:self.multiworld.StartingCharacterCount[self.player]]
+        starting_characters = starting_characters[0:self.multiworld.StartingCharacterCount[self.player]]
+        starting_characters.sort(key=lambda character: character == "random_with_no_gogo_or_umaro")
 
         filtered_starting_characters = []
-        for character in chosen_starting_characters:
-            if character == "RANDOM_WITH_NO_GOGO_OR_UMARO":
-                character = random.choice(Rom.characters[0:12])
+        for character in starting_characters:
+            if character == "random_with_no_gogo_or_umaro":
+                character = random.choice(Rom.characters[:12])
+                while character in filtered_starting_characters:
+                    character = random.choice(Rom.characters[:12])
             if character not in filtered_starting_characters:
                 filtered_starting_characters.append(character)
 
@@ -143,20 +152,20 @@ class FF6WCWorld(World):
 
     def set_rules(self):
         check_list = {
-            "TERRA": Locations.terra_checks,
-            "LOCKE": Locations.locke_checks,
-            "CYAN": Locations.cyan_checks,
-            "SHADOW": Locations.shadow_checks,
-            "EDGAR": Locations.edgar_checks,
-            "SABIN": Locations.sabin_checks,
-            "CELES": Locations.celes_checks,
-            "STRAGO": Locations.strago_checks,
-            "RELM": Locations.relm_checks,
-            "SETZER": Locations.setzer_checks,
-            "MOG": Locations.mog_checks,
-            "GAU": Locations.gau_checks,
-            "GOGO": Locations.gogo_checks,
-            "UMARO": Locations.umaro_checks,
+            "Terra": Locations.terra_checks,
+            "Locke": Locations.locke_checks,
+            "Cyan": Locations.cyan_checks,
+            "Shadow": Locations.shadow_checks,
+            "Edgar": Locations.edgar_checks,
+            "Sabin": Locations.sabin_checks,
+            "Celes": Locations.celes_checks,
+            "Strago": Locations.strago_checks,
+            "Relm": Locations.relm_checks,
+            "Setzer": Locations.setzer_checks,
+            "Mog": Locations.mog_checks,
+            "Gau": Locations.gau_checks,
+            "Gogo": Locations.gogo_checks,
+            "Umaro": Locations.umaro_checks,
         }
         # Set every character locked check to require that character.
         for check_name, checks in check_list.items():
@@ -248,62 +257,26 @@ class FF6WCWorld(World):
             if region.player == self.player:
                 for location in region.locations:
                     if location.name in Locations.minor_checks:
-                        try:
-                            location_name = Rom.treasure_chest_data[location.name][2]
-                        except IndexError:
-                            print(location.name)
+                        location_name = Rom.treasure_chest_data[location.name][2]
                     else:
                         location_name = location.name
                     locations[location_name] = "Archipelago Item"
                     if location.item.player == self.player:
                         locations[location_name] = location.item.name
         self.rom_name_text = f'6WC{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
-        self.romName = bytearray(self.rom_name_text, 'utf8')[:21]
-        self.romName.extend([0] * (21 - len(self.romName)))
+        self.romName = bytearray(self.rom_name_text, 'utf8')[:20]
+        self.romName.extend([0] * (20 - len(self.romName)))
         self.rom_name = self.romName
-        locations["RomName"] = self.rom_name_text
-        character_arg_string = ""
-        for index, character in enumerate(self.starting_characters):
-            character_arg_string += f"-sc{index + 1}={str.lower(character)} "
-        char_c = str(self.multiworld.CharacterCount[self.player]) + "." + str(self.multiworld.CharacterCount[self.player])
-        esper_c = str(self.multiworld.EsperCount[self.player]) + "." + str(self.multiworld.EsperCount[self.player])
-        drag_c = str(self.multiworld.DragonCount[self.player]) + "." + str(self.multiworld.DragonCount[self.player])
-        objective_flag = f'-oa=2.3.3.2.{char_c}.4.{esper_c}.6.{drag_c}'
+        locations["RomName"] = self.rom_name_text[:20]
         placement_file = os.path.join(output_directory,
                                       f'{self.multiworld.get_out_file_name_base(self.player)}' + '.txt')
         with open(placement_file, "w") as file:
             json.dump(locations, file, indent=2)
         output_file = os.path.join(output_directory,f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
-        wc_args = [
-            '-i="Final Fantasy III (USA).sfc"',
-            f"-ap={placement_file}",
-            objective_flag,
-            "-ob=30.8.8.1.1.11.8",
-            "-nro",
-            "-sl",
-            "-cg",
-            character_arg_string,
-            f"-o={output_file}",
-            "-sal -eu -fst -brl -slr 1 5 -lmprp 75 125 -lel ",
-            "-srr 3 15 -rnl -rnc -sdr 1 1 -das -dda -dns -com 98989898989898989898989898",
-            "-rec1 28 -rec2 23 -rec3 14 -rec4 24 -rec5 26 -rec6 5 ",
-            "-xpm 3 -mpm 5 -gpm 5 -nxppd -lsced 2 -hmced 2 -xgced 2 ",
-            "-ase 2 -msl 40 -sed -bbs -bnds -be -bnu -res -fer 5 ",
-            "-escr 100 -dgne -wnz -mmnu -cmd -esr 1 5 -ebr 68 ",
-            "-emprp 75 125 -nm1 random -rnl1 -rns1 -nm2 random ",
-            "-rnl2 -rns2 -nmmi -gp 20000 -smc 3 -ieor 33 -ieror 33",
-            "-csb 1 32 -mca -stra -saw -sisr 20 -sprp 75 125 -sdm 4 ",
-            "-npi -ccsr 50 -cms ",
-            "-name Terra.Locke.Cyan.Shadow.Edgar.Sabin.Celes.Strago.Relm.Setzer.Mog.Gau.Gogo.Umaro ",
-            "-cor -crr -crvr 255 255 -ari -anca -adeh -nmc ",
-            "-nu -fs -fe -fvd -fr -fj -fbs -fedc -as -rr"
-        ]
+        wc_args = ["-i", "Final Fantasy III (USA).sfc", "-o", f"{output_file}", "-ap", placement_file]
+        wc_args.extend(generate_flagstring(self.multiworld, self.player, self.starting_characters))
 
-        wc_args = " ".join(wc_args)
-        # -oa 2.3.3.2.4.12.4.10.26.6.1.8 is characters/espers/dragons
-        # (2.4.12 is Characters, 4-12; 4.10.26 is Espers, 10-26, 6.1.8 is Dragons, 1-8)
-        # -ob 30.8.8.1.1.11.8 is Get All SwdTechs after Doma.
-        subprocess.run(f"python ./worlds/ff6wc/WorldsCollide/wc.py {wc_args}")
+        wc.main(wc_args)
         patch = FF6WCDeltaPatch(
             os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending,
             player=self.player,

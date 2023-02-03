@@ -76,7 +76,8 @@ major_setzer_checks = [
 
 major_mog_checks = [
     "Lone Wolf 1",
-    "Lone Wolf 2"
+    "Lone Wolf 2",
+    "Narshe Moogle Defense"
 ]
 
 major_gau_checks = [

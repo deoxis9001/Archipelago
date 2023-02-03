@@ -190,7 +190,7 @@ minor_cyan_checks = [
     "Mt. Zozo Cyan's Room"
 ]
 
-minor_cyan_checks = [
+minor_cyan_ext_checks = [
 ]
 
 minor_shadow_checks = [
@@ -288,7 +288,7 @@ minor_strago_ext_checks = [
     "Fanatics' Tower Twenty-sixth Floor",
     "Fanatics' Tower Thirty-fifth Floor",
     "Fanatics' Tower Seventh Floor",
-    "Fanatics' Tower Eighth Floor",
+    "Fanatics' Tower Eighth Floor"
 ]
 
 minor_relm_checks = [
@@ -513,8 +513,8 @@ fanatics_tower_checks = [
 ]
 
 accomplishment_data = [
-    "Kefka's Tower Skip",
-    "Beat Final Kefka"
+    "Beat Final Kefka",
+    "Kefka's Tower Skip"
 ]
 
 dragon_events = [

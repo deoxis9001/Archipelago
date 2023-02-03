@@ -115,6 +115,7 @@ major_kefka_checks = [
     "Skull Dragon Status",
     "Gold Dragon Status"
 ]
+
 minor_terra_checks = [
     "Sealed Gate Basement 1",
     "Sealed Gate Basement 2 Bottom",
@@ -146,7 +147,25 @@ minor_terra_checks = [
     "Mobliz Shelter Pot"
 ]
 
+minor_terra_ext_checks = [
+    "Zozo Armor Shop",
+    "Zozo Cafe",
+    "Zozo Clock Puzzle",
+    "Zozo Relic Shop Seventh Floor",
+    "Zozo West Tower North Left Pot",
+    "Zozo West Tower North Right Pot",
+    "Zozo Relic Shop Thirteenth Floor",
+    "Zozo Esper Room Left",
+    "Zozo Esper Room Right"
+]
+
 minor_locke_checks = [
+]
+
+minor_locke_ext_checks = [
+    "South Figaro Cave Eastern Passage WoB",
+    "South Figaro Cave Southwest Passage WoB",
+    "South Figaro Cave Eastern Bridge WoB",
     "Phoenix Cave Lower Cavern East Pool Island",
     "Phoenix Cave Lower Cavern East Pool Bridge",
     "Phoenix Cave Lower Cavern Spikes",
@@ -171,11 +190,20 @@ minor_cyan_checks = [
     "Mt. Zozo Cyan's Room"
 ]
 
+minor_cyan_checks = [
+]
+
 minor_shadow_checks = [
     "Floating Continent North Path",
     "Floating Continent Lower Path",
     "Floating Continent Northeast of Save",
     "Floating Continent Escape"
+]
+
+minor_shadow_ext_checks = [
+    "Veldt Cave North Upper Left",
+    "Veldt Cave North Hidden Room",
+    "Veldt Cave South Lower Left"
 ]
 
 minor_edgar_checks = [
@@ -201,6 +229,9 @@ minor_edgar_checks = [
     "Figaro Castle Basement 3 Treasure Room Statue"
 ]
 
+minor_edgar_ext_checks = [
+]
+
 minor_sabin_checks = [
     "Imperial Camp Kick Chest",
     "Imperial Camp Central Tent Left",
@@ -221,6 +252,13 @@ minor_sabin_checks = [
     "Collapsing House Basement Right"
 ]
 
+minor_sabin_ext_checks = [
+    "Mt. Kolts Exit",
+    "Mt. Kolts Hidden Cavern",
+    "Mt. Kolts West Face South",
+    "Mt. Kolts West Face North"
+]
+
 minor_celes_checks = [
     "Magitek Factory North Upper Left",
     "Magitek Factory North Right Side Pipe",
@@ -237,18 +275,32 @@ minor_celes_checks = [
     "Magitek Factory Specimen Room"
 ]
 
+minor_celes_ext_checks = [
+]
+
 minor_strago_checks = [
     "Burning House First Chest",
     "Burning House Second Chest"
 ]
 
+minor_strago_ext_checks = [
+    "Fanatics' Tower Seventeenth Floor",
+    "Fanatics' Tower Twenty-sixth Floor",
+    "Fanatics' Tower Thirty-fifth Floor",
+    "Fanatics' Tower Seventh Floor",
+    "Fanatics' Tower Eighth Floor",
+]
+
 minor_relm_checks = [
+    "Owzer's Basement Left Door",
+    "Owzer's Basement Door Trio"
+]
+
+minor_relm_ext_checks = [
     "Esper Mountain Entrance Cavern",
     "Esper Mountain Outside Bridge",
     "Esper Mountain Side Slope",
-    "Esper Mountain Treasure Slope",
-    "Owzer's Basement Left Door",
-    "Owzer's Basement Door Trio"
+    "Esper Mountain Treasure Slope"
 ]
 
 minor_setzer_checks = [
@@ -260,12 +312,21 @@ minor_setzer_checks = [
     "Darill's Tomb Pre-Boss Room Right"
 ]
 
+minor_setzer_ext_checks = [
+]
+
 minor_mog_checks = [
+]
+
+minor_mog_ext_checks = [
 ]
 
 minor_gau_checks = [
     "Serpent Trench First Branch",
     "Serpent Trench Second Branch"
+]
+
+minor_gau_ext_checks = [
 ]
 
 minor_gogo_checks = [
@@ -275,7 +336,21 @@ minor_gogo_checks = [
     "Zone Eater Jumping Room"
 ]
 
+minor_gogo_ext_checks = [
+    "Zone Eater Lower Cavern Left",
+    "Zone Eater Lower Cavern Right",
+    "Zone Eater Triple Bridge Right",
+    "Zone Eater Triple Bridge Middle",
+    "Zone Eater Triple Bridge Left"
+]
+
 minor_umaro_checks = [
+    "Umaro's Cave Basement 1 Lower Left",
+    "Umaro's Cave Basement 1 Left Central",
+    "Umaro's Cave Basement 2 Lower Left"
+]
+
+minor_umaro_ext_checks = [
 ]
 
 minor_generic_checks = [
@@ -293,11 +368,6 @@ minor_generic_checks = [
     "Doma Castle West Sleeping Quarters Clock",
     "Dragon's Neck Cabin Pot",
     "Duncan's Cabin Bucket",
-    "Fanatics' Tower Seventeenth Floor",
-    "Fanatics' Tower Twenty-sixth Floor",
-    "Fanatics' Tower Thirty-fifth Floor",
-    "Fanatics' Tower Seventh Floor",
-    "Fanatics' Tower Eighth Floor",
     "Figaro Castle East Shop Left",
     "Figaro Castle East Shop Right",
     "Figaro Castle Upper Hall",
@@ -309,10 +379,6 @@ minor_generic_checks = [
     "Maranda Crate Bottom Right",
     "Mobliz Post Office Clock",
     "Mobliz House Barrel",
-    "Mt. Kolts Exit",
-    "Mt. Kolts Hidden Cavern",
-    "Mt. Kolts West Face South",
-    "Mt. Kolts West Face North",
     "Narshe Arvis's Clock",
     "Narshe Elder's Clock",
     "Narshe Adventuring School Battle Tactics Chest",
@@ -331,9 +397,6 @@ minor_generic_checks = [
     "Narshe West Mines Right WoR",
     "Narshe West Mines Left WoR",
     "Narshe Moogle Lair WoR",
-    "Umaro's Cave Basement 1 Lower Left",
-    "Umaro's Cave Basement 1 Left Central",
-    "Umaro's Cave Basement 2 Lower Left",
     "Nikeah Inn Clock",
     "Returners' Hideout Banon's Room",
     "Returners' Hideout Bedroom",
@@ -375,32 +438,12 @@ minor_generic_checks = [
     "South Figaro Mansion Basement East Room Below Clock",
     "South Figaro Mansion Basement East Room Right",
     "South Figaro Mansion Basement East Room Far Right",
-    "South Figaro Cave Eastern Passage WoB",
-    "South Figaro Cave Southwest Passage WoB",
-    "South Figaro Cave Eastern Bridge WoB",
     "Thamasa Strago's House Near Table",
     "Thamasa Item Shop Barrel",
     "Thamasa Relic Shop Barrel",
     "Thamasa Inn Barrel",
     "Thamasa Strago's House Barrel",
-    "Thamasa Elder's House Barrel",
-    "Veldt Cave North Upper Left",
-    "Veldt Cave North Hidden Room",
-    "Veldt Cave South Lower Left",
-    "Zone Eater Lower Cavern Left",
-    "Zone Eater Lower Cavern Right",
-    "Zone Eater Triple Bridge Right",
-    "Zone Eater Triple Bridge Middle",
-    "Zone Eater Triple Bridge Left",
-    "Zozo Armor Shop",
-    "Zozo Cafe",
-    "Zozo Clock Puzzle",
-    "Zozo Relic Shop Seventh Floor",
-    "Zozo West Tower North Left Pot",
-    "Zozo West Tower North Right Pot",
-    "Zozo Relic Shop Thirteenth Floor",
-    "Zozo Esper Room Left",
-    "Zozo Esper Room Right"
+    "Thamasa Elder's House Barrel"
 ]
 
 minor_kefka_checks = [
@@ -422,22 +465,29 @@ minor_kefka_checks = [
     "Kefka's Tower Group 2 Switch Room"
 ]
 
-terra_checks = [*major_terra_checks, *minor_terra_checks]
-locke_checks = [*major_locke_checks, *minor_locke_checks]
-cyan_checks = [*major_cyan_checks, *minor_cyan_checks]
-shadow_checks = [*major_shadow_checks, *minor_shadow_checks]
-edgar_checks = [*major_edgar_checks, *minor_edgar_checks]
-sabin_checks = [*major_sabin_checks, *minor_sabin_checks]
-celes_checks = [*major_celes_checks, *minor_celes_checks]
-strago_checks = [*major_strago_checks, *minor_strago_checks]
-relm_checks = [*major_relm_checks, *minor_relm_checks]
-setzer_checks = [*major_setzer_checks, *minor_setzer_checks]
-mog_checks = [*major_mog_checks, *minor_mog_checks]
-gau_checks = [*major_gau_checks, *minor_gau_checks]
-gogo_checks = [*major_gogo_checks, *minor_gogo_checks]
-umaro_checks = [*major_umaro_checks, *minor_umaro_checks]
+# TODO checks to be assigned based on options
+terra_checks = [*major_terra_checks, *minor_terra_checks, *minor_terra_ext_checks]
+locke_checks = [*major_locke_checks, *minor_locke_checks, *minor_locke_ext_checks]
+cyan_checks = [*major_cyan_checks, *minor_cyan_checks, *minor_cyan_ext_checks]
+shadow_checks = [*major_shadow_checks, *minor_shadow_checks, *minor_shadow_ext_checks]
+edgar_checks = [*major_edgar_checks, *minor_edgar_checks, *minor_edgar_ext_checks]
+sabin_checks = [*major_sabin_checks, *minor_sabin_checks, *minor_sabin_ext_checks]
+celes_checks = [*major_celes_checks, *minor_celes_checks, *minor_celes_ext_checks]
+strago_checks = [*major_strago_checks, *minor_strago_checks, *minor_strago_ext_checks]
+relm_checks = [*major_relm_checks, *minor_relm_checks, *minor_relm_ext_checks]
+setzer_checks = [*major_setzer_checks, *minor_setzer_checks, *minor_setzer_ext_checks]
+mog_checks = [*major_mog_checks, *minor_mog_checks, *minor_mog_ext_checks]
+gau_checks = [*major_gau_checks, *minor_gau_checks, *minor_gau_ext_checks]
+gogo_checks = [*major_gogo_checks, *minor_gogo_checks, *minor_gogo_ext_checks]
+umaro_checks = [*major_umaro_checks, *minor_umaro_checks, *minor_umaro_ext_checks]
 generic_checks = [*major_generic_checks, *minor_generic_checks]
 kefka_checks = [*major_kefka_checks, *minor_kefka_checks]
+
+minor_ext_checks = [
+    *minor_terra_ext_checks, *minor_locke_ext_checks, *minor_cyan_ext_checks, *minor_shadow_ext_checks, *minor_edgar_ext_checks,
+    *minor_sabin_ext_checks, *minor_celes_ext_checks, *minor_strago_ext_checks, *minor_relm_ext_checks, *minor_setzer_ext_checks,
+    *minor_mog_ext_checks, *minor_gau_ext_checks, *minor_gogo_ext_checks, *minor_umaro_ext_checks
+]
 
 minor_checks = [
     *minor_terra_checks, *minor_locke_checks, *minor_cyan_checks, *minor_shadow_checks, *minor_edgar_checks,
@@ -463,9 +513,8 @@ fanatics_tower_checks = [
 ]
 
 accomplishment_data = [
-    "Kefka's Tower",
+    "Kefka's Tower Skip",
     "Beat Final Kefka"
-
 ]
 
 dragon_events = [
@@ -503,6 +552,7 @@ dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
 # Most are the first one, so we only need to note the exceptions
 item_only_checks = list(dragons)
 item_only_checks.extend(["Narshe Weapon Shop 2", "Gem Box", "Atma"])
+item_only_checks.extend(minor_ext_checks)
 item_only_checks.extend(minor_checks)
 no_item_checks = ["Cranes", "MagiMaster", "Imperial Air Force", "Nerapa", "Veldt"]
 no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Wrexsoul", "Doma Castle Throne",

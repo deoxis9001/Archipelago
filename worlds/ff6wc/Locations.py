@@ -513,6 +513,7 @@ fanatics_tower_checks = [
 ]
 
 accomplishment_data = [
+    "Kefka's Tower",
     "Beat Final Kefka",
     "Kefka's Tower Skip"
 ]

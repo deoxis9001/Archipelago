@@ -25,7 +25,7 @@ class FF6WCClient(SNIClient):
     async def validate_rom(self, ctx: SNIContext) -> bool:
         from SNIClient import snes_read
 
-        rom_name: bytes = await snes_read(ctx, Rom.ROM_NAME, 0x15)
+        rom_name: bytes = await snes_read(ctx, Rom.ROM_NAME, 20)
         if rom_name is None or rom_name[:3] != b"6WC":
             return False
 
@@ -39,7 +39,7 @@ class FF6WCClient(SNIClient):
     async def game_watcher(self, ctx: SNIContext) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        rom: bytes = await snes_read(ctx, Rom.ROM_NAME, 0x15)
+        rom: bytes = await snes_read(ctx, Rom.ROM_NAME, 20)
         if rom != ctx.rom:
             ctx.rom = None
             return
@@ -82,7 +82,7 @@ class FF6WCClient(SNIClient):
         items_received_data = await snes_read(ctx, Rom.items_received_address, 2)
         if items_received_data is None:
             return
-        items_received_amount = int.from_bytes(items_received_data, "big")
+        items_received_amount = int.from_bytes(items_received_data, "little")
         if items_received_amount >= len(ctx.items_received):
             return
         else:

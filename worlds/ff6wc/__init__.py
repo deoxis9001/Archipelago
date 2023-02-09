@@ -258,6 +258,8 @@ class FF6WCWorld(World):
                 for location in region.locations:
                     if location.name in Locations.minor_checks:
                         location_name = Rom.treasure_chest_data[location.name][2]
+                    elif location.name in Locations.minor_ext_checks:
+                        location_name = Rom.treasure_chest_data[location.name][2]
                     else:
                         location_name = location.name
                     locations[location_name] = "Archipelago Item"

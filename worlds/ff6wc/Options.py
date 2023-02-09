@@ -203,7 +203,7 @@ class EsperEquipability(Choice):
     default = 0
 
 class NaturalMagic(Choice):
-    """Modifies which two characters leanr Magic via level up, and what they learn"""
+    """Modifies which two characters learn Magic via level up, and what they learn"""
     display_name = "Natural Magic"
     option_vanilla = 0
     option_random_characters = 1

@@ -95,17 +95,17 @@ class FF6WCWorld(World):
 
     def generate_early(self):
         starting_characters = [
-            self.multiworld.StartingCharacter1[self.player].current_key,
-            self.multiworld.StartingCharacter2[self.player].current_key,
-            self.multiworld.StartingCharacter3[self.player].current_key,
-            self.multiworld.StartingCharacter4[self.player].current_key
+            (self.multiworld.StartingCharacter1[self.player].current_key).capitalize(),
+            (self.multiworld.StartingCharacter2[self.player].current_key).capitalize(),
+            (self.multiworld.StartingCharacter3[self.player].current_key).capitalize(),
+            (self.multiworld.StartingCharacter4[self.player].current_key).capitalize()
         ]
         starting_characters = starting_characters[0:self.multiworld.StartingCharacterCount[self.player]]
-        starting_characters.sort(key=lambda character: character == "random_with_no_gogo_or_umaro")
+        starting_characters.sort(key=lambda character: character == "Random_with_no_gogo_or_umaro")
 
         filtered_starting_characters = []
         for character in starting_characters:
-            if character == "random_with_no_gogo_or_umaro":
+            if character == "Random_with_no_gogo_or_umaro":
                 character = random.choice(Rom.characters[:12])
                 while character in filtered_starting_characters:
                     character = random.choice(Rom.characters[:12])

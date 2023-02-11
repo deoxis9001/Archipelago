@@ -470,7 +470,7 @@ def generate_magic_string(multiworld: MultiWorld, player: int):
 
     esper_equipability_string = ""
     if multiworld.EsperEquipability[player] == 1: # Random equipability
-        esper_equipability_string = "-eer"
+        esper_equipability_string = ["-eer", "1", "12"]
     elif multiworld.EsperEquipability[player] == 2: # Balanced random equipability
         esper_equipability_string = ["-eebr", "6"]
 

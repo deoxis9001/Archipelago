@@ -552,7 +552,7 @@ dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
 # Except for Cranes, Magimaster, Imperial Air Force, AtmaWeapon, Veldt
 # Most are the first one, so we only need to note the exceptions
 item_only_checks = list(dragons)
-item_only_checks.extend(["Narshe Weapon Shop 2", "Gem Box", "Atma"])
+item_only_checks.extend(["Lone Wolf 2", "Narshe Weapon Shop 2", "Gem Box", "Atma"])
 item_only_checks.extend(minor_ext_checks)
 item_only_checks.extend(minor_checks)
 no_item_checks = ["Cranes", "MagiMaster", "Imperial Air Force", "Nerapa", "Veldt"]

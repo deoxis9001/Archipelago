@@ -363,6 +363,15 @@ event_flag_location_names = {
     "Gold Dragon": 0x11d
 }
 
+additional_event_flags = {
+    "Lone Wolf Encountered": 0x68d,
+    "Lone Wolf First Reward Picked": 0x29f,
+    "Lone Wolf Both Rewards Picked": 0x241,
+    "Narshe Weapon Shop Encountered": 0x605,
+    "Narshe Weapon Shop First Reward Picked": 0x0b5,
+    "Narshe Weapon Shop Both Rewards Picked": 0x0b7
+}
+
 treasure_chest_data = {
     "Narshe Arvis's Clock": (0x1E40, 2, 1),
     "Narshe Elder's Clock": (0x1E41, 2, 9),

@@ -173,6 +173,11 @@ class FF6WCWorld(World):
                 set_rule(self.multiworld.get_location(check, self.player),
                          lambda state, character=check_name: state.has(character, self.player))
 
+        # Lock (ha!) these behind Terra as well as Locke, since whatever isn't chosen is put behind Whelk
+        for check_name in ["Narshe Weapon Shop 1", "Narshe Weapon Shop 2",]:
+            add_rule(self.multiworld.get_location(check_name, self.player),
+                     lambda state: state.has("Terra", self.player))
+
         for check in Locations.major_checks:
             add_item_rule(self.multiworld.get_location(check, self.player),
                           lambda item: item.name not in Items.okay_items)
@@ -209,6 +214,14 @@ class FF6WCWorld(World):
         set_rule(self.multiworld.get_location("Beat Final Kefka", self.player),
                  lambda state: state.can_reach("Kefka's Tower", 'Location', self.player)
                                and state._ff6wc_has_enough_dragons(self.multiworld, self.player))
+    def pre_fill(self):
+        for location in Locations.no_item_checks:
+            possibilities = [item for item in self.multiworld.itempool if item.player == self.player]
+            possibilities = [item for item in possibilities if item.name in Items.characters or item.name in Items.espers]
+            location = self.multiworld.get_location(location, self.player)
+            item = self.multiworld.random.choice(possibilities)
+            location.place_locked_item(item)
+            self.multiworld.itempool.remove(item)
 
     def generate_basic(self):
         self.multiworld.get_location("Kefka's Tower", self.player).place_locked_item(
@@ -222,9 +235,9 @@ class FF6WCWorld(World):
                 self.create_event(self.all_dragon_clears[index]))
 
         #filler_item = self.create_item("Junk")
-        filler_count = len(
-            self.multiworld.get_unfilled_locations(self.player)) - len(
-            [item for item in self.multiworld.itempool if item.player == self.player])
+        unfilled_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        item_pool_size = len([item for item in self.multiworld.itempool if item.player == self.player])
+        filler_count = unfilled_locations - item_pool_size
         filler_pool = []
         for item in Items.items:
             if item != "ArchplgoItem":

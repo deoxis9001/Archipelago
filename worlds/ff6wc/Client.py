@@ -58,12 +58,54 @@ class FF6WCClient(SNIClient):
             event_data = await snes_read(ctx, event_byte, 1)
 
             if event_data is not None:
-                event_done = event_data[0] & event_bit
-                if event_done and location_id not in ctx.locations_checked:
-                    ctx.locations_checked.add(location_id)
-                    snes_logger.info(
-                        f'New Check: {location_name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+                # Have to special case these, since they work differently.
+                if location_name in ["Lone Wolf 1", "Lone Wolf 2", "Narshe Weapon Shop 1", "Narshe Weapon Shop 3"]:
+                    if location_name[0] == "L":
+                        initial_event_done = Rom.additional_event_flags["Lone Wolf Encountered"]
+                        first_reward_chosen = Rom.additional_event_flags["Lone Wolf First Reward Picked"]
+                        both_rewards_obtained = Rom.additional_event_flags["Lone Wolf Both Rewards Picked"]
+                        location_one = "Lone Wolf 1"
+                        location_two = "Lone Wolf 2"
+                    else:
+                        initial_event_done = Rom.additional_event_flags["Narshe Weapon Shop Encountered"]
+                        first_reward_chosen = Rom.additional_event_flags["Narshe Weapon Shop First Reward Picked"]
+                        both_rewards_obtained = Rom.additional_event_flags["Narshe Weapon Shop Both Rewards Picked"]
+                        location_one = "Narshe Weapon Shop 1"
+                        location_two = "Narshe Weapon Shop 2"
+                    event_byte, event_bit = Rom.get_event_flag_value(initial_event_done)
+                    first_reward_byte, first_reward_bit = Rom.get_event_flag_value(first_reward_chosen)
+                    both_rewards_byte, both_rewards_bit = Rom.get_event_flag_value(both_rewards_obtained)
+                    initial_event_data = await snes_read(ctx, event_byte, 1)
+                    first_reward_data = await snes_read(ctx, first_reward_byte, 1)
+                    both_rewards_data = await snes_read(ctx, both_rewards_byte, 1)
+                    if initial_event_data is not None \
+                            and first_reward_data is not None \
+                            and both_rewards_data is not None:
+                        initial_event_status = initial_event_data[0] & event_bit
+                        both_rewards_status = both_rewards_data[0] & both_rewards_bit
+                        if initial_event_status or both_rewards_status:
+                            first_reward_status = first_reward_data[0] & first_reward_bit
+                            locations_cleared = []
+                            if first_reward_status:
+                                locations_cleared.append(location_one)
+                            else:
+                                locations_cleared.append(location_two)
+                            if both_rewards_status:
+                                locations_cleared = [location_one, location_two]
+                            for location_name in locations_cleared:
+                                location_id = self.location_ids[location_name]
+                                if location_id not in ctx.locations_checked:
+                                    ctx.locations_checked.add(location_id)
+                                    snes_logger.info(
+                                        f'New Check: {location_name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
+                else:
+                    event_done = event_data[0] & event_bit
+                    if event_done and location_id not in ctx.locations_checked:
+                        ctx.locations_checked.add(location_id)
+                        snes_logger.info(
+                            f'New Check: {location_name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
         treasure_data = await snes_read(ctx, Rom.treasure_chest_base_address, 40)
 

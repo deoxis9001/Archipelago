@@ -227,8 +227,9 @@ class FF6WCWorld(World):
             [item for item in self.multiworld.itempool if item.player == self.player])
         filler_pool = []
         for item in Items.items:
-            filler_pool.append(item)
-        self.multiworld.itempool += [self.create_item(random.choice(filler_pool)) for _ in range(0, filler_count)]
+            if item != "ArchplgoItem":
+                filler_pool.append(item)
+        self.multiworld.itempool += [self.create_filler_item(random.choice(filler_pool)) for _ in range(0, filler_count)]
 
     def post_fill(self) -> None:
         spheres = list(self.multiworld.get_spheres())

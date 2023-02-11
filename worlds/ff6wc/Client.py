@@ -100,7 +100,10 @@ class FF6WCClient(SNIClient):
                 character_recruit_data = await snes_read(ctx, character_recruit_byte, 1)
                 if character_recruit_data is None:
                     return
-
+                character_count = await snes_read(ctx, Rom.characters_obtained_address, 1)
+                if character_count is None:
+                    return
+                character_count = character_count[0]
                 character_initialized = character_init_data[0] & character_init_bit
                 character_recruited = character_recruit_data[0] & character_recruit_bit
                 if not (character_initialized and character_recruited):
@@ -114,6 +117,8 @@ class FF6WCClient(SNIClient):
                         snes_buffered_write(ctx, character_init_byte, bytes([new_init_data]))
                         snes_buffered_write(ctx, character_recruit_byte, bytes([new_recruit_data]))
                         snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
+
+                        snes_buffered_write(ctx, Rom.characters_obtained_address, bytes([character_count + 1]))
                         snes_logger.info('Received %s from %s (%s)' % (
                             ctx.item_names[character_item.item],
                             ctx.player_names[character_item.player],
@@ -124,13 +129,18 @@ class FF6WCClient(SNIClient):
                 esper_data = await snes_read(ctx, esper_byte, 1)
                 if esper_data is None:
                     return
+                esper_count = await snes_read(ctx, Rom.espers_obtained_address, 1)
+                if esper_count is None:
+                    return
+                esper_count = esper_count[0]
                 esper_obtained = esper_data[0] & esper_bit
                 if esper_obtained == 0:
                     new_data = esper_data[0] | esper_bit
-                    print("writing data")
                     snes_buffered_write(ctx, esper_byte, bytes([new_data]))
 
                     snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
+
+                    snes_buffered_write(ctx, Rom.espers_obtained_address, bytes([esper_count + 1]))
                     snes_logger.info('Received %s from %s (%s)' % (
                         ctx.item_names[item.item],
                         ctx.player_names[item.player],

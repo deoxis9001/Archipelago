@@ -2,7 +2,7 @@ import math
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink, Choice
+from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink, Choice, TextChoice, FreeText
 
 
 class CharacterCount(Range):
@@ -262,6 +262,16 @@ class Treasuresanity(Choice):
     option_on = 1
     option_on_with_additional_gating = 2
 
+class EnableFlagstring(FreeText):
+    """Enables the Flagstring option. Set this to "true" to use a custom Worlds Collide flagstring"""
+    display_name = "Enable Flagstring"
+    default = "false"
+
+class Flagstring(FreeText):
+    """Custom flagstring. For advanced users only: will override most other options"""
+    display_name = "Flagstring"
+    default = "flagstring_here"
+
 ff6wc_options: typing.Dict[str, type(Option)] = {
     "CharacterCount": CharacterCount,
     "EsperCount": EsperCount,
@@ -287,24 +297,29 @@ ff6wc_options: typing.Dict[str, type(Option)] = {
     "Equipment": Equipment,
     "AllowStrongestItems": AllowStrongestItems,
     "RandomizeZozoClock": RandomizeZozoClock,
-    "Treasuresanity": Treasuresanity
+    "Treasuresanity": Treasuresanity,
+    "EnableFlagstring": EnableFlagstring,
+    "Flagstring": Flagstring
 }
 
 def generate_flagstring(multiworld: MultiWorld, player: int, starting_characters):
-    flags = [
-        *generate_settings_string(),
-        *generate_objectives_string(multiworld, player),
-        *generate_party_string(multiworld, player, starting_characters),
-        *generate_commands_string(multiworld, player),
-        *generate_battle_string(multiworld, player),
-        *generate_magic_string(multiworld, player),
-        *generate_items_string(multiworld, player),
-        *generate_gameplay_string(multiworld, player),
-        *generate_graphics_string(),
-        *generate_accessibility_string(),
-        *generate_fixes_string()
-    ]
-    flags = [_ for _ in flags if len(_) > 0]
+    if multiworld.EnableFlagstring == "true":
+        flags = multiworld.Flagstring.split(" ")
+    else:
+        flags = [
+            *generate_settings_string(),
+            *generate_objectives_string(multiworld, player),
+            *generate_party_string(multiworld, player, starting_characters),
+            *generate_commands_string(multiworld, player),
+            *generate_battle_string(multiworld, player),
+            *generate_magic_string(multiworld, player),
+            *generate_items_string(multiworld, player),
+            *generate_gameplay_string(multiworld, player),
+            *generate_graphics_string(),
+            *generate_accessibility_string(),
+            *generate_fixes_string()
+        ]
+        flags = [_ for _ in flags if len(_) > 0]
     return flags
 
 
@@ -457,7 +472,7 @@ def generate_magic_string(multiworld: MultiWorld, player: int):
     if multiworld.EsperEquipability[player] == 1: # Random equipability
         esper_equipability_string = "-eer"
     elif multiworld.EsperEquipability[player] == 2: # Balanced random equipability
-        esper_equipability_string = "-eebr"
+        esper_equipability_string = ["-eebr", "6"]
 
     multi_summon_string = "-ems"
 
@@ -467,7 +482,7 @@ def generate_magic_string(multiworld: MultiWorld, player: int):
     if multiworld.NaturalMagic == 2 or multiworld.NaturalMagic == 3: # Random learnsets
         natural_magic_strings.extend(["-rns1", "-rns2", "-rnl1", "-rnl2"])
 
-    return [*spell_strings, esper_spells_string, esper_bonuses_string, esper_equipability_string,
+    return [*spell_strings, esper_spells_string, esper_bonuses_string, *esper_equipability_string,
             multi_summon_string, *natural_magic_strings]
 
 def generate_items_string(multiworld: MultiWorld, player: int):
@@ -475,7 +490,8 @@ def generate_items_string(multiworld: MultiWorld, player: int):
     # Three Moogle Charms, a Warp Stone, and five Fenix Downs
     starting_items_strings = ["-smc=3", "-sws=1", "-sfd=5"]
 
-    shops_strings = ["-sprp 75 125", "-sdm=5"]
+    # 75-125% shop prices, five Dried Meat shops, no priceless items
+    shops_strings = ["-sprp 75 125", "-sdm", "5", "-npi"]
     if multiworld.RandomizedShops[player] == 1: # Shuffled shops
         shops_strings.extend(["-slsr"])
     elif multiworld.RandomizedShops[player] == 2: # Randomized Shops
@@ -520,4 +536,4 @@ def generate_accessibility_string():
 
 def generate_fixes_string():
     # Bug fixes, and Magimaster can cast his final spell because I'm a jerk.
-    return ["-fedc", "-fe", "-fbs", "-fvd", "-fj", "-mmnu"]
+    return ["-fedc", "-fe", "-fbs", "-fvd", "-fj", "-dgne", "-wnz", "-cmd"]

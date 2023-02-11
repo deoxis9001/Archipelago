@@ -52,4 +52,4 @@ good_items = [
     "Dragon Horn"
 ]
 
-okay_items = [item for item in items if item not in good_items or item == "Empty"]
+okay_items = [item for item in items if item not in good_items or item == "Empty" or item == "ArchplgoItem"]

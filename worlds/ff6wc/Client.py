@@ -51,6 +51,13 @@ class FF6WCClient(SNIClient):
         if self.location_ids is None:
             self.location_ids = dict((v, k) for k, v in ctx.location_names.items())
 
+        map_data = await snes_read(ctx, Rom.map_index_address, 2)
+        if map_data is None:
+            return
+        map_index = int.from_bytes(map_data, "little")
+        map_index = Rom.get_map_index(map_index)
+        if map_index < 6:
+            return
         for location_index in range(len(Rom.event_flag_location_names)):
             location_name = self.location_names[location_index]
             location_id = self.location_ids[location_name]

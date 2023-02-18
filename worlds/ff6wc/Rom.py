@@ -300,7 +300,7 @@ item_name_id = {v: k for k, v in item_id_name.items()}
 
 event_flag_location_names = {
     "Whelk": 0x135,
-    "Lete River": 0x1a,
+    "Lete River": 0x257,
     "Sealed Gate": 0x471,
     "Zozo": 0x52,
     "Mobliz": 0x0bf,
@@ -708,3 +708,6 @@ def get_treasure_chest_bit(treasure_chest):
     treasure_byte = treasure_chest_data[treasure_chest][0] - 0x1E40
     treasure_bit = bit_positions[treasure_chest_data[treasure_chest][1]]
     return treasure_byte, treasure_bit
+
+def get_map_index(map_byte):
+    return map_byte & 0x01FF

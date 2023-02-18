@@ -496,6 +496,8 @@ minor_checks = [
     *minor_generic_checks, *minor_kefka_checks
 ]
 
+all_minor_checks = [*minor_checks, *minor_ext_checks]
+
 major_checks = [
     *major_terra_checks, *major_locke_checks, *major_cyan_checks, *major_shadow_checks, *major_edgar_checks,
     *major_sabin_checks, *major_celes_checks, *major_strago_checks, *major_relm_checks, *major_setzer_checks,
@@ -514,8 +516,7 @@ fanatics_tower_checks = [
 
 accomplishment_data = [
     "Kefka's Tower",
-    "Beat Final Kefka",
-    "Kefka's Tower Skip"
+    "Beat Final Kefka"
 ]
 
 dragon_events = [
@@ -555,7 +556,7 @@ item_only_checks = list(dragons)
 item_only_checks.extend(["Lone Wolf 2", "Narshe Weapon Shop 2", "Gem Box", "Atma"])
 item_only_checks.extend(minor_ext_checks)
 item_only_checks.extend(minor_checks)
-no_item_checks = ["Cranes", "MagiMaster", "Imperial Air Force", "Nerapa", "Veldt"]
+no_item_checks = []
 no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Wrexsoul", "Doma Castle Throne",
                        "Doom Gaze", "AtmaWeapon", "Ifrit and Shiva", "Number 024", "Narshe Weapon Shop 1",
                        "Tritoch", "Tzen Thief"]

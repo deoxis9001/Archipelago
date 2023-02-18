@@ -1,3 +1,4 @@
+import importlib
 import json
 import os
 import random
@@ -19,7 +20,7 @@ from .Items import item_table
 from .Options import ff6wc_options, generate_flagstring
 import Utils
 
-from .WorldsCollide import wc
+from worlds.ff6wc.WorldsCollide.wc import WC
 
 
 class FF6WCWeb(WebWorld):
@@ -32,6 +33,7 @@ class FF6WCWorld(World):
     data_version = 1
     base_id = 6000
     web = FF6WCWeb()
+    wc_ready = threading.Lock()
 
     item_name_to_id = {name: index for index, name in enumerate(item_table)}
     location_name_to_id = {name: index for index, name in enumerate(location_table)}
@@ -115,11 +117,14 @@ class FF6WCWorld(World):
         self.starting_characters = filtered_starting_characters
 
     def create_regions(self):
-        menu = Region("Menu", None, "Menu", self.player, self.multiworld)
-        world_map = Region("World Map", None, "World Map", self.player, self.multiworld)
-        final_dungeon = Region("Kefka's Tower", None, "Kefka's Tower", self.player, self.multiworld)
+        menu = Region("Menu", self.player, self.multiworld)
+        world_map = Region("World Map", self.player, self.multiworld)
+        final_dungeon = Region("Kefka's Tower", self.player, self.multiworld)
 
         for name, id in self.location_name_to_id.items():
+            if self.multiworld.Treasuresanity[self.player] == 0:
+                if name in Locations.all_minor_checks:
+                    continue
             if name in Locations.dragon_events:
                 id = None
             if name in Locations.kefka_checks:
@@ -152,26 +157,37 @@ class FF6WCWorld(World):
 
     def set_rules(self):
         check_list = {
-            "Terra": Locations.terra_checks,
-            "Locke": Locations.locke_checks,
-            "Cyan": Locations.cyan_checks,
-            "Shadow": Locations.shadow_checks,
-            "Edgar": Locations.edgar_checks,
-            "Sabin": Locations.sabin_checks,
-            "Celes": Locations.celes_checks,
-            "Strago": Locations.strago_checks,
-            "Relm": Locations.relm_checks,
-            "Setzer": Locations.setzer_checks,
-            "Mog": Locations.mog_checks,
-            "Gau": Locations.gau_checks,
-            "Gogo": Locations.gogo_checks,
-            "Umaro": Locations.umaro_checks,
+            "Terra": (Locations.major_terra_checks, Locations.minor_terra_checks, Locations.minor_terra_ext_checks),
+            "Locke": (Locations.major_locke_checks, Locations.minor_locke_checks, Locations.minor_locke_ext_checks),
+            "Cyan": (Locations.major_cyan_checks, Locations.minor_cyan_checks, Locations.minor_cyan_ext_checks),
+            "Shadow": (Locations.major_shadow_checks, Locations.minor_shadow_checks, Locations.minor_shadow_ext_checks),
+            "Edgar": (Locations.major_edgar_checks, Locations.minor_edgar_checks, Locations.minor_edgar_ext_checks),
+            "Sabin": (Locations.major_sabin_checks, Locations.minor_sabin_checks, Locations.minor_sabin_ext_checks),
+            "Celes": (Locations.major_celes_checks, Locations.minor_celes_checks, Locations.minor_celes_ext_checks),
+            "Strago": (Locations.major_strago_checks, Locations.minor_strago_checks, Locations.minor_strago_ext_checks),
+            "Relm": (Locations.major_relm_checks, Locations.minor_relm_checks, Locations.minor_relm_ext_checks),
+            "Setzer": (Locations.major_setzer_checks, Locations.minor_setzer_checks, Locations.minor_setzer_ext_checks),
+            "Mog": (Locations.major_mog_checks, Locations.minor_mog_checks, Locations.minor_mog_ext_checks),
+            "Gau": (Locations.major_gau_checks, Locations.minor_gau_checks, Locations.minor_gau_ext_checks),
+            "Gogo": (Locations.major_gogo_checks, Locations.minor_gogo_checks, Locations.minor_gogo_ext_checks),
+            "Umaro": (Locations.major_umaro_checks, Locations.minor_umaro_checks, Locations.minor_umaro_ext_checks),
         }
         # Set every character locked check to require that character.
         for check_name, checks in check_list.items():
-            for check in checks:
+            # Major checks. These are always on.
+            for check in checks[0]:
                 set_rule(self.multiworld.get_location(check, self.player),
                          lambda state, character=check_name: state.has(character, self.player))
+            # Minor checks. These are only on if Treasuresanity is on.
+            if self.multiworld.Treasuresanity[self.player] != 0:
+                for check in checks[1]:
+                    set_rule(self.multiworld.get_location(check, self.player),
+                             lambda state, character=check_name: state.has(character, self.player))
+            # Minor extended gating checks. These are on if Treasuresanity are on, but can be character gated.
+            if self.multiworld.Treasuresanity[self.player] == 2:
+                for check in checks[2]:
+                    set_rule(self.multiworld.get_location(check, self.player),
+                             lambda state, character=check_name: state.has(character, self.player))
 
         # Lock (ha!) these behind Terra as well as Locke, since whatever isn't chosen is put behind Whelk
         for check_name in ["Narshe Weapon Shop 1", "Narshe Weapon Shop 2",]:
@@ -183,8 +199,9 @@ class FF6WCWorld(World):
                           lambda item: item.name not in Items.okay_items)
 
         for check in Locations.item_only_checks:
-            add_item_rule(self.multiworld.get_location(check, self.player),
-                          lambda item: item.name not in self.item_name_groups["characters"]
+            if self.multiworld.Treasuresanity[self.player] != 0 or (check not in Locations.minor_checks and check not in Locations.minor_ext_checks):
+                add_item_rule(self.multiworld.get_location(check, self.player),
+                              lambda item: item.name not in self.item_name_groups["characters"]
                                        and item.name not in self.item_name_groups['espers']
                                        or item.player != self.player)
 
@@ -205,8 +222,9 @@ class FF6WCWorld(World):
                           lambda state: state.can_reach(str(dragon), 'Location', self.player))
 
         for location in Locations.fanatics_tower_checks:
-            add_rule(self.multiworld.get_location(location, self.player),
-                          lambda state: state.has_group("espers", self.player, 4))
+            if self.multiworld.Treasuresanity[self.player] != 0 or location not in Locations.all_minor_checks:
+                add_rule(self.multiworld.get_location(location, self.player),
+                         lambda state: state.has_group("espers", self.player, 4))
 
         set_rule(self.multiworld.get_entrance("Kefka's Tower Landing", self.player),
                  lambda state: state._ff6wc_has_enough_characters(self.multiworld, self.player)
@@ -215,13 +233,7 @@ class FF6WCWorld(World):
                  lambda state: state.can_reach("Kefka's Tower", 'Location', self.player)
                                and state._ff6wc_has_enough_dragons(self.multiworld, self.player))
     def pre_fill(self):
-        for location in Locations.no_item_checks:
-            possibilities = [item for item in self.multiworld.itempool if item.player == self.player]
-            possibilities = [item for item in possibilities if item.name in Items.characters or item.name in Items.espers]
-            location = self.multiworld.get_location(location, self.player)
-            item = self.multiworld.random.choice(possibilities)
-            location.place_locked_item(item)
-            self.multiworld.itempool.remove(item)
+        pass
 
     def generate_basic(self):
         self.multiworld.get_location("Kefka's Tower", self.player).place_locked_item(
@@ -234,15 +246,37 @@ class FF6WCWorld(World):
             self.multiworld.get_location(dragon_event, self.player).place_locked_item(
                 self.create_event(self.all_dragon_clears[index]))
 
-        #filler_item = self.create_item("Junk")
-        unfilled_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        for location in Locations.no_item_checks:
+            possibilities = [item for item in self.multiworld.itempool if item.player == self.player]
+            possibilities = [item for item in possibilities if
+                             item.name in Items.characters or item.name in Items.espers]
+            location = self.multiworld.get_location(location, self.player)
+            item = self.multiworld.random.choice(possibilities)
+            location.place_locked_item(item)
+            self.multiworld.itempool.remove(item)
+        unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
         item_pool_size = len([item for item in self.multiworld.itempool if item.player == self.player])
-        filler_count = unfilled_locations - item_pool_size
+        filler_count = len(unfilled_locations) - item_pool_size
         filler_pool = []
+        good_filler_pool = []
         for item in Items.items:
             if item != "ArchplgoItem":
                 filler_pool.append(item)
-        self.multiworld.itempool += [self.create_filler_item(random.choice(filler_pool)) for _ in range(0, filler_count)]
+            if item in Items.good_items:
+                good_filler_pool.append(item)
+        unfilled_major_locations = [
+            location for location in unfilled_locations
+            if location.player == self.player and location.name in Locations.major_checks
+        ]
+        self.multiworld.itempool += [
+            self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool))
+            for _ in range(0, len(unfilled_major_locations))
+        ]
+        filler_count -= len(unfilled_major_locations)
+        self.multiworld.itempool += [
+            self.create_filler_item(self.multiworld.random.choice(filler_pool))
+            for _ in range(0, filler_count)
+        ]
 
     def post_fill(self) -> None:
         spheres = list(self.multiworld.get_spheres())
@@ -286,22 +320,30 @@ class FF6WCWorld(World):
         self.rom_name = self.romName
         locations["RomName"] = self.rom_name_text
         placement_file = os.path.join(output_directory,
-                                      f'{self.multiworld.get_out_file_name_base(self.player)}' + '.txt')
+                                      f'{self.multiworld.get_out_file_name_base(self.player)}' + '.applacements')
         with open(placement_file, "w") as file:
             json.dump(locations, file, indent=2)
         output_file = os.path.join(output_directory,f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
         wc_args = ["-i", "Final Fantasy III (USA).sfc", "-o", f"{output_file}", "-ap", placement_file]
         wc_args.extend(generate_flagstring(self.multiworld, self.player, self.starting_characters))
-
-        wc.main(wc_args)
-        patch = FF6WCDeltaPatch(
-            os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending,
-            player=self.player,
-            player_name=self.multiworld.player_name[self.player],
-            patched_path=output_file)
-        self.rom_name_available_event.set()
-        patch.write()
-        os.remove(output_file)
+        with FF6WCWorld.wc_ready:
+            import sys
+            from copy import deepcopy
+            module_keys = deepcopy(list(sys.modules.keys()))
+            for module in module_keys:
+                if str(module).startswith("worlds.ff6wc.WorldsCollide"):
+                    del sys.modules[module]
+            wc = WC()
+            wc.main(wc_args)
+            patch = FF6WCDeltaPatch(
+                os.path.splitext(output_file)[0] + FF6WCDeltaPatch.patch_file_ending,
+                player=self.player,
+                player_name=self.multiworld.player_name[self.player],
+                patched_path=output_file)
+            patch.write()
+            os.remove(output_file)
+            os.remove(placement_file)
+            self.rom_name_available_event.set()
 
 
     def modify_multidata(self, multidata: dict):

@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from SNIClient import SNIContext
 else:
     SNIContext = typing.Any
-from worlds.ff6wc import Rom
+from worlds.ff6wc import Rom, Locations
 
 snes_logger: Logger = logging.getLogger("SNES")
 
@@ -30,7 +30,9 @@ class FF6WCClient(SNIClient):
             return False
 
         ctx.game = self.game
-        ctx.items_handling = 0b001
+        # While this set of flags indicates a fully remote setup, it's worth noting we'll
+        # be doing a hybrid approach, with only some "local" items being sent by the server.
+        ctx.items_handling = 0b111
 
         ctx.rom = rom_name
 
@@ -38,26 +40,38 @@ class FF6WCClient(SNIClient):
 
     async def game_watcher(self, ctx: SNIContext) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        if await self.connection_check(ctx) == False:
+            return
+        await self.location_check(ctx)
+        await self.treasure_check(ctx)
+        await self.received_items_check(ctx)
+        await self.check_victory2(ctx)
+        await snes_flush_writes(ctx)
 
+    async def connection_check(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         rom: bytes = await snes_read(ctx, Rom.ROM_NAME, 20)
         if rom != ctx.rom:
             ctx.rom = None
-            return
+            return False
 
         if ctx.server is None or ctx.slot is None:
             # not successfully connected to a multiworld server, cannot process the game sending items
-            return
+            return False
 
         if self.location_ids is None:
             self.location_ids = dict((v, k) for k, v in ctx.location_names.items())
 
         map_data = await snes_read(ctx, Rom.map_index_address, 2)
         if map_data is None:
-            return
+            return False
         map_index = int.from_bytes(map_data, "little")
         map_index = Rom.get_map_index(map_index)
         if map_index < 6:
-            return
+            return False
+
+    async def location_check(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         for location_index in range(len(Rom.event_flag_location_names)):
             location_name = self.location_names[location_index]
             location_id = self.location_ids[location_name]
@@ -110,10 +124,20 @@ class FF6WCClient(SNIClient):
                     event_done = event_data[0] & event_bit
                     if event_done and location_id not in ctx.locations_checked:
                         ctx.locations_checked.add(location_id)
+                        if location_name in Locations.point_of_no_return_checks.keys():
+                            for passed_location in Locations.point_of_no_return_checks[location_name]:
+                                passed_id = self.location_ids[passed_location]
+                                if passed_id not in ctx.locations_checked:
+                                    ctx.locations_checked.add(passed_id)
+                                    snes_logger.info(
+                                        f'New Check: {passed_location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [passed_id]}])
                         snes_logger.info(
                             f'New Check: {location_name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
+    async def treasure_check(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         treasure_data = await snes_read(ctx, Rom.treasure_chest_base_address, 40)
 
         if treasure_data is not None:
@@ -127,7 +151,8 @@ class FF6WCClient(SNIClient):
                         f'New Check: {chest} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                     await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [treasure_id]}])
 
-
+    async def received_items_check(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         items_received_data = await snes_read(ctx, Rom.items_received_address, 2)
         if items_received_data is None:
             return
@@ -138,6 +163,17 @@ class FF6WCClient(SNIClient):
             item = ctx.items_received[items_received_amount]
             item_name = ctx.item_names[item.item]
             item_id = item.item
+            allow_local_network_item = False
+            if item.player == ctx.slot:
+                if item.location == self.location_ids["Veldt"]:
+                    allow_local_network_item = True
+                elif item_name not in Rom.item_name_id.keys():
+                    allow_local_network_item = True
+                else:
+                    self.increment_items_received(ctx, items_received_amount)
+                    return
+            if item.player == ctx.slot and not allow_local_network_item:
+                return
             if item_name in Rom.characters:
                 character_index = Rom.characters.index(item_name)
                 character_init_byte, character_init_bit = Rom.get_character_initialized_bit(character_index)
@@ -155,23 +191,22 @@ class FF6WCClient(SNIClient):
                 character_count = character_count[0]
                 character_initialized = character_init_data[0] & character_init_bit
                 character_recruited = character_recruit_data[0] & character_recruit_bit
-                if not (character_initialized and character_recruited):
-                    character_name = Rom.characters[character_index]
-                    character_ap_id = item_id
-                    character_item = next((item for item in ctx.items_received if item.item == character_ap_id),
-                                          None)
-                    if character_item is not None:
-                        new_init_data = character_init_data[0] | character_init_bit
-                        new_recruit_data = character_recruit_data[0] | character_recruit_bit
-                        snes_buffered_write(ctx, character_init_byte, bytes([new_init_data]))
-                        snes_buffered_write(ctx, character_recruit_byte, bytes([new_recruit_data]))
-                        snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
+                character_name = Rom.characters[character_index]
+                character_ap_id = item_id
+                character_item = next((item for item in ctx.items_received if item.item == character_ap_id),
+                                         None)
+                if character_item is not None:
+                    new_init_data = character_init_data[0] | character_init_bit
+                    new_recruit_data = character_recruit_data[0] | character_recruit_bit
+                    snes_buffered_write(ctx, character_init_byte, bytes([new_init_data]))
+                    snes_buffered_write(ctx, character_recruit_byte, bytes([new_recruit_data]))
+                    self.increment_items_received(ctx, items_received_amount)
 
-                        snes_buffered_write(ctx, Rom.characters_obtained_address, bytes([character_count + 1]))
-                        snes_logger.info('Received %s from %s (%s)' % (
-                            ctx.item_names[character_item.item],
-                            ctx.player_names[character_item.player],
-                            ctx.location_names[character_item.location]))
+                    snes_buffered_write(ctx, Rom.characters_obtained_address, bytes([character_count + 1]))
+                    snes_logger.info('Received %s from %s (%s)' % (
+                        ctx.item_names[character_item.item],
+                        ctx.player_names[character_item.player],
+                        ctx.location_names[character_item.location]))
             elif item_name in Rom.espers:
                 esper_index = Rom.espers.index(item_name)
                 esper_byte, esper_bit = Rom.get_obtained_esper_bit(esper_index)
@@ -183,17 +218,16 @@ class FF6WCClient(SNIClient):
                     return
                 esper_count = esper_count[0]
                 esper_obtained = esper_data[0] & esper_bit
-                if esper_obtained == 0:
-                    new_data = esper_data[0] | esper_bit
-                    snes_buffered_write(ctx, esper_byte, bytes([new_data]))
+                new_data = esper_data[0] | esper_bit
+                snes_buffered_write(ctx, esper_byte, bytes([new_data]))
 
-                    snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
+                self.increment_items_received(ctx, items_received_amount)
 
-                    snes_buffered_write(ctx, Rom.espers_obtained_address, bytes([esper_count + 1]))
-                    snes_logger.info('Received %s from %s (%s)' % (
-                        ctx.item_names[item.item],
-                        ctx.player_names[item.player],
-                        ctx.location_names[item.location]))
+                snes_buffered_write(ctx, Rom.espers_obtained_address, bytes([esper_count + 1]))
+                snes_logger.info('Received %s from %s (%s)' % (
+                    ctx.item_names[item.item],
+                    ctx.player_names[item.player],
+                    ctx.location_names[item.location]))
 
             else:
                 item_types_data = await snes_read(ctx, Rom.item_types_base_address, 255)
@@ -203,7 +237,6 @@ class FF6WCClient(SNIClient):
                 reserved_slots = []
                 for i in range(0, 255):
                     slot = item_types_data[i]
-                    print("slot" + str(i) + ":" + str(slot))
                     quantity = item_quantities_data[i]
                     exists = False
                     if slot == Rom.item_name_id[item_name]:
@@ -216,10 +249,40 @@ class FF6WCClient(SNIClient):
                         amount = quantity + 1
                         snes_buffered_write(ctx, type_destination, bytes([type_id]))
                         snes_buffered_write(ctx, amount_destination, bytes([amount]))
-                        snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
+                        self.increment_items_received(ctx, items_received_amount)
                         snes_logger.info('Received %s from %s (%s)' % (
                             item_name,
                             ctx.player_names[item.player],
                             ctx.location_names[item.location]))
                         break
-        await snes_flush_writes(ctx)
+
+    async def check_victory1(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        formation_data = await snes_read(ctx, Rom.formation_id, 2)
+        if formation_data is None:
+            return
+        animation_data = await snes_read(ctx, Rom.animation_byte, 1)
+        if animation_data is None:
+            return
+        formation_value = int.from_bytes(formation_data, "little")
+        animation_value = animation_data[0]
+        #for now
+        if formation_value == 0x0202 and animation_value == 0x01:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+
+    async def check_victory2(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        victory_data = await snes_read(ctx, 0x02, 2)
+        if victory_data is None:
+            return
+
+        victory_value = victory_data[0]
+        #for now
+        if victory_value == 0x00:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
+
+    def increment_items_received(self, ctx, items_received_amount):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))

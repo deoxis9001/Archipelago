@@ -312,7 +312,8 @@ class FF6WCWorld(World):
                         location_name = location.name
                     locations[location_name] = "Archipelago Item"
                     if location.item.player == self.player:
-                        locations[location_name] = location.item.name
+                        if location_name in Locations.major_checks or location.item.name in Items.items:
+                            locations[location_name] = location.item.name
         self.rom_name_text = f'6WC{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'
         self.rom_name_text = self.rom_name_text[:20]
         self.romName = bytearray(self.rom_name_text, 'utf-8')

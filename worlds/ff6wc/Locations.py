@@ -465,7 +465,6 @@ minor_kefka_checks = [
     "Kefka's Tower Group 2 Switch Room"
 ]
 
-# TODO checks to be assigned based on options
 terra_checks = [*major_terra_checks, *minor_terra_checks, *minor_terra_ext_checks]
 locke_checks = [*major_locke_checks, *minor_locke_checks, *minor_locke_ext_checks]
 cyan_checks = [*major_cyan_checks, *minor_cyan_checks, *minor_cyan_ext_checks]
@@ -552,11 +551,65 @@ dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
 # Most checks are either character/esper/item, esper/item, or item.
 # Except for Cranes, Magimaster, Imperial Air Force, AtmaWeapon, Veldt
 # Most are the first one, so we only need to note the exceptions
-item_only_checks = list(dragons)
-item_only_checks.extend(["Lone Wolf 2", "Narshe Weapon Shop 2", "Gem Box", "Atma"])
-item_only_checks.extend(minor_ext_checks)
-item_only_checks.extend(minor_checks)
+item_only_checks = []
 no_item_checks = []
 no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Wrexsoul", "Doma Castle Throne",
                        "Doom Gaze", "AtmaWeapon", "Ifrit and Shiva", "Number 024", "Narshe Weapon Shop 1",
                        "Tritoch", "Tzen Thief"]
+
+point_of_no_return_checks = {
+    "Wrexsoul": [
+        "Cyan's Dream Phantom Train Fourth Car Upper Right",
+        "Cyan's Dream Phantom Train Fourth Car Middle",
+        "Cyan's Dream Phantom Train Third Car Bottom Right",
+        "Cyan's Dream Phantom Train Third Car Middle"
+    ],
+    "Nerapa": [
+        "Floating Continent North Path",
+        "Floating Continent Lower Path",
+        "Floating Continent Northeast of Save",
+        "Floating Continent Escape"
+    ],
+    "Imperial Camp": [
+        "Imperial Camp Kick Chest",
+        "Imperial Camp Central Tent Left",
+        "Imperial Camp Central Tent Right",
+        "Imperial Camp Central Tent Back",
+    ],
+    "Cranes": [
+        "Magitek Factory North Upper Left",
+        "Magitek Factory North Right Side Pipe",
+        "Magitek Factory North Lower Landing",
+        "Magitek Factory North Across Conveyor Belt",
+        "Magitek Factory North Near Crate",
+        "Magitek Factory North Lower Balcony",
+        "Magitek Factory South Secret Room Left",
+        "Magitek Factory South Secret Room Right",
+        "Magitek Factory South Lower Balcony",
+        "Magitek Factory South Hidden Chest",
+        "Magitek Factory South Lower Left",
+        "Magitek Factory South Bottom Left",
+        "Magitek Factory Specimen Room"
+    ],
+    "Phantom Train": [
+        "Phantom Train Dining Car",
+        "Phantom Train Third Car Far Left Chest",
+        "Phantom Train Third Car Left Chest",
+        "Phantom Train Third Car Right Chest",
+        "Phantom Train Third Car Far Right Chest",
+    ],
+    "Burning House": [
+        "Burning House First Chest",
+        "Burning House Second Chest"
+    ],
+    "Collapsing House": [
+        "Collapsing House First Floor Top Right",
+        "Collapsing House First Floor Middle",
+        "Collapsing House First Floor Top Left",
+        "Collapsing House First Floor Left",
+        "Collapsing House First Floor Bottom Left",
+        "Collapsing House Basement Bottom",
+        "Collapsing House Basement Left",
+        "Collapsing House Basement Right"
+    ]
+}

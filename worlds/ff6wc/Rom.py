@@ -18,7 +18,12 @@ characters_obtained_address = 0xF51FC6
 item_types_base_address = 0xF51869
 item_quantities_base_address = 0xF51969
 items_received_address = 0xE07E00
+traps_received_address = 0xE07E02
+victory_address = 0xE07E04
 map_index_address = 0xF50082
+formation_id = 0xF511E0
+animation_byte = 0xF5009A
+
 espers = [  # This is the internal order of the Espers in the game. Editing this will break things.
     "Ramuh", "Ifrit", "Shiva",
     "Siren", "Terrato", "Shoat",

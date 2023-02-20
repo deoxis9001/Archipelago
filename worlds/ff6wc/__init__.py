@@ -326,6 +326,7 @@ class FF6WCWorld(World):
         output_file = os.path.join(output_directory,f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
         wc_args = ["-i", "Final Fantasy III (USA).sfc", "-o", f"{output_file}", "-ap", placement_file]
         wc_args.extend(generate_flagstring(self.multiworld, self.player, self.starting_characters))
+        print(wc_args)
         with FF6WCWorld.wc_ready:
             import sys
             from copy import deepcopy
@@ -349,6 +350,7 @@ class FF6WCWorld(World):
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.
+        self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:

@@ -412,19 +412,19 @@ def generate_commands_string(multiworld: MultiWorld, player: int):
     if multiworld.RandomizedCommands[player] == 1: # Randomized Vanilla
         command_strings = ["-com=03050708091011121315191629", "-scc"]
     if multiworld.RandomizedCommands[player].value >= 2: # Random Most/Random All
-        forbid_commands_string = "-rec1=28 -rec2=27 -rec3=26" if multiworld.RandomizedCommands[player] == 3 else ""
-        command_strings = ["-com=98989898989898989898989898", forbid_commands_string]
+        forbid_commands_strings = ["-rec1=28", "-rec2=27", "-rec3=26"] if multiworld.RandomizedCommands[player] == 3 else ""
+        command_strings = ["-com=98989898989898989898989898", *forbid_commands_strings]
 
     steal_command_strings = ["-sch", "-fc"] # Higher Steal Chance, Fix Capture Bugs
     swdtech_command_strings = ["-fst", "-sel"] # Fast SwdTech, Everyone Learns
-    tools_command_strings = ["-sto 1"] # One starting Tool
+    tools_command_strings = ["-sto=1"] # One starting Tool
     blitz_command_strings = ["-brl", "-bel"] # Bum Rush Last, Everyone Learns
     # Start with 3-5 Lores, +/- 25% MP cost, Everyone Learns
-    lore_command_strings = ["-slr 3 5", "-lmprp", "75", "125", "-lel"]
+    lore_command_strings = ["-slr", "3", "5", "-lmprp", "75", "125", "-lel"]
     sketch_command_strings = ["-scis"] # Improved Sketch/Control
     # Start with one Dance, Shuffle Abilities, Display Abilities, No Stumble, Everyone Learns
-    dance_command_strings = ["-sdr 1 1", "-das", "-dda", "-dns", "-del"]
-    rage_command_strings = ["-srr 10 20", "-rnl"] # Start with 10-20 Rages, No Leap
+    dance_command_strings = ["-sdr", "1", "1", "-das", "-dda", "-dns", "-del"]
+    rage_command_strings = ["-srr", "10", "20", "-rnl"] # Start with 10-20 Rages, No Leap
     other_command_string = ["-stra"] #SwdTech/Runic All
 
     return [*command_strings, *steal_command_strings, *swdtech_command_strings, *tools_command_strings,
@@ -433,7 +433,7 @@ def generate_commands_string(multiworld: MultiWorld, player: int):
 
 def generate_battle_string(multiworld: MultiWorld, player: int):
     reward_value = multiworld.BattleRewardMultiplier[player] + 1
-    rewards_strings = [f"-xpm={reward_value}", f"-mpm={reward_value}", f"-gpm={reward_value}"]
+    rewards_strings = [f"-xpm={reward_value}", f"-mpm={reward_value}", f"-gpm={reward_value}", "-be"]
 
     boss_string = ""
     if multiworld.RandomizedBosses[player] == 1:
@@ -454,19 +454,19 @@ def generate_battle_string(multiworld: MultiWorld, player: int):
 def generate_magic_string(multiworld: MultiWorld, player: int):
     spell_strings = ["-mmprp", "75", "125"] # Spell cost +/- 25%
 
-    esper_spells_string = ""
+    esper_spells_strings = [""]
     if multiworld.EsperSpells[player] == 1:
-        esper_spells_string = "-ess" # Shuffle Esper spells
+        esper_spells_strings = ["-ess"] # Shuffle Esper spells
     elif multiworld.EsperSpells[player] == 2:
-        esper_spells_string = "-esr" # Fully randomize Esper spells
+        esper_spells_strings = ["-esr", "1", "5"] # Fully randomize Esper spells
     elif multiworld.EsperSpells[player] == 3:
-        esper_spells_string = "-esrt" # Randomize Esper spells with tiered weighting
+        esper_spells_strings = ["-esrt"] # Randomize Esper spells with tiered weighting
 
     esper_bonuses_string = ""
     if multiworld.EsperBonuses[player] == 1: # Shuffled bonuses
         esper_bonuses_string = "-ebs"
     elif multiworld.EsperBonuses[player] == 2: # Random bonuses
-        esper_bonuses_string = "-ebr"
+        esper_bonuses_string = "-ebr=70"
 
     esper_equipability_string = ""
     if multiworld.EsperEquipability[player] == 1: # Random equipability
@@ -477,12 +477,12 @@ def generate_magic_string(multiworld: MultiWorld, player: int):
     multi_summon_string = "-ems"
 
     natural_magic_strings = ["-nmmi"] # Show who has Natural Magic
-    if multiworld.NaturalMagic == 1 or multiworld.NaturalMagic == 3: # Random characters
-        natural_magic_strings.extend(["-nms1 random", "-nms2 random"])
-    if multiworld.NaturalMagic == 2 or multiworld.NaturalMagic == 3: # Random learnsets
+    if multiworld.NaturalMagic[player] == 1 or multiworld.NaturalMagic == 3: # Random characters
+        natural_magic_strings.extend(["-nm1=random", "-nm2=random"])
+    if multiworld.NaturalMagic[player] == 2 or multiworld.NaturalMagic == 3: # Random learnsets
         natural_magic_strings.extend(["-rns1", "-rns2", "-rnl1", "-rnl2"])
 
-    return [*spell_strings, esper_spells_string, esper_bonuses_string, *esper_equipability_string,
+    return [*spell_strings, *esper_spells_strings, esper_bonuses_string, *esper_equipability_string,
             multi_summon_string, *natural_magic_strings]
 
 def generate_items_string(multiworld: MultiWorld, player: int):
@@ -491,28 +491,28 @@ def generate_items_string(multiworld: MultiWorld, player: int):
     starting_items_strings = ["-smc=3", "-sws=1", "-sfd=5"]
 
     # 75-125% shop prices, five Dried Meat shops, no priceless items
-    shops_strings = ["-sprp 75 125", "-sdm", "5", "-npi"]
+    shops_strings = ["-sprp", "75", "125", "-sdm", "5", "-npi"]
     if multiworld.RandomizedShops[player] == 1: # Shuffled shops
         shops_strings.extend(["-slsr"])
     elif multiworld.RandomizedShops[player] == 2: # Randomized Shops
         shops_strings.extend(["-sirt"])
 
     spellcasting_items_string = []
-    if multiworld.SpellcastingItems == 1: # Limited
+    if multiworld.SpellcastingItems[player] == 1: # Limited
         spellcasting_items_string = ["-sebr", "-sesb", "-snes"]
-    elif multiworld.SpellcastingItems == 2: # None
+    elif multiworld.SpellcastingItems[player] == 2: # None
         spellcasting_items_string = ["-snbr", "-snsb", "-snes"]
 
     # Moogle Charms equipable by all, no Moogle Charms in item pool, no Sprint Shoes in pool
     # Stronger Atma Weapon, 8-32 battles to uncurse Cursed Shield
     equipability_strings = ["-mca", "-nmc", "-noshoes", "-saw", "-csb", "8", "32"]
-    if multiworld.AllowStrongestItems == False:
+    if multiworld.AllowStrongestItems[player] == False:
         equipability_strings.extend(["-nee", "-nil", "-nfps"])
-    if multiworld.Equipment == 1: # Shuffled
-        equipability_strings.extend(["-iesr 0", "-iersr 0"])
-    elif multiworld.Equipment == 2: # Random
-        equipability_strings.extend(["-ier 1 14", "-ierr 1 14"])
-    elif multiworld.Equipment == 3: # Balanced Random
+    if multiworld.Equipment[player] == 1: # Shuffled
+        equipability_strings.extend(["-iesr=0", "-iersr=0"])
+    elif multiworld.Equipment[player] == 2: # Random
+        equipability_strings.extend(["-ier", "1", "14", "-ierr", "1", "14"])
+    elif multiworld.Equipment[player] == 3: # Balanced Random
         equipability_strings.extend(["-iebr=6", "-ierbr=6"])
     return [starting_gp_string, *starting_items_strings, *shops_strings,
             *spellcasting_items_string, *equipability_strings]

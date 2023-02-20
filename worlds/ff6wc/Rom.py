@@ -595,7 +595,7 @@ treasure_chest_data = {
     "South Figaro Cave Eastern Passage WoR": (0x1E4C, 1, 28),
     "South Figaro Cave Southwest Passage WoR": (0x1E42, 2, 27),
     "South Figaro Cave Eastern Bridge WoR": (0x1E42, 3, 66),
-    "Thamasa Strago's House Near Table": (0x1E5C, 3, 224),
+    "Thamasa Strago's House Near Table (Second Floor)": (0x1E5C, 3, 224),
     "Thamasa Item Shop Barrel": (0x1E5F, 1, 222),
     "Thamasa Relic Shop Barrel": (0x1E5F, 0, 221),
     "Thamasa Inn Barrel": (0x1E5F, 2, 223),

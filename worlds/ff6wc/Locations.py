@@ -438,7 +438,7 @@ minor_generic_checks = [
     "South Figaro Mansion Basement East Room Below Clock",
     "South Figaro Mansion Basement East Room Right",
     "South Figaro Mansion Basement East Room Far Right",
-    "Thamasa Strago's House Near Table",
+    "Thamasa Strago's House Near Table (Second Floor)",
     "Thamasa Item Shop Barrel",
     "Thamasa Relic Shop Barrel",
     "Thamasa Inn Barrel",

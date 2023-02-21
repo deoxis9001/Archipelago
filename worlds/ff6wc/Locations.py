@@ -551,11 +551,11 @@ dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
 # Most checks are either character/esper/item, esper/item, or item.
 # Except for Cranes, Magimaster, Imperial Air Force, AtmaWeapon, Veldt
 # Most are the first one, so we only need to note the exceptions
-item_only_checks = []
+item_only_checks = [*dragons, "Lone Wolf 2", "Narshe Weapon Shop 2"]
 no_item_checks = []
-no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Wrexsoul", "Doma Castle Throne",
-                       "Doom Gaze", "AtmaWeapon", "Ifrit and Shiva", "Number 024", "Narshe Weapon Shop 1",
-                       "Tritoch", "Tzen Thief"]
+no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Dream Stooges",
+                       "AtmaWeapon", "Ifrit and Shiva", "Number 024",
+                        "Tzen Thief"]
 
 point_of_no_return_checks = {
     "Wrexsoul": [

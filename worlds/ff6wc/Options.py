@@ -303,8 +303,8 @@ ff6wc_options: typing.Dict[str, type(Option)] = {
 }
 
 def generate_flagstring(multiworld: MultiWorld, player: int, starting_characters):
-    if multiworld.EnableFlagstring[player] == "true":
-        flags = multiworld.Flagstring.split(" ")
+    if multiworld.EnableFlagstring[player].value == 'true':
+        flags = multiworld.Flagstring[player].value.split(" ")
     else:
         flags = [
             *generate_settings_string(),

@@ -5,10 +5,10 @@ from .Items import TheBindingOfIsaacRepentanceItem, item_table, default_weights,
     default_trap_items_weights
 from .Locations import location_table, TheBindingOfIsaacRepentanceLocation, base_location_table
 from .Rules import set_rules
+from .Options import tobir_options
 
 from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial, ItemClassification
-from .Options import tobir_options
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 
 class TheBindingOfIsaacRepentanceWeb(WebWorld):
@@ -92,7 +92,7 @@ class TheBindingOfIsaacRepentanceWorld(World):
     def fill_slot_data(self):
         return {
             "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
-            "seed": "".join(self.multiworld.slot_seeds[self.player].choice(string.digits) for _ in range(16)),
+            "seed": ''.join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
             "totalLocations": self.multiworld.total_locations[self.player].value,
             "requiredLocations": self.multiworld.required_locations[self.player].value,
             "goal": self.multiworld.goal[self.player].value,
@@ -139,7 +139,7 @@ def create_regions(world, player: int):
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
+    ret = Region(name, player, world)
     ret.world = world
     if locations:
         for location in locations:

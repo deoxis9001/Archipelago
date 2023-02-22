@@ -1,5 +1,5 @@
-from BaseClasses import Location
 import typing
+from BaseClasses import Location
 
 class TheBindingOfIsaacRepentanceLocation(Location):
     game: str = "The Binding of Isaac Rebirth"

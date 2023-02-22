@@ -1,7 +1,7 @@
 import typing
 from Options import Option, DefaultOnToggle, Toggle, Range, Choice, DeathLink, OptionDict
-from worlds.tboir import default_weights, default_junk_items_weights, item_table
-from worlds.tboir.Items import default_trap_items_weights
+from ..tboir import default_weights, default_junk_items_weights, item_table
+from .Items import default_trap_items_weights
 
 
 class TotalLocations(Range):

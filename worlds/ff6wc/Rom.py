@@ -341,8 +341,8 @@ event_flag_location_names = {
     "Opera House": 0x5b,
     "Burning House": 0x090,
     "Ebot's Rock": 0x19c,
-    "MagiMaster": 0x2db,
-    "Gem Box": 0x0ba,
+    "MagiMaster": 0x0ba,
+    "Gem Box": 0x2da, # Stepped in front of the chest, triggering boss fight.
     "Esper Mountain": 0x095,
     "Owzer Mansion": 0x253,
     "Kohlingen": 0x18e,

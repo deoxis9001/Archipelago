@@ -433,7 +433,7 @@ def generate_commands_string(multiworld: MultiWorld, player: int):
 
 def generate_battle_string(multiworld: MultiWorld, player: int):
     reward_value = multiworld.BattleRewardMultiplier[player] + 1
-    rewards_strings = [f"-xpm={reward_value}", f"-mpm={reward_value}", f"-gpm={reward_value}", "-be"]
+    rewards_strings = [f"-xpm={reward_value}", f"-mpm={reward_value}", f"-gpm={reward_value}", "-be", "-nxppd"]
 
     boss_string = ""
     if multiworld.RandomizedBosses[player] == 1:

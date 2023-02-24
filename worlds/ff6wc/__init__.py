@@ -130,6 +130,8 @@ class FF6WCWorld(World):
                     continue
             if name in Locations.dragon_events:
                 id = None
+            if "(Boss)" in name:
+                id = None
             if name in Locations.kefka_checks:
                 final_dungeon.locations.append(self.create_location(name, id, final_dungeon))
             elif name in Locations.accomplishment_data:
@@ -229,14 +231,19 @@ class FF6WCWorld(World):
                 add_rule(self.multiworld.get_location(location, self.player),
                          lambda state: state.has_group("espers", self.player, 4))
 
-        set_rule(self.multiworld.get_entrance("Kefka's Tower Landing", self.player),
-                 lambda state: state._ff6wc_has_enough_characters(self.multiworld, self.player)
-                               and state._ff6wc_has_enough_espers(self.multiworld, self.player))
         set_rule(self.multiworld.get_location("Beat Final Kefka", self.player),
-                 lambda state: state.can_reach("Kefka's Tower", 'Location', self.player)
-                               and state._ff6wc_has_enough_dragons(self.multiworld, self.player))
+                 lambda state: state._ff6wc_has_enough_characters(self.multiworld, self.player)
+                               and state._ff6wc_has_enough_espers(self.multiworld, self.player)
+                               and state._ff6wc_has_enough_dragons(self.multiworld, self.player)
+                               and state._ff6wc_has_enough_bosses(self.multiworld, self.player))
     def pre_fill(self):
-        pass
+        for index, dragon in enumerate(Locations.dragons):
+            dragon_event = Locations.dragon_events_link[dragon]
+            self.multiworld.get_location(dragon_event, self.player).place_locked_item(
+                self.create_event(self.all_dragon_clears[index]))
+
+        for boss in [location for location in Locations.major_checks if "(Boss)" in location]:
+            self.multiworld.get_location(boss, self.player).place_locked_item(self.create_event("Busted!"))
 
     def generate_basic(self):
         self.multiworld.get_location("Kefka's Tower", self.player).place_locked_item(
@@ -244,10 +251,7 @@ class FF6WCWorld(World):
         self.multiworld.get_location("Beat Final Kefka", self.player).place_locked_item(self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-        for index, dragon in enumerate(Locations.dragons):
-            dragon_event = Locations.dragon_events_link[dragon]
-            self.multiworld.get_location(dragon_event, self.player).place_locked_item(
-                self.create_event(self.all_dragon_clears[index]))
+
 
         for location in Locations.no_item_checks:
             possibilities = [item for item in self.multiworld.itempool if item.player == self.player]

@@ -1,13 +1,19 @@
 major_terra_checks = [
     "Whelk",
+    "Whelk (Boss)",
     "Lete River",
+    "Ultros 1 (Boss)",
     "Sealed Gate",
     "Zozo",
-    "Mobliz"
+    "Dadaluma (Boss)",
+    "Mobliz",
+    "Phunbaba 3 (Boss)",
+    "Phunbaba 4 (Boss)"
 ]
 
 major_locke_checks = [
     "South Figaro Cave",
+    "TunnelArmr (Boss)",
     "Narshe Weapon Shop 1",
     "Narshe Weapon Shop 2",
     "Phoenix Cave",
@@ -17,8 +23,11 @@ major_locke_checks = [
 
 major_cyan_checks = [
     "Doma Castle Siege",
+    "Leader (Boss)",
     "Dream Stooges",
+    "Dream Stooges (Boss)",
     "Wrexsoul",
+    "Wrexsoul (Boss)",
     "Doma Castle Throne",
     "Mt. Zozo",
     "Storm Dragon",
@@ -28,14 +37,20 @@ major_cyan_checks = [
 major_shadow_checks = [
     "Gau Father House",
     "Imperial Air Force",
+    "Ultros and Chupon (Boss)",
+    "Air Force (Boss)",
     "AtmaWeapon",
+    "AtmaWeapon (Boss)",
     "Nerapa",
-    "Veldt Cave"
+    "Nerapa (Boss)",
+    "Veldt Cave",
+    "SrBehemoth (Boss)"
 ]
 
 major_edgar_checks = [
     "Figaro Castle Throne",
     "Figaro Castle Basement",
+    "Tentacles (Boss)",
     "Ancient Castle",
     "Blue Dragon",
     "Blue Dragon Status"
@@ -43,41 +58,56 @@ major_edgar_checks = [
 
 major_sabin_checks = [
     "Mt. Kolts",
+    "Vargas (Boss)",
     "Collapsing House",
     "Baren Falls",
+    "Rhizopas (Boss)",
     "Imperial Camp",
-    "Phantom Train"
+    "Phantom Train",
+    "GhostTrain (Boss)"
 ]
 
 major_celes_checks = [
     "South Figaro",
     "Ifrit and Shiva",
+    "Ifrit and Shiva (Boss)",
     "Number 024",
+    "Number 024 (Boss)",
+    "Number 128 (Boss)",
     "Cranes",
-    "Opera House"
+    "Cranes (Boss)",
+    "Opera House",
+    "Ultros 2 (Boss)"
 ]
 
 major_strago_checks = [
     "Burning House",
+    "FlameEater (Boss)",
     "Ebot's Rock",
+    "Hidon (Boss)",
     "MagiMaster",
+    "MagiMaster (Boss)",
     "Gem Box"
 ]
 
 major_relm_checks = [
     "Esper Mountain",
-    "Owzer Mansion"
+    "Ultros 3 (Boss)",
+    "Owzer Mansion",
+    "Chadarnook (Boss)",
 ]
 
 major_setzer_checks = [
     "Kohlingen",
-    "Daryl's Tomb"
+    "Daryl's Tomb",
+    "Dullahan (Boss)"
 ]
 
 major_mog_checks = [
     "Lone Wolf 1",
     "Lone Wolf 2",
-    "Narshe Moogle Defense"
+    "Narshe Moogle Defense",
+    "Marshal (Boss)"
 ]
 
 major_gau_checks = [
@@ -90,14 +120,18 @@ major_gogo_checks = [
 ]
 
 major_umaro_checks = [
-    "Umaro's Cave"
+    "Umaro's Cave",
+    "Umaro (Boss)"
 ]
 
 major_generic_checks = [
     "Kefka at Narshe",
+    "Kefka at Narshe (Boss)",
     "Tzen Thief",
     "Doom Gaze",
+    "Doom Gaze (Boss)",
     "Tritoch",
+    "Tritoch (Boss)",
     "Auction House 10kGP",
     "Auction House 20kGP",
     "Dirt Dragon",
@@ -105,15 +139,21 @@ major_generic_checks = [
     "Ice Dragon",
     "Dirt Dragon Status",
     "White Dragon Status",
-    "Ice Dragon Status"
+    "Ice Dragon Status",
 ]
 
 major_kefka_checks = [
     "Atma",
+    "Atma (Boss)",
     "Skull Dragon",
     "Gold Dragon",
     "Skull Dragon Status",
-    "Gold Dragon Status"
+    "Gold Dragon Status",
+    "Doom (Boss)",
+    "Goddess (Boss)",
+    "Poltrgeist (Boss)",
+    "Inferno (Boss)",
+    "Guardian (Boss)"
 ]
 
 minor_terra_checks = [

@@ -26,14 +26,14 @@ class DragonCount(Range):
     display_name = "Dragons Required"
     range_start = 0
     range_end = 8
-    default = 2
+    default = 4
 
 class BossCount(Range):
     """Sets the number of bosses required to access the final battle"""
     display_name = "Bosses Required"
     range_start = 0
     range_end = 40
-    default = 0
+    default = 16
 
 class StartingCharacterCount(Range):
     """Sets the number of starting characters"""

@@ -45,6 +45,7 @@ apworlds: set = {
     "Rogue Legacy",
     "Donkey Kong Country 3",
     "Super Mario World",
+    "Final Fantasy 6 Worlds Collide"
 }
 
 if os.path.exists("X:/pw.txt"):

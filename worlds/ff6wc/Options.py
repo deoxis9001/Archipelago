@@ -514,8 +514,9 @@ def generate_items_string(multiworld: MultiWorld, player: int):
         equipability_strings.extend(["-ier", "1", "14", "-ierr", "1", "14"])
     elif multiworld.Equipment[player] == 3: # Balanced Random
         equipability_strings.extend(["-iebr=6", "-ierbr=6"])
+    chest_randomization = ["-ccsr", "20"] # Default shuffle + 20% random. Only applies if Treasuresanity = off
     return [starting_gp_string, *starting_items_strings, *shops_strings,
-            *spellcasting_items_string, *equipability_strings]
+            *spellcasting_items_string, *equipability_strings, *chest_randomization]
 
 def generate_gameplay_string(multiworld: MultiWorld, player: int):
     # B Dash, randomized Coliseum rewards and enemies, randomize Auction House minor items

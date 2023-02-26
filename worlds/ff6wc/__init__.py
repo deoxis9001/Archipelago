@@ -31,7 +31,7 @@ class FF6WCWorld(World):
     option_definitions = ff6wc_options
     game = "Final Fantasy 6 Worlds Collide"
     topology_present = False
-    data_version = 1
+    data_version = 0
     base_id = 6000
     web = FF6WCWeb()
     wc_ready = threading.Lock()

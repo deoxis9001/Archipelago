@@ -153,6 +153,8 @@ components: Iterable[Component] = (
     Component('Starcraft 2 Client', 'Starcraft2Client'),
     # The Legend of Zelda
     Component('The Legend of Zelda Client', 'Zelda1Client'),
+    # Wargroove
+    Component('Wargroove Client', 'WargrooveClient'),
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),

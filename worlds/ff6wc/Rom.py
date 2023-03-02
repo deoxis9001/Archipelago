@@ -17,10 +17,13 @@ character_recruited_bit_base_address = 0xF51EDE
 characters_obtained_address = 0xF51FC6
 item_types_base_address = 0xF51869
 item_quantities_base_address = 0xF51969
-items_received_address = 0xE07E00
+items_received_address = 0xF51DC9
 traps_received_address = 0xE07E02
 victory_address = 0xE07E04
 map_index_address = 0xF50082
+swdtech_byte = 0xF51CF7
+blitz_byte = 0xF51D28
+menu_address = 0xF50059
 formation_id = 0xF511E0
 animation_byte = 0xF5009A
 

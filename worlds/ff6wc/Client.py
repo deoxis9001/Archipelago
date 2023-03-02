@@ -69,6 +69,15 @@ class FF6WCClient(SNIClient):
         map_index = Rom.get_map_index(map_index)
         if map_index < 6:
             return False
+        if map_index == 255:
+            return False
+
+        menu_data = await snes_read(ctx, Rom.menu_address, 1)
+        if menu_data is None:
+            return False
+        if menu_data[0] != 0:
+            return False
+        return True
 
     async def location_check(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
@@ -185,8 +194,16 @@ class FF6WCClient(SNIClient):
                 character_recruit_data = await snes_read(ctx, character_recruit_byte, 1)
                 if character_recruit_data is None:
                     return
+
                 character_count = await snes_read(ctx, Rom.characters_obtained_address, 1)
                 if character_count is None:
+                    return
+
+                swdtech_data = await snes_read(ctx, Rom.swdtech_byte, 1)
+                blitz_data = await snes_read(ctx, Rom.blitz_byte, 1)
+                if swdtech_data is None:
+                    return
+                if blitz_data is None:
                     return
                 character_count = character_count[0]
                 character_initialized = character_init_data[0] & character_init_bit
@@ -197,10 +214,16 @@ class FF6WCClient(SNIClient):
                                          None)
                 if character_item is not None:
                     new_init_data = character_init_data[0] | character_init_bit
+                    if new_init_data == character_init_data[0]:
+                        self.increment_items_received(ctx, items_received_amount)
+                        return
                     new_recruit_data = character_recruit_data[0] | character_recruit_bit
                     snes_buffered_write(ctx, character_init_byte, bytes([new_init_data]))
                     snes_buffered_write(ctx, character_recruit_byte, bytes([new_recruit_data]))
                     self.increment_items_received(ctx, items_received_amount)
+
+                    snes_buffered_write(ctx, Rom.swdtech_byte, bytes([swdtech_data[0] | 1]))
+                    snes_buffered_write(ctx, Rom.blitz_byte, bytes([blitz_data[0] | 1]))
 
                     snes_buffered_write(ctx, Rom.characters_obtained_address, bytes([character_count + 1]))
                     snes_logger.info('Received %s from %s (%s)' % (
@@ -222,8 +245,8 @@ class FF6WCClient(SNIClient):
                 snes_buffered_write(ctx, esper_byte, bytes([new_data]))
 
                 self.increment_items_received(ctx, items_received_amount)
-
-                snes_buffered_write(ctx, Rom.espers_obtained_address, bytes([esper_count + 1]))
+                if esper_obtained == 0:
+                    snes_buffered_write(ctx, Rom.espers_obtained_address, bytes([esper_count + 1]))
                 snes_logger.info('Received %s from %s (%s)' % (
                     ctx.item_names[item.item],
                     ctx.player_names[item.player],
@@ -235,6 +258,7 @@ class FF6WCClient(SNIClient):
                 if item_types_data is None or item_quantities_data is None:
                     return
                 reserved_slots = []
+                # Field items
                 for i in range(0, 255):
                     slot = item_types_data[i]
                     quantity = item_quantities_data[i]
@@ -273,13 +297,13 @@ class FF6WCClient(SNIClient):
 
     async def check_victory2(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        victory_data = await snes_read(ctx, 0x02, 2)
+        victory_data = await snes_read(ctx, Rom.victory_address, 1)
         if victory_data is None:
             return
 
         victory_value = victory_data[0]
         #for now
-        if victory_value == 0x00:
+        if victory_value != 0x00:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 

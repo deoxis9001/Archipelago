@@ -40,7 +40,14 @@ class Goal(Choice):
     option_delirium = 14
     option_required_locations = 15
     option_full_notes = 16
+    option_note_marks = 17
 
+class NoteMarkAmount(Range):
+    """Number of full marks needed to beat the game (if goal is note marks). """
+    display_name = "Full Note Amount"
+    range_start = 1
+    range_end = 408
+    default = 20
 
 class FullNoteAmount(Range):
     """Number of full notes needed to beat the game (if goal is full notes). """
@@ -51,7 +58,8 @@ class FullNoteAmount(Range):
 
 
 class NoteMarksRequireHardMode(Toggle):
-    """If set on Note Marks are only considered complete if the run was on hard mode"""
+    """If set on Note Marks are only considered complete if the run was on hard mode.
+    Relevant for both full notes and note marks goal"""
     display_name = "Note marks require hard mode"
 
 
@@ -152,6 +160,18 @@ class TrapItemWeights(CustomItemWeightsBase):
     default = default_trap_items_weights
     valid_keys = {key for key, value in item_table.items() if value.is_trap()}
 
+class SplitStartItems(Choice):
+    """
+    Will split items already received on run start to be received over multiple floors.
+    This is to avoid getting to many items early and make runs more interesting.
+    Always 6 will always divide items over the first 6 floors.
+    Furthest will base the division on your furthest run so far.
+    """
+    display_name = "Split Items received on start"
+    option_off = 0
+    option_on_always_6 = 1
+    option_on_furthest = 2
+
 
 tobir_options: typing.Dict[str, type(Option)] = {
     "total_locations": TotalLocations,
@@ -159,6 +179,7 @@ tobir_options: typing.Dict[str, type(Option)] = {
     "item_pickup_step": ItemPickupStep,
     "goal": Goal,
     "full_note_amount": FullNoteAmount,
+    "note_marks_amount": NoteMarkAmount,
     "note_marks_require_hard_mode": NoteMarksRequireHardMode,
     "item_weights": ItemWeights,
     "custom_item_weights": CustomItemWeights,
@@ -169,4 +190,5 @@ tobir_options: typing.Dict[str, type(Option)] = {
     "teleport_trap_can_error": TeleportTrapCanError,
     "additional_boss_rewards": AdditonalBossRewards,
     "death_link": DeathLink,
+    "split_start_items": SplitStartItems,
 }

@@ -24,7 +24,10 @@ class TheBindingOfIsaacRepentanceWeb(WebWorld):
 
 class TheBindingOfIsaacRepentanceWorld(World):
     """
-    todo
+    The Binding of Isaac: Rebirth is a randomly generated action RPG shooter with heavy Rogue-like elements.
+    Following Isaac on his journey players will find bizarre treasures that change Isaac’s form giving him super
+    human abilities and enabling him to fight off droves of mysterious creatures, discover secrets and fight his way
+    to safety.
     """
     game: str = "The Binding of Isaac Repentance"
     option_definitions = tobir_options
@@ -32,6 +35,7 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = location_table
+    item_name_groups = {'Any Progression': [name for name, data in item_table.items() if data.is_progression()]}
 
     data_version = 5
     web = TheBindingOfIsaacRepentanceWeb()
@@ -100,7 +104,9 @@ class TheBindingOfIsaacRepentanceWorld(World):
             "deathLink": self.multiworld.death_link[self.player].value,
             "teleportTrapCanError": self.multiworld.teleport_trap_can_error[self.player].value,
             "fullNoteAmount": self.multiworld.full_note_amount[self.player].value,
-            "noteMarkRequireHardMode": self.multiworld.note_marks_require_hard_mode[self.player].value
+            "noteMarksAmount": self.multiworld.note_marks_amount[self.player].value,
+            "noteMarkRequireHardMode": self.multiworld.note_marks_require_hard_mode[self.player].value,
+            "splitStartItems": self.multiworld.split_start_items[self.player].value
         }
 
     def create_item(self, name: str) -> Item:

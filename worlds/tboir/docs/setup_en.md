@@ -4,14 +4,11 @@
 
 - The Binding of Isaac: Rebirth including all DLCs up to Repentance
   - [The Binding of Isaac: Rebirth Complete Bundle](https://store.steampowered.com/bundle/2405/The_Binding_of_Isaac_Rebirth_Complete_Bundle/)
-- Mod Config Menu (either Continued or Pure)
-  - Mod Config Menu - Continued
-    - [gitlab](https://gitlab.com/Chifilly/bindingofisaac-modconfigmenu)
-    - [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2487535818)
-  - Mod Config Menu Pure
-    - [GitHub](https://github.com/Zamiell/isaac-mod-config-menu)
-    - [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787)
+- Mod Config Menu Pure
+  - [GitHub](https://github.com/Zamiell/isaac-mod-config-menu)
+  - [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787)
 - [The Binding of Isaac AP Mod](https://github.com/Cyb3RGER/TBoI-AP-Mod/releases)
+- [isaac-save-insaller by Zamiell](https://github.com/Zamiell/isaac-save-installer) (optional for 100% save file)
 
 ## Installation Procedures
 

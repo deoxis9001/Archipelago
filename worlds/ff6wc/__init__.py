@@ -160,7 +160,7 @@ class FF6WCWorld(World):
             character_list = proper_names.split(" ")
             self.starting_characters = character_list
 
-            # Determining character, esper, and dragon requirements
+            # Determining character, esper, dragon, and boss requirements
             # Finding KT Objective in flagstring (starts with 2)
             character_count = 0
             esper_count = 0
@@ -179,9 +179,31 @@ class FF6WCWorld(World):
                         kt_obj_list = objective_code_list
                         kt_obj_code_index = flags_list.index(objective) + 1
                         break
-            # Determining Esper and Dragon Counts
+            # Determining Character, Esper, Dragon and Boss Counts
+            # Since AP only (currently) takes in counts for bosses, espers, characters, and dragons, this code
+            # identifies the root objective number/prefix, parses the ranges/values, and then tells the loop to skip to
+            # the next requirement. There are requirements that have 2 inputs because of ranges (bosses, characters,
+            # espers, dragons) and skip the next 2 indices in objective identification. The others only have 1 number in
+            # objective identification and only skip 1/the next index
+
+            # Also, the player can input a "range" of conditions to be met for KT entry. When building the AP logic of
+            # the seed, suggest not including these ranges in the logic selection, but instead ensuring that all
+            # possible conditions are required. As such, this section does not account for the range of conditions that
+            # are required for seed completion. For example, if 1 of 2 conditions is required, one being 14 characters
+            # and the other being Kill Cid, the logic should still be such that 14 characters can be acquired.
+
+            not_ranged_obj_numbers = ["1", "3", "5", "7", "9", "11", "12"] # Random or looking for specific character. etc.
+            skip = 2    # jumps over the initial KT requirements inputs which are indices 0, 1, and 2
+
             for index in range(len(kt_obj_list)):
-                if index%3 == 0 and index > 0:
+                if skip >= index or skip >= len(kt_obj_list):
+                    continue    # skips over the ranges or specific condition inputs based on condition type
+
+                if kt_obj_list[index] in not_ranged_obj_numbers:    # not a ranged objective type
+                    skip = index + 1
+
+                else:              # is a ranged objective, note that checks (type "10") are not currently parsed by AP
+                    skip = index + 2
                     count_low = int(kt_obj_list[index + 1])
                     count_high = int(kt_obj_list[index + 2])
                     if kt_obj_list[index] == "2":
@@ -207,7 +229,7 @@ class FF6WCWorld(World):
             self.multiworld.CharacterCount[self.player].value = character_count
             self.multiworld.EsperCount[self.player].value = esper_count
             self.multiworld.DragonCount[self.player].value = dragon_count
-            # self.multiworld.BossCount[self.player].value = boss_count
+            self.multiworld.BossCount[self.player].value = boss_count
 
         else:
             starting_characters = [

@@ -592,7 +592,6 @@ dragons = ["Red Dragon", "Storm Dragon", "Blue Dragon", "Dirt Dragon",
 # Except for Cranes, Magimaster, Imperial Air Force, AtmaWeapon, Veldt
 # Most are the first one, so we only need to note the exceptions
 item_only_checks = [*dragons, "Lone Wolf 2", "Narshe Weapon Shop 2"]
-no_item_checks = []
 no_character_checks = ["Auction House 10kGP", "Auction House 20kGP", "Dream Stooges",
                        "AtmaWeapon", "Ifrit and Shiva", "Number 024",
                         "Tzen Thief"]

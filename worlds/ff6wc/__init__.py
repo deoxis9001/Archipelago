@@ -287,11 +287,45 @@ class FF6WCWorld(World):
         self.multiworld.regions.append(final_dungeon)
 
     def create_items(self):
+        item_pool = []
         for item in map(self.create_item, self.item_name_to_id):
             if item.name in self.starting_characters:
                 self.multiworld.push_precollected(item)
             elif item.name in Rom.characters or item.name in Rom.espers:
-                self.multiworld.itempool.append(item)
+                item_pool.append(item)
+
+        for index, dragon in enumerate(Locations.dragons):
+            dragon_event = Locations.dragon_events_link[dragon]
+            self.multiworld.get_location(dragon_event, self.player).place_locked_item(
+                self.create_event(self.all_dragon_clears[index]))
+
+        for boss in [location for location in Locations.major_checks if "(Boss)" in location]:
+            self.multiworld.get_location(boss, self.player).place_locked_item(self.create_event("Busted!"))
+
+        self.multiworld.get_location("Kefka's Tower", self.player).place_locked_item(
+            self.create_event("Kefka's Tower Access"))
+        self.multiworld.get_location("Beat Final Kefka", self.player).place_locked_item(
+            self.create_event("Victory"))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+        filler_pool = []
+        good_filler_pool = []
+        for item in Items.items:
+            if item != "ArchplgoItem":
+                filler_pool.append(item)
+            if item in Items.good_items:
+                good_filler_pool.append(item)
+        major_items = len([location for location in Locations.major_checks if "(Boss)" not in location and "Status" not
+                           in location]) - len(item_pool)
+
+        for _ in range(major_items):
+            item_pool.append(self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool)))
+        if self.multiworld.Treasuresanity[self.player]:
+            minor_items = len(Locations.all_minor_checks)
+            for _ in range(minor_items):
+                item_pool.append(self.create_filler_item(self.multiworld.random.choice(filler_pool)))
+
+        self.multiworld.itempool += item_pool
 
     def set_rules(self):
         check_list = {
@@ -328,7 +362,7 @@ class FF6WCWorld(World):
                              lambda state, character=check_name: state.has(character, self.player))
 
         # Lock (ha!) these behind Terra as well as Locke, since whatever isn't chosen is put behind Whelk
-        for check_name in ["Narshe Weapon Shop 1", "Narshe Weapon Shop 2",]:
+        for check_name in ["Narshe Weapon Shop 1", "Narshe Weapon Shop 2"]:
             add_rule(self.multiworld.get_location(check_name, self.player),
                      lambda state: state.has("Terra", self.player))
 
@@ -348,12 +382,6 @@ class FF6WCWorld(World):
                           lambda item: item.name not in self.item_name_groups["characters"]
                                        or item.player != self.player)
 
-        for check in Locations.no_item_checks:
-            add_item_rule(self.multiworld.get_location(check, self.player),
-                          lambda item: item.name in self.item_name_groups["characters"]
-                                       or item.name in self.item_name_groups['espers']
-                                       or item.player != self.player)
-
         for dragon in Locations.dragons:
             dragon_event = Locations.dragon_events_link[dragon]
             add_item_rule(self.multiworld.get_location(dragon_event, self.player),
@@ -369,54 +397,7 @@ class FF6WCWorld(World):
                                and state._ff6wc_has_enough_espers(self.multiworld, self.player)
                                and state._ff6wc_has_enough_dragons(self.multiworld, self.player)
                                and state._ff6wc_has_enough_bosses(self.multiworld, self.player))
-    def pre_fill(self):
-        for index, dragon in enumerate(Locations.dragons):
-            dragon_event = Locations.dragon_events_link[dragon]
-            self.multiworld.get_location(dragon_event, self.player).place_locked_item(
-                self.create_event(self.all_dragon_clears[index]))
 
-        for boss in [location for location in Locations.major_checks if "(Boss)" in location]:
-            self.multiworld.get_location(boss, self.player).place_locked_item(self.create_event("Busted!"))
-
-    def generate_basic(self):
-        self.multiworld.get_location("Kefka's Tower", self.player).place_locked_item(
-            self.create_event("Kefka's Tower Access"))
-        self.multiworld.get_location("Beat Final Kefka", self.player).place_locked_item(self.create_event("Victory"))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-
-
-
-        for location in Locations.no_item_checks:
-            possibilities = [item for item in self.multiworld.itempool if item.player == self.player]
-            possibilities = [item for item in possibilities if
-                             item.name in Items.characters or item.name in Items.espers]
-            location = self.multiworld.get_location(location, self.player)
-            item = self.multiworld.random.choice(possibilities)
-            location.place_locked_item(item)
-            self.multiworld.itempool.remove(item)
-        unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
-        item_pool_size = len([item for item in self.multiworld.itempool if item.player == self.player])
-        filler_count = len(unfilled_locations) - item_pool_size
-        filler_pool = []
-        good_filler_pool = []
-        for item in Items.items:
-            if item != "ArchplgoItem":
-                filler_pool.append(item)
-            if item in Items.good_items:
-                good_filler_pool.append(item)
-        unfilled_major_locations = [
-            location for location in unfilled_locations
-            if location.player == self.player and location.name in Locations.major_checks
-        ]
-        self.multiworld.itempool += [
-            self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool))
-            for _ in range(0, len(unfilled_major_locations))
-        ]
-        filler_count -= len(unfilled_major_locations)
-        self.multiworld.itempool += [
-            self.create_filler_item(self.multiworld.random.choice(filler_pool))
-            for _ in range(0, filler_count)
-        ]
 
     def post_fill(self) -> None:
         spheres = list(self.multiworld.get_spheres())
@@ -464,7 +445,7 @@ class FF6WCWorld(World):
                                       f'{self.multiworld.get_out_file_name_base(self.player)}' + '.applacements')
         with open(placement_file, "w") as file:
             json.dump(locations, file, indent=2)
-        output_file = os.path.join(output_directory,f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
+        output_file = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
         wc_args = ["-i", "Final Fantasy III (USA).sfc", "-o", f"{output_file}", "-ap", placement_file]
         wc_args.extend(generate_flagstring(self.multiworld, self.player, self.starting_characters))
         print(wc_args)
@@ -486,7 +467,6 @@ class FF6WCWorld(World):
             os.remove(output_file)
             os.remove(placement_file)
             self.rom_name_available_event.set()
-
 
     def modify_multidata(self, multidata: dict):
         import base64

@@ -117,7 +117,7 @@ class FF6WCWorld(World):
                 character_list.append(flags_list[sc4_index])
 
             for character in range(len(character_list)):
-                if character_list[character] == "randomgu":
+                if character_list[character] == "randomngu":
                     compare_character_list = character_list.copy()
                     character_list[character] = random.choice(Rom.characters[:12]).lower()
                     while character_list[character] in compare_character_list:

@@ -9,7 +9,6 @@ import threading
 from typing import NamedTuple, Union
 import logging
 
-import BaseClasses
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification
 from . import Logic
 from .Rom import FF6WCDeltaPatch
@@ -36,7 +35,6 @@ class FF6WCWorld(World):
     base_id = 6000
     web = FF6WCWeb()
     wc_ready = threading.Lock()
-    modified_item_table = item_table
     item_name_to_id = {name: index for index, name in enumerate(item_table)}
     location_name_to_id = {name: index for index, name in enumerate(location_table)}
 
@@ -496,9 +494,7 @@ class FF6WCWorld(World):
         wc_args = ["-i", "Final Fantasy III (USA).sfc", "-o", f"{output_file}", "-ap", placement_file]
         wc_args.extend(generate_flagstring(self.multiworld, self.player, self.starting_characters))
         print(wc_args)
-        self.generator_in_use.set()
-        with self.wc_ready:
-            self.generator_in_use.wait()
+        with FF6WCWorld.wc_ready:
             import sys
             from copy import deepcopy
             module_keys = deepcopy(list(sys.modules.keys()))
@@ -516,7 +512,7 @@ class FF6WCWorld(World):
             os.remove(output_file)
             os.remove(placement_file)
             self.rom_name_available_event.set()
-        self.generator_in_use.clear()
+
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.

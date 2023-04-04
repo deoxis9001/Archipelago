@@ -17,7 +17,7 @@ from ..generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 from ..AutoWorld import World, LogicMixin, WebWorld
 from NetUtils import SlotType
 from .Locations import location_table
-from .Items import item_table
+from .Items import item_table, items, good_items
 from .Options import ff6wc_options, generate_flagstring
 import Utils
 
@@ -75,6 +75,9 @@ class FF6WCWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.starting_characters = None
+        self.no_illuminas = False
+        self.no_paladin_shields = False
+        self.no_exp_eggs = False
         self.generator_in_use = threading.Event()
         self.wc = None
         self.rom_name_available_event = threading.Event()
@@ -140,9 +143,7 @@ class FF6WCWorld(World):
                 if x == 3:
                     flags_list[sc4_index] = character_list[x]
 
-
             self.multiworld.StartingCharacterCount[self.player].value = len(character_list)
-
             starting_character_options = list(self.multiworld.StartingCharacter1[self.player].name_lookup.values())
             self.multiworld.StartingCharacter1[self.player].value = starting_character_options.index(character_list[0])
             self.multiworld.StartingCharacter2[self.player].value = 14
@@ -287,6 +288,19 @@ class FF6WCWorld(World):
         self.multiworld.regions.append(final_dungeon)
 
     def create_items(self):
+        # Setting variables for item restrictions based on custom flagstring or AllowStrongestItems value
+        if self.multiworld.EnableFlagstring[self.player]:
+            if "-nfps" in self.multiworld.Flagstring[self.player].value.split(" "):
+                self.no_paladin_shields = True
+            if "-nee" in self.multiworld.Flagstring[self.player].value.split(" "):
+                self.no_exp_eggs = True
+            if "-nil" in self.multiworld.Flagstring[self.player].value.split(" "):
+                self.no_illuminas = True
+        else:
+            if not self.multiworld.AllowStrongestItems[self.player]:
+                self.no_paladin_shields = True
+                self.no_exp_eggs = True
+                self.no_illuminas = True
         item_pool = []
         for item in map(self.create_item, self.item_name_to_id):
             if item.name in self.starting_characters:
@@ -310,7 +324,15 @@ class FF6WCWorld(World):
 
         filler_pool = []
         good_filler_pool = []
+
         for item in Items.items:
+            # Skips adding an item to filler_pool and good_filler_pool if item restrictions are in place
+            if self.no_paladin_shields is True and (item == "Paladin Shld" or item == "Cursed Shld"):
+                continue
+            if self.no_exp_eggs is True and item == "Exp. Egg":
+                continue
+            if self.no_illuminas is True and item == "Illumina":
+                continue
             if item != "ArchplgoItem":
                 filler_pool.append(item)
             if item in Items.good_items:
@@ -324,8 +346,7 @@ class FF6WCWorld(World):
             minor_items = len(Locations.all_minor_checks)
             for _ in range(minor_items):
                 item_pool.append(self.create_filler_item(self.multiworld.random.choice(filler_pool)))
-
-        self.multiworld.itempool += item_pool
+            self.multiworld.itempool += item_pool
 
     def set_rules(self):
         check_list = {
@@ -412,7 +433,21 @@ class FF6WCWorld(World):
 
     def upgrade_item(self, item: Item):
         if item.name in Items.okay_items:
-            new_item = self.multiworld.random.choice(Items.good_items)
+            # Prevents upgrades to restricted items based on flags or AllowStrongestItems value
+            nfps = nee = nil = 1
+            while (nfps or nee or nil) == 1:
+                temp_new_item = self.multiworld.random.choice(Items.good_items)
+                if self.no_paladin_shields is True and (temp_new_item == "Paladin Shld"
+                                                                     or temp_new_item == "Cursed Shld"):
+                        nfps = 1
+                else:   nfps = 0
+                if self.no_exp_eggs is True and temp_new_item == "Exp. Egg":
+                        nee = 1
+                else:   nee = 0
+                if self.no_illuminas is True and temp_new_item == "Illumina":
+                        nil = 1
+                else:   nil = 0
+            new_item = temp_new_item
             new_item_id = self.item_name_to_id[new_item]
             item.name = new_item
             item.code = new_item_id
@@ -477,7 +512,6 @@ class FF6WCWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-
 
 class FF6WCItem(Item):
     game = 'Final Fantasy 6 Worlds Collide'

@@ -9,6 +9,7 @@ import threading
 from typing import NamedTuple, Union
 import logging
 
+import BaseClasses
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification
 from . import Logic
 from .Rom import FF6WCDeltaPatch
@@ -35,7 +36,7 @@ class FF6WCWorld(World):
     base_id = 6000
     web = FF6WCWeb()
     wc_ready = threading.Lock()
-
+    modified_item_table = item_table
     item_name_to_id = {name: index for index, name in enumerate(item_table)}
     location_name_to_id = {name: index for index, name in enumerate(location_table)}
 
@@ -150,11 +151,14 @@ class FF6WCWorld(World):
             self.multiworld.StartingCharacter3[self.player].value = 14
             self.multiworld.StartingCharacter4[self.player].value = 14
             if len(character_list) > 1:
-                self.multiworld.StartingCharacter2[self.player].value = starting_character_options.index(character_list[1])
+                self.multiworld.StartingCharacter2[self.player].value = \
+                    starting_character_options.index(character_list[1])
             if len(character_list) > 2:
-                self.multiworld.StartingCharacter3[self.player].value = starting_character_options.index(character_list[2])
+                self.multiworld.StartingCharacter3[self.player].value = \
+                    starting_character_options.index(character_list[2])
             if len(character_list) > 3:
-                self.multiworld.StartingCharacter4[self.player].value = starting_character_options.index(character_list[3])
+                self.multiworld.StartingCharacter4[self.player].value = \
+                    starting_character_options.index(character_list[3])
 
             proper_names = " ".join(character_list)
             proper_names = proper_names.title()
@@ -193,7 +197,7 @@ class FF6WCWorld(World):
             # are required for seed completion. For example, if 1 of 2 conditions is required, one being 14 characters
             # and the other being Kill Cid, the logic should still be such that 14 characters can be acquired.
 
-            not_ranged_obj_numbers = ["1", "3", "5", "7", "9", "11", "12"] # Random or looking for specific character. etc.
+            not_ranged_obj_numbers = ["1", "3", "5", "7", "9", "11", "12"] # Random or looking for something specific.
             skip = 2    # jumps over the initial KT requirements inputs which are indices 0, 1, and 2
 
             for index in range(len(kt_obj_list)):
@@ -492,7 +496,9 @@ class FF6WCWorld(World):
         wc_args = ["-i", "Final Fantasy III (USA).sfc", "-o", f"{output_file}", "-ap", placement_file]
         wc_args.extend(generate_flagstring(self.multiworld, self.player, self.starting_characters))
         print(wc_args)
-        with FF6WCWorld.wc_ready:
+        self.generator_in_use.set()
+        with self.wc_ready:
+            self.generator_in_use.wait()
             import sys
             from copy import deepcopy
             module_keys = deepcopy(list(sys.modules.keys()))
@@ -510,7 +516,7 @@ class FF6WCWorld(World):
             os.remove(output_file)
             os.remove(placement_file)
             self.rom_name_available_event.set()
-
+        self.generator_in_use.clear()
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.

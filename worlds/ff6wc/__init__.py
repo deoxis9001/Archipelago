@@ -337,13 +337,21 @@ class FF6WCWorld(World):
                 filler_pool.append(item)
             if item in Items.good_items:
                 good_filler_pool.append(item)
-        major_items = len([location for location in Locations.major_checks if "(Boss)" not in location and "Status" not
-                           in location]) - len(item_pool)
 
-        for _ in range(major_items):
-            item_pool.append(self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool)))
-        if self.multiworld.Treasuresanity[self.player]:
-            minor_items = len(Locations.all_minor_checks)
+        major_items = len([location for location in Locations.major_checks if "(Boss)" not in location and "Status"
+                            not in location])
+        progression_items = len(item_pool)
+        if not self.multiworld.Treasuresanity[self.player]:
+            major_items = major_items - progression_items
+            for _ in range(major_items):
+                item_pool.append(self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool)))
+            self.multiworld.itempool += item_pool
+        # Note that for stability in generation and simplicity, this method generates an excess of good items in
+        # Treasuresanity seeds due to not knowing which minor checks have been selected to have characters or espers.
+        else:
+            for _ in range(major_items):
+                item_pool.append(self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool)))
+            minor_items = len(Locations.all_minor_checks) - progression_items
             for _ in range(minor_items):
                 item_pool.append(self.create_filler_item(self.multiworld.random.choice(filler_pool)))
             self.multiworld.itempool += item_pool

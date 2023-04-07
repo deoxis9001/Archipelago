@@ -9,6 +9,7 @@ from .Options import tobir_options
 
 from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, WebWorld
+from worlds.generic.Rules import set_rule
 
 
 class TheBindingOfIsaacRepentanceWeb(WebWorld):
@@ -88,29 +89,6 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
-    #     self.enforce_early_items_before_first_event()
-    #
-    # def enforce_early_items_before_first_event(self):
-    #     early_items = []
-    #     for player, item_count in self.multiworld.early_items.items():
-    #         for item, count in item_count.items():
-    #             if self.multiworld.worlds[player].create_item(item).advancement:
-    #                 early_items.append((player, item, count))
-    #
-    #     for item, count in self.multiworld.local_early_items[self.player].items():
-    #         if self.create_item(item).advancement:
-    #             early_items.append((self.player, item, count))
-    #
-    #     def first_event_require_all_early_items(state: CollectionState) -> bool:
-    #         for player, item, count in early_items:
-    #             if not state.has(item, player, count):
-    #                 return False
-    #
-    #         return True
-    #
-    #     locations_per_event = 25
-    #     first_event = self.multiworld.get_location(f"Pickup{locations_per_event}", self.player)
-    #     set_rule(first_event, first_event_require_all_early_items)
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
@@ -138,7 +116,7 @@ class TheBindingOfIsaacRepentanceWorld(World):
         return item
 
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False):
-        if item.advancement:
+        if item.advancement and item.code:
             return "Progression Item"
 
         return super(TheBindingOfIsaacRepentanceWorld, self).collect_item(state, item, remove)

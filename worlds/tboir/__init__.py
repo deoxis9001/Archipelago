@@ -7,7 +7,7 @@ from .Locations import location_table, TheBindingOfIsaacRepentanceLocation, base
 from .Rules import set_rules
 from .Options import tobir_options
 
-from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial, ItemClassification
+from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, WebWorld
 
 
@@ -88,6 +88,29 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)
+    #     self.enforce_early_items_before_first_event()
+    #
+    # def enforce_early_items_before_first_event(self):
+    #     early_items = []
+    #     for player, item_count in self.multiworld.early_items.items():
+    #         for item, count in item_count.items():
+    #             if self.multiworld.worlds[player].create_item(item).advancement:
+    #                 early_items.append((player, item, count))
+    #
+    #     for item, count in self.multiworld.local_early_items[self.player].items():
+    #         if self.create_item(item).advancement:
+    #             early_items.append((self.player, item, count))
+    #
+    #     def first_event_require_all_early_items(state: CollectionState) -> bool:
+    #         for player, item, count in early_items:
+    #             if not state.has(item, player, count):
+    #                 return False
+    #
+    #         return True
+    #
+    #     locations_per_event = 25
+    #     first_event = self.multiworld.get_location(f"Pickup{locations_per_event}", self.player)
+    #     set_rule(first_event, first_event_require_all_early_items)
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
@@ -114,10 +137,17 @@ class TheBindingOfIsaacRepentanceWorld(World):
         item = TheBindingOfIsaacRepentanceItem(name, item_data.classification, item_data.id, self.player)
         return item
 
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False):
+        if item.advancement:
+            return "Progression Item"
+
+        return super(TheBindingOfIsaacRepentanceWorld, self).collect_item(state, item, remove)
+
 
 def create_events(world: MultiWorld, player: int, total_locations: int):
     locations_per_event = 25
     num_of_events = total_locations // locations_per_event
+
     if total_locations / locations_per_event == num_of_events:
         num_of_events -= 1
     for i in range(num_of_events):
@@ -127,7 +157,7 @@ def create_events(world: MultiWorld, player: int, total_locations: int):
             TheBindingOfIsaacRepentanceItem(f"Pickup{(i + 1) * locations_per_event}", ItemClassification.progression, None,
                                          player))
         event_loc.access_rule(
-            lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * locations_per_event) - 1}", player))
+            lambda state, i=i: state.can_reach(f"ItemPickup{((i + 1) * locations_per_event) - 1}", player) and state.has("Progression Item", player, i+1))
         world.get_region('In Run', player).locations.append(event_loc)
 
 

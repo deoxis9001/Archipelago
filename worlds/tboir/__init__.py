@@ -9,7 +9,6 @@ from .Options import tobir_options
 
 from BaseClasses import Region, Entrance, Item, MultiWorld, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule
 
 
 class TheBindingOfIsaacRepentanceWeb(WebWorld):
@@ -92,9 +91,6 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, int(self.multiworld.total_locations[self.player].value))
-        # create_events(self.multiworld, self.player, int(self.multiworld.total_locations[self.player].value))
-        self.multiworld.get_location("Victory", self.player).place_locked_item(
-            TheBindingOfIsaacRepentanceItem("Victory", ItemClassification.progression, None, self.player))
 
     def fill_slot_data(self):
         return {
@@ -124,28 +120,10 @@ class TheBindingOfIsaacRepentanceWorld(World):
         return super(TheBindingOfIsaacRepentanceWorld, self).collect_item(state, item, remove)
 
 
-# def create_events(world: MultiWorld, player: int, total_locations: int):
-#     locations_per_event = 25
-#     num_of_events = total_locations // locations_per_event
-#
-#     if total_locations / locations_per_event == num_of_events:
-#         num_of_events -= 1
-#     for i in range(num_of_events):
-#         event_loc = TheBindingOfIsaacRepentanceLocation(player, f"Pickup{(i + 1) * locations_per_event}", None,
-#                                                         world.get_region(f'Run Section {i + 1}', player))
-#         event_loc.place_locked_item(
-#             TheBindingOfIsaacRepentanceItem(f"Pickup{(i + 1) * locations_per_event}", ItemClassification.progression,
-#                                             None, player))
-#         world.get_region(f'Run Section {i + 1}', player).locations.append(event_loc)
-
-
 # generate locations based on player setting
 def create_regions(world, player: int, total_locations: int):
     world.regions += [
         create_region(world, player, 'Menu', None, ['New Run']),
-        # create_region(world, player, 'In Run',
-        #               [location for location in base_location_table] +
-        #               [f"ItemPickup{i}" for i in range(1, 1 + world.total_locations[player].value)])
     ]
     # setup regions
     locations_per_event = 25
@@ -170,6 +148,9 @@ def create_regions(world, player: int, total_locations: int):
         connection.access_rule = lambda state: state.has(f'Progression Item', player, (i + 1))
         source_region.exits.append(connection)
         connection.connect(target_region)
+
+    world.get_location("Victory", player).place_locked_item(
+        TheBindingOfIsaacRepentanceItem("Victory", ItemClassification.progression, None, player))
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):

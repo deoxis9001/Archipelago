@@ -101,7 +101,7 @@ first time launching, you may be prompted to allow it to communicate through the
    Once you have changed the loaded core, you must restart BizHawk.
 2. Load your ROM file if it hasn't already been loaded.
 3. Click on the Tools menu and click on **Lua Console**
-4. Click the button to open a new Lua script.
+4. Click the Open Folder icon that says `Open Script` via the tooltip on mouse hover, or click the Script Menu then `Open Script...`, or press `Ctrl-O`.
 5. Select the `Connector.lua` file included with your client
     - SuperNintendoClient users should download `sniConnector.lua` from the client download page
     - SNIClient users should look in their Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the

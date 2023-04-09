@@ -15,6 +15,7 @@ local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
 local zeldaSocket = nil
 local frame = 0
+local gameMode = 0
 
 local cave_index
 local triforce_byte
@@ -25,6 +26,18 @@ local wU8 = nil
 local isNesHawk = false
 
 local shopsChecked = {}
+local shopSlotLeft       = 0x0628
+local shopSlotMiddle     = 0x0629
+local shopSlotRight      = 0x062A
+
+--N.B.: you won't find these in a RAM map. They're flag values that the base patch derives from the cave ID.
+local blueRingShopBit       = 0x40
+local potionShopBit         = 0x02
+local arrowShopBit          = 0x08
+local candleShopBit         = 0x10
+local shieldShopBit         = 0x20
+local takeAnyCaveBit        = 0x01
+
 
 local sword                 = 0x0657
 local bombs                 = 0x0658
@@ -44,15 +57,19 @@ local stepladder            = 0x0663
 local magicalKey            = 0x0664
 local powerBracelet         = 0x0665
 local letter                = 0x0666
+local clockItem             = 0x066C
 local heartContainers       = 0x066F
+local partialHearts         = 0x0670
 local triforceFragments     = 0x0671
 local boomerang             = 0x0674
 local magicalBoomerang      = 0x0675
 local magicalShield         = 0x0676
 local rupeesToAdd           = 0x067D
+local rupeesToSubtract      = 0x067E
 local itemsObtained         = 0x0677
-local remoteTriforce        = 0x0678
+local takeAnyCavesChecked   = 0x0678
 local localTriforce         = 0x0679
+local bonusItemsObtained    = 0x067A
 
 itemAPids = {
     ["Boomerang"] = 7100,
@@ -85,7 +102,9 @@ itemAPids = {
     ["Bomb"] = 7127,
     ["Recovery Heart"] = 7128,
     ["Five Rupees"] = 7129,
-    ["Rupee"] = 7129,
+    ["Rupee"] = 7130,
+    ["Clock"] = 7131,
+    ["Fairy"] = 7132
 }
 
 itemCodes = {
@@ -120,6 +139,8 @@ itemCodes = {
     ["Recovery Heart"] = 0x22,
     ["Five Rupees"] = 0x0F,
     ["Rupee"] = 0x18,
+    ["Clock"] = 0x21,
+    ["Fairy"] = 0x23
 }
 
 
@@ -179,9 +200,9 @@ end
 
 local function gotBomb()
     local currentBombs = u8(bombs)
-    local maxBombs = u8(maxBombs)
-    wU8(bombs, math.min(bombs + 4, maxBombs))
-    wU8(0x505, 0x29) -- Fake bomb.
+    local currentMaxBombs = u8(maxBombs)
+    wU8(bombs, math.min(currentBombs + 4, currentMaxBombs))
+    wU8(0x505, 0x29) -- Fake bomb to show item get.
 end
 
 local function gotArrow()
@@ -216,7 +237,7 @@ end
 
 local function gotWaterOfLifeBlue()
     local currentWaterOfLife = u8(waterOfLife)
-    wU8(waterOfLife, math.max(waterOfLife, 1))
+    wU8(waterOfLife, math.max(currentWaterOfLife, 1))
 end
 
 local function gotWaterOfLifeRed()
@@ -271,15 +292,17 @@ end
 
 local function gotHeartContainer()
     local currentHeartContainers = bit.rshift(bit.band(u8(heartContainers), 0xF0), 4)
-    currentHeartContainers = math.min(currentHeartContainers + 1, 16)
-    local currentHearts = bit.band(u8(heartContainers), 0x0F) + 1
-    wU8(heartContainers, bit.lshift(currentHeartContainers, 4) + currentHearts)
+    if currentHeartContainers < 16 then
+        currentHeartContainers = math.min(currentHeartContainers + 1, 16)
+        local currentHearts = bit.band(u8(heartContainers), 0x0F) + 1
+        wU8(heartContainers, bit.lshift(currentHeartContainers, 4) + currentHearts)
+    end
 end
 
 local function gotTriforceFragment()
     local triforceByte = 0xFF
-    local newTriforceCount = u8(remoteTriforce) + 1
-    wU8(remoteTriforce, newTriforceCount)
+    local newTriforceCount = u8(localTriforce) + 1
+    wU8(localTriforce, newTriforceCount)
 end
 
 local function gotBoomerang()
@@ -296,9 +319,34 @@ end
 
 local function gotRecoveryHeart()
     local currentHearts = bit.band(u8(heartContainers), 0x0F)
-    if currentHearts < 0xF then currentHearts = currentHearts + 1 end
+    local currentHeartContainers = bit.rshift(bit.band(u8(heartContainers), 0xF0), 4)
+    if currentHearts < currentHeartContainers then 
+        currentHearts = currentHearts + 1 
+    else
+        wU8(partialHearts, 0xFF)
+    end
     currentHearts = bit.bor(bit.band(u8(heartContainers), 0xF0), currentHearts)
     wU8(heartContainers, currentHearts)
+end
+
+local function gotFairy()
+    local currentHearts = bit.band(u8(heartContainers), 0x0F)
+    local currentHeartContainers = bit.rshift(bit.band(u8(heartContainers), 0xF0), 4)
+    if currentHearts < currentHeartContainers then 
+        currentHearts = currentHearts + 3
+        if currentHearts > currentHeartContainers then
+            currentHearts = currentHeartContainers
+            wU8(partialHearts, 0xFF)
+        end
+    else
+        wU8(partialHearts, 0xFF)
+    end
+    currentHearts = bit.bor(bit.band(u8(heartContainers), 0xF0), currentHearts)
+    wU8(heartContainers, currentHearts)
+end
+
+local function gotClock()
+    wU8(clockItem, 1)
 end
 
 local function gotFiveRupees()
@@ -351,6 +399,8 @@ local function gotItem(item)
     if itemName == "Bomb" then gotBomb() end
     if itemName == "Recovery Heart" then gotRecoveryHeart() end
     if itemName == "Five Rupees" then gotFiveRupees() end
+    if itemName == "Fairy" then gotFairy() end
+    if itemName == "Clock" then gotClock() end
 end
 
 
@@ -361,42 +411,12 @@ local function StateOKForMainLoop()
 end
 
 local function checkCaveItemObtained()
-    memDomain.ram()
-    local gameMode = u8(0x12)
+    memDomain.ram() 
     local returnTable = {}
-    returnTable["itemSlot"] = -1
-    returnTable["caveType"] = "None"
-    local screen = u8(0xEB)
-    returnTable["screen"] = screen
-    if bit.band(gameMode, 0x0B) then -- if we're in a cave
-        local itemLift = u8(0x506)
-        local xPosition = u8(0x70)
-        if itemLift > 0 then
-            returnTable["itemSlot"] = u8(0x438) + 1
-            memDomain.rom()
-            local caveType = u8(0x18480 + screen)
-            caveType = caveType - 0x40
-            caveType = math.floor(caveType / 4)
-            if caveType == 0x10 then
-                returnTable["caveType"] = "Blue Ring Shop"
-            end
-            if caveType == 0x0A then
-                returnTable["caveType"] = "Potion Shop"
-            end
-            if caveType == 0x0E then
-                returnTable["caveType"] = "Candle Shop"
-            end
-            if caveType == 0x0F then
-                returnTable["caveType"] = "Shield Shop"
-            end
-            if caveType == 0x0D then
-                returnTable["caveType"] = "Arrow Shop"
-            end
-            if caveType == 0x01 then
-                returnTable["caveType"] = "Take Any"
-            end
-        end
-    end
+    returnTable["slot1"] = u8(shopSlotLeft)
+    returnTable["slot2"] = u8(shopSlotMiddle)
+    returnTable["slot3"] = u8(shopSlotRight)
+    returnTable["takeAnys"] = u8(takeAnyCavesChecked)
     return returnTable
 end
 
@@ -484,6 +504,18 @@ function generateOverworldLocationChecked()
     return data
 end
 
+function getHCLocation()
+    memDomain.rom()
+    data = u8(0x1789A)
+    return data
+end
+
+function getPBLocation()
+    memDomain.rom()
+    data = u8(0x10CB2)
+    return data
+end
+
 function generateUnderworld16LocationChecked()
     memDomain.ram()
     data = uRange(0x06FE, 0x81)
@@ -501,7 +533,7 @@ end
 function updateTriforceFragments()
     memDomain.ram()
     local triforceByte = 0xFF
-    totalTriforceCount = u8(remoteTriforce) + u8(localTriforce)
+    totalTriforceCount = u8(localTriforce)
     local currentPieces = bit.rshift(triforceByte, 8 - math.min(8, totalTriforceCount))
     wU8(triforceFragments, currentPieces)
 end
@@ -514,6 +546,19 @@ function processBlock(block)
                 if itemMessages[i] == nil then
                     local msg = {TTL=450, message=v, color=0xFFFF0000}
                     itemMessages[i] = msg
+                end
+            end
+        end
+        local bonusItems = block["bonusItems"]
+        if bonusItems ~= nil and isInGame then
+            for i, item in ipairs(bonusItems) do
+                memDomain.ram()
+                if i > u8(bonusItemsObtained) then
+                    if u8(0x505) == 0 then
+                        gotItem(item)
+                        wU8(itemsObtained, u8(itemsObtained) - 1)
+                        wU8(bonusItemsObtained, u8(bonusItemsObtained) + 1)
+                    end
                 end
             end
         end
@@ -534,6 +579,12 @@ function processBlock(block)
                     end
                 end
             end
+        end
+        local shopsBlock = block["shops"]
+        if shopsBlock ~= nil then
+            wU8(shopSlotLeft, bit.bor(u8(shopSlotLeft), shopsBlock["left"]))
+            wU8(shopSlotMiddle, bit.bor(u8(shopSlotMiddle), shopsBlock["middle"]))
+            wU8(shopSlotRight, bit.bor(u8(shopSlotRight), shopsBlock["right"]))
         end
     end
 end
@@ -570,7 +621,7 @@ function receive()
 
     -- Determine Message to send back
     memDomain.rom()
-    local playerName = uRange(0x1F, 0x10)
+    local playerName = uRange(0x1F, 0x11)
     playerName[0] = nil
     local retTable = {}
     retTable["playerName"] = playerName
@@ -581,7 +632,12 @@ function receive()
     end
     retTable["caves"] = checkCaveItemObtained()
     memDomain.ram()
-    retTable["gameMode"] = u8(0x12)
+    if gameMode ~= 19 then
+        gameMode = u8(0x12)
+    end
+    retTable["gameMode"] = gameMode
+    retTable["overworldHC"] = getHCLocation()
+    retTable["overworldPB"] = getPBLocation()
     retTable["itemsObtained"] = u8(itemsObtained)
     msg = json.encode(retTable).."\n"
     local ret, error = zeldaSocket:send(msg)
@@ -624,7 +680,7 @@ function main()
                 gui.drawEllipse(248, 9, 6, 6, "Black", "Yellow")
 
                 drawText(5, 8, "Waiting for client", 0xFFFF0000)
-                drawText(5, 32, "Please start TheLegendOfZeldaClient.exe", 0xFFFF0000)
+                drawText(5, 32, "Please start Zelda1Client.exe", 0xFFFF0000)
 
                 -- Advance so the messages are drawn
                 emu.frameadvance()

@@ -9,7 +9,7 @@ class TotalLocations(Range):
     display_name = "Total Locations"
     range_start = 10
     range_end = 500
-    default = 150
+    default = 125
 
 
 class RequiredLocations(Range):
@@ -17,7 +17,7 @@ class RequiredLocations(Range):
     display_name = "Required Locations"
     range_start = 1
     range_end = 500
-    default = 50
+    default = 75
 
 
 class Goal(Choice):
@@ -41,6 +41,7 @@ class Goal(Choice):
     option_required_locations = 15
     option_full_notes = 16
     option_note_marks = 17
+    default = 5
 
 class NoteMarkAmount(Range):
     """Number of full marks needed to beat the game (if goal is note marks). """
@@ -93,7 +94,7 @@ class JunkPercentage(Range):
     display_name = "Junk Percentage"
     range_start = 0
     range_end = 100
-    default = 0
+    default = 75
 
 
 class TrapPercentage(Range):

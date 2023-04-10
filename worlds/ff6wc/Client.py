@@ -309,4 +309,5 @@ class FF6WCClient(SNIClient):
 
     def increment_items_received(self, ctx, items_received_amount):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        snes_buffered_write(ctx, Rom.items_received_address, bytes([items_received_amount + 1]))
+        items_received_amount += 1
+        snes_buffered_write(ctx, Rom.items_received_address, items_received_amount.to_bytes(2, 'little'))

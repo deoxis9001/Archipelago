@@ -1,4 +1,5 @@
 import logging
+import math
 import string
 
 from .Items import TheBindingOfIsaacRepentanceItem, item_table, default_weights, default_junk_items_weights, \
@@ -41,20 +42,24 @@ class TheBindingOfIsaacRepentanceWorld(World):
     web = TheBindingOfIsaacRepentanceWeb()
 
     def generate_early(self) -> None:
-        if self.multiworld.required_locations[self.player].value > self.multiworld.total_locations[self.player].value:
-            self.multiworld.total_locations[self.player].value = self.multiworld.required_locations[self.player].value
-
-    def generate_basic(self):
         if not self.multiworld.player_name[self.player].isalnum():
             logging.warning(f"The name {self.multiworld.player_name[self.player]} for a TBoI world contains "
                             f"non-alphanumerical characters. You are not guaranteed to be able to enter the name "
                             f"ingame and may have to edit the games savefile to connect.")
+        if self.multiworld.required_locations[self.player].value > self.multiworld.total_locations[self.player].value:
+            self.multiworld.total_locations[self.player].value = self.multiworld.required_locations[self.player].value
+
+        self.multiworld.junk_item_count = round(
+            self.multiworld.total_locations[self.player] * (self.multiworld.junk_percentage[self.player] / 100))
+        self.multiworld.progression_item_count = self.multiworld.total_locations[self.player] - self.multiworld.junk_item_count
+
+        self.multiworld.trap_item_count = round(
+            self.multiworld.junk_item_count * (self.multiworld.trap_percentage[self.player] / 100))
+        self.multiworld.junk_item_count = self.multiworld.junk_item_count - self.multiworld.trap_item_count
+
+    def create_items(self):
         # Generate item pool
         itempool = []
-
-        junk_item_count = round(
-            self.multiworld.total_locations[self.player] * (self.multiworld.junk_percentage[self.player] / 100))
-        collectable_item_count = self.multiworld.total_locations[self.player] - junk_item_count
 
         if self.multiworld.item_weights[self.player] == 99:
             item_weights = {name: val for name, val in self.multiworld.custom_item_weights[self.player].value.items()}
@@ -63,21 +68,18 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
         # Fill non-junk items
         itempool += self.multiworld.random.choices(list(item_weights.keys()), weights=list(item_weights.values()),
-                                                   k=collectable_item_count)
-
-        trap_item_count = round(junk_item_count * (self.multiworld.trap_percentage[self.player] / 100))
-        junk_item_count = junk_item_count - trap_item_count
+                                                   k=self.multiworld.progression_item_count)
 
         trap_weights = {name: val for name, val in self.multiworld.trap_item_weights[self.player].value.items()}
         junk_weights = {name: val for name, val in self.multiworld.custom_junk_item_weights[self.player].value.items()}
 
         # Fill traps
         itempool += self.multiworld.random.choices(list(trap_weights.keys()), weights=list(trap_weights.values()),
-                                                   k=trap_item_count)
+                                                   k=self.multiworld.trap_item_count)
 
         # Fill remaining items with randomly generated junk
         itempool += self.multiworld.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()),
-                                                   k=junk_item_count)
+                                                   k=self.multiworld.junk_item_count)
 
         assert len(itempool) == self.multiworld.total_locations[self.player]
 
@@ -126,30 +128,31 @@ def create_regions(world, player: int, total_locations: int):
         create_region(world, player, 'Menu', None, ['New Run']),
     ]
     # setup regions
-    locations_per_event = 25
-    num_of_sections = total_locations // locations_per_event
-    if total_locations / locations_per_event == num_of_sections:
+    locations_per_section = 25
+    num_of_sections = total_locations // locations_per_section
+    if total_locations / locations_per_section == num_of_sections:
         num_of_sections -= 1
     num_of_sections += 1
     assert num_of_sections > 1
     for i in range(num_of_sections):
-        locations = [f"ItemPickup{i}" for i in
-                     range(i * locations_per_event + 1, min(total_locations + 1, (i + 1) * locations_per_event + 1))]
+        locations = [f"ItemPickup{n}" for n in
+                     range(i * locations_per_section + 1,
+                           min(total_locations + 1, (i + 1) * locations_per_section + 1))]
         if i == num_of_sections - 1:
             locations += [location for location in base_location_table]
         world.regions.append(create_region(world, player, f'Run Section {i + 1}', locations))
 
     # setup connections
     world.get_entrance("New Run", player).connect(world.get_region("Run Section 1", player))
-    for i in range(num_of_sections - 1):
-        source_region = world.get_region(f'Run Section {i + 1}', player)
-        target_region = world.get_region(f'Run Section {i + 2}', player)
-        connection = Entrance(player, f'From Section {i + 1} To Section {i + 2}', source_region)
-        connection.access_rule = lambda state: state.has(f'Progression Item', player, (i + 1))
+    for i in range(1, num_of_sections):
+        source_region = world.get_region(f'Run Section {i}', player)
+        target_region = world.get_region(f'Run Section {i + 1}', player)
+        connection = Entrance(player, f'From Section {i} To Section {i + 1}', source_region)
+        connection.access_rule = lambda state: state.has(f'Progression Item', player, math.floor(i * (world.progression_item_count / (num_of_sections))))
         source_region.exits.append(connection)
         connection.connect(target_region)
 
-    world.get_location("Victory", player).place_locked_item(
+    world.get_location("Run End", player).place_locked_item(
         TheBindingOfIsaacRepentanceItem("Victory", ItemClassification.progression, None, player))
 
 

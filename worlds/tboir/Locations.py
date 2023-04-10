@@ -6,7 +6,7 @@ class TheBindingOfIsaacRepentanceLocation(Location):
 
 
 base_location_table = {
-    "Victory": None
+    "Run End": None
 }
 
 item_pickups = {

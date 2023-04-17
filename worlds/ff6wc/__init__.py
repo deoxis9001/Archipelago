@@ -105,6 +105,7 @@ class FF6WCWorld(World):
             flags = self.multiworld.Flagstring[self.player].value
             # Determining Starting Characters
             flags_list = flags.split(" ")
+            sc1_index = sc2_index = sc3_index = sc4_index = 0
             if "-sc1" in flags_list:
                 sc1_index = flags_list.index("-sc1") + 1
                 character_list.append(flags_list[sc1_index])

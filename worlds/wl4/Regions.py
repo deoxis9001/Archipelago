@@ -210,7 +210,7 @@ def create_regions(world: MultiWorld, player: int, location_table: dict):
         player,
         location_table,
         RegionName.golden_passage,
-        LocationName.golden_passage.jewels,
+        LocationName.golden_passage.locations(),
     )
     golden_diva = create_region(
         world,

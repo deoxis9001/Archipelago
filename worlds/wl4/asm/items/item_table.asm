@@ -12,22 +12,28 @@ invalid_item equ 0xFF
 ; locations that don't exist
 .align 4
 ItemLocationTable:
-    Jewel1LocationTable: .fill @levels, invalid_item
-    Jewel2LocationTable: .fill @levels, invalid_item
-    Jewel3LocationTable: .fill @levels, invalid_item
-    Jewel4LocationTable: .fill @levels, invalid_item
-    CDLocationTable:     .fill @levels, invalid_item
-    HealthLocationTable: .fill @levels, invalid_item
+    Jewel1LocationTable:      .fill @levels, invalid_item
+    Jewel2LocationTable:      .fill @levels, invalid_item
+    Jewel3LocationTable:      .fill @levels, invalid_item
+    Jewel4LocationTable:      .fill @levels, invalid_item
+    CDLocationTable:          .fill @levels, invalid_item
+    HealthLocationTable:      .fill @levels, invalid_item
+    GoldCrownLocationTable:   .fill @levels, invalid_item
+    SilverCrownLocationTable: .fill @levels, invalid_item
+    BronzeCrownLocationTable: .fill @levels, invalid_item
 
 ; Maps locations to the 8-bit player ID of the item's owner.
 .align 4
 ItemDestinationTable:
-    Jewel1DestinationTable: .fill @levels, -1
-    Jewel2DestinationTable: .fill @levels, -1
-    Jewel3DestinationTable: .fill @levels, -1
-    Jewel4DestinationTable: .fill @levels, -1
-    CDDestinationTable:     .fill @levels, -1
-    HealthDestinationTable: .fill @levels, -1
+    Jewel1DestinationTable:      .fill @levels, -1
+    Jewel2DestinationTable:      .fill @levels, -1
+    Jewel3DestinationTable:      .fill @levels, -1
+    Jewel4DestinationTable:      .fill @levels, -1
+    CDDestinationTable:          .fill @levels, -1
+    HealthDestinationTable:      .fill @levels, -1
+    GoldCrownDestinationTable:   .fill @levels, -1
+    SilverCrownDestinationTable: .fill @levels, -1
+    BronzeCrownDestinationTable: .fill @levels, -1
 
 
 .align 2

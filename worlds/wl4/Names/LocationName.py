@@ -1,7 +1,7 @@
 import typing
 import string
 
-from . import JewelPieces, RegionName
+from . import JewelPieces, Crowns, RegionName, generate_group
 
 
 name_format = string.Template("$level $check")
@@ -11,21 +11,22 @@ boss_format = string.Template("Defeat $boss")
 class Level(typing.NamedTuple):
     jewels: JewelPieces
     keyzer: str
+    crowns: Crowns
     cd_box: typing.Optional[str]
     fullhealth: typing.Optional[str]
 
     @classmethod
     def _with_cd_health(cls, name, cd, fullhealth):
+        jewels = string.Template(name_format.substitute(
+                                 level=name, check="Jewel Piece Box ($location)"))
+        crowns = string.Template(name_format.substitute(
+                                 level=name, check="$location Crown"))
         return cls(
-            JewelPieces(
-                *(
-                    name_format.substitute(level=name, check=f"Jewel Piece Box ({j})")
-                    for j in JewelPieces.locations
-                )
-            ),
+            generate_group(JewelPieces, jewels),
             name_format.substitute(level=name, check="Keyzer"),
+            generate_group(Crowns, crowns),
             cd,
-            fullhealth
+            fullhealth,
         )
 
     @classmethod
@@ -57,7 +58,7 @@ class Level(typing.NamedTuple):
         return cls._with_cd_health(name, None, None)
     
     def locations(self):
-        return filter(None, (*self.jewels, self.cd_box, self.fullhealth))
+        return filter(None, (*self.jewels, self.cd_box, self.fullhealth, *self.crowns))
 
 
 # Entry Passage

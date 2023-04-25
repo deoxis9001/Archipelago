@@ -14,6 +14,23 @@ class Difficulty(Choice):
     default = 0
 
 
+class CrownShuffle(Choice):
+    """
+    Add extra locations to the crowns earned by collecting high amounts of coins in levels.
+    Gold: Get an item when you complete a level with 10,000 coins.
+    Silver: Get an item when you complete a level with 8,000 coins.
+    Bronze: Get an item when you complete a level with 6,000 coins.
+    All: Get an item individually for each crown, adding three items to each level.
+    """
+    display_name = "Crown Shuffle"
+    option_off = 0
+    option_gold = 1
+    option_silver = 2
+    option_bronze = 3
+    option_all = 4
+    default = 0
+
+
 class EarlyEntryJewels(DefaultOnToggle):
     """
     Force the Entry Passage Jewel Pieces to appear early in the seed as a local item.
@@ -38,6 +55,7 @@ class MusicShuffle(Choice):
 
 wl4_options: typing.Dict[str, type[Option]] = {
     "difficulty": Difficulty,
+    "crown_shuffle": CrownShuffle,
     "early_entry_jewels": EarlyEntryJewels,
     "death_link": DeathLink,
     #"music_shuffle": MusicShuffle,

@@ -1,9 +1,10 @@
 import typing
 
 from BaseClasses import Item, ItemClassification, Tutorial
+from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 
-from .Items import WL4Item, item_table
+from .Items import WL4Item, item_table, junk_table
 from .Locations import all_locations, setup_locations
 from .Logic import WL4Logic
 from .Names import ItemName, LocationName
@@ -45,6 +46,18 @@ class WL4World(World):
 
     web = WL4Web()
 
+    def pre_fill(self):
+        # 10,000 coins is impossible in Hall of Hieroglyphs unless a box has a full health item.
+        if self.multiworld.crown_shuffle[self.player] in (1, 4):
+            item = self.create_item(ItemName.full_health)
+            self.multiworld.itempool.remove(item)
+            locations = [*LocationName.hall_of_hieroglyphs.jewels,
+                         LocationName.hall_of_hieroglyphs.fullhealth]
+            locations = [self.multiworld.get_location(name, self.player) for name in locations]
+            self.multiworld.random.shuffle(locations)
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations,
+                             [item], single_player_placement=True, lock=True)
+
     def generate_early(self):
         if self.multiworld.early_entry_jewels[self.player]:
             self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.ne] = 1
@@ -60,7 +73,14 @@ class WL4World(World):
         diamond_pieces = 18 * 4
         cds = 16
         full_health_items = (9, 7, 5)[self.multiworld.difficulty[self.player].value]
-        total_required_locations = diamond_pieces + cds + full_health_items
+        crown_shuffle = self.multiworld.crown_shuffle[self.player].value
+        if crown_shuffle == 0:
+            crown_items = 0
+        elif crown_shuffle == 4:
+            crown_items = 18 * 3
+        else:
+            crown_items = 18
+        total_required_locations = diamond_pieces + cds + full_health_items + crown_items
 
         for item, data in Items.box_table.items():
             for _ in range(data.quantity):
@@ -70,7 +90,9 @@ class WL4World(World):
             itempool.append(self.create_item(ItemName.full_health))
 
         junk_count = total_required_locations - len(itempool)
-        assert junk_count == 0, f"Mismatched location counts: {junk_count} empty checks"
+        for _ in range(junk_count):
+            junk_item = self.multiworld.random.choice(tuple(junk_table.keys()))
+            itempool.append(self.create_item(junk_item))
 
         boss_location_names = [
             LocationName.spoiled_rotten,

@@ -5,12 +5,14 @@ class TheBindingOfIsaacRepentanceLocation(Location):
     game: str = "The Binding of Isaac Rebirth"
 
 
+base_id = 78000
+
 base_location_table = {
     "Run End": None
 }
 
 item_pickups = {
-    f"ItemPickup{i+1}": 78000+i for i in range(0, 500)
+    f"ItemPickup{i+1}": base_id+i for i in range(0, 500)
 }
 
 location_table = {**base_location_table, **item_pickups}

@@ -57,6 +57,8 @@ class TheBindingOfIsaacRepentanceWorld(World):
             self.multiworld.junk_item_count * (self.multiworld.trap_percentage[self.player] / 100))
         self.multiworld.junk_item_count = self.multiworld.junk_item_count - self.multiworld.trap_item_count
 
+        self.multiworld.required_prog_item_factor = 0.6
+
     def create_items(self):
         # Generate item pool
         itempool = []
@@ -148,7 +150,7 @@ def create_regions(world, player: int, total_locations: int):
         source_region = world.get_region(f'Run Section {i}', player)
         target_region = world.get_region(f'Run Section {i + 1}', player)
         connection = Entrance(player, f'From Section {i} To Section {i + 1}', source_region)
-        connection.access_rule = lambda state: state.has(f'Progression Item', player, math.floor(i * (world.progression_item_count / ((2-((i-1)/(num_of_sections-1)))*num_of_sections))))
+        connection.access_rule = lambda state: state.has(f'Progression Item', player, round(i * ((world.progression_item_count*world.required_prog_item_factor) / ((2-((i-1)/(num_of_sections-1)))*num_of_sections))))
         source_region.exits.append(connection)
         connection.connect(target_region)
 

@@ -28,7 +28,7 @@ and backup you old saves.
 
 ToDo: needs testing
 
-## What Risk of Rain items can appear in other players' worlds?
+## What The Binding of Isaac: Repentance items can appear in other players' worlds?
 
 By default, The Binding of Isaac items are:
 

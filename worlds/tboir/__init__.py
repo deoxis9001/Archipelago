@@ -36,10 +36,15 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = location_table
-    item_name_groups = {'Any Progression': [name for name, data in item_table.items() if data.is_progression()]}
+    item_name_groups = {"Any Progression": [name for name, data in item_table.items() if data.is_progression()]}
 
     data_version = 5
     web = TheBindingOfIsaacRepentanceWeb()
+
+    progression_item_count: int = 0
+    trap_item_count: int = 0
+    junk_item_count: int = 0
+    required_prog_item_factor: float = 0.6
 
     def generate_early(self) -> None:
         if not self.multiworld.player_name[self.player].isalnum():
@@ -49,15 +54,13 @@ class TheBindingOfIsaacRepentanceWorld(World):
         if self.multiworld.required_locations[self.player].value > self.multiworld.total_locations[self.player].value:
             self.multiworld.total_locations[self.player].value = self.multiworld.required_locations[self.player].value
 
-        self.multiworld.junk_item_count = round(
+        self.junk_item_count = round(
             self.multiworld.total_locations[self.player] * (self.multiworld.junk_percentage[self.player] / 100))
-        self.multiworld.progression_item_count = self.multiworld.total_locations[self.player] - self.multiworld.junk_item_count
+        self.progression_item_count = self.multiworld.total_locations[self.player] - self.junk_item_count
 
-        self.multiworld.trap_item_count = round(
-            self.multiworld.junk_item_count * (self.multiworld.trap_percentage[self.player] / 100))
-        self.multiworld.junk_item_count = self.multiworld.junk_item_count - self.multiworld.trap_item_count
-
-        self.multiworld.required_prog_item_factor = 0.6
+        self.trap_item_count = round(
+            self.junk_item_count * (self.multiworld.trap_percentage[self.player] / 100))
+        self.junk_item_count = self.junk_item_count - self.trap_item_count
 
     def create_items(self):
         # Generate item pool
@@ -70,18 +73,18 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
         # Fill non-junk items
         itempool += self.multiworld.random.choices(list(item_weights.keys()), weights=list(item_weights.values()),
-                                                   k=self.multiworld.progression_item_count)
+                                                   k=self.progression_item_count)
 
         trap_weights = {name: val for name, val in self.multiworld.trap_item_weights[self.player].value.items()}
         junk_weights = {name: val for name, val in self.multiworld.custom_junk_item_weights[self.player].value.items()}
 
         # Fill traps
         itempool += self.multiworld.random.choices(list(trap_weights.keys()), weights=list(trap_weights.values()),
-                                                   k=self.multiworld.trap_item_count)
+                                                   k=self.trap_item_count)
 
         # Fill remaining items with randomly generated junk
         itempool += self.multiworld.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()),
-                                                   k=self.multiworld.junk_item_count)
+                                                   k=self.junk_item_count)
 
         assert len(itempool) == self.multiworld.total_locations[self.player]
 
@@ -91,15 +94,16 @@ class TheBindingOfIsaacRepentanceWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player, self.progression_item_count, self.required_prog_item_factor)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, int(self.multiworld.total_locations[self.player].value))
+        create_regions(self.multiworld, self.player, int(self.multiworld.total_locations[self.player].value),
+                       self.progression_item_count, self.required_prog_item_factor)
 
     def fill_slot_data(self):
         return {
             "itemPickupStep": self.multiworld.item_pickup_step[self.player].value,
-            "seed": ''.join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
+            "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
             "totalLocations": self.multiworld.total_locations[self.player].value,
             "requiredLocations": self.multiworld.required_locations[self.player].value,
             "goal": self.multiworld.goal[self.player].value,
@@ -125,9 +129,10 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
 
 # generate locations based on player setting
-def create_regions(world, player: int, total_locations: int):
+def create_regions(world, player: int, total_locations: int, progression_item_count: int,
+                   required_prog_item_factor: float):
     world.regions += [
-        create_region(world, player, 'Menu', None, ['New Run']),
+        create_region(world, player, "Menu", None, ["New Run"]),
     ]
     # setup regions
     locations_per_section = 25
@@ -142,15 +147,17 @@ def create_regions(world, player: int, total_locations: int):
                            min(total_locations + 1, (i + 1) * locations_per_section + 1))]
         if i == num_of_sections - 1:
             locations += [location for location in base_location_table]
-        world.regions.append(create_region(world, player, f'Run Section {i + 1}', locations))
+        world.regions.append(create_region(world, player, f"Run Section {i + 1}", locations))
 
     # setup connections
     world.get_entrance("New Run", player).connect(world.get_region("Run Section 1", player))
     for i in range(1, num_of_sections):
-        source_region = world.get_region(f'Run Section {i}', player)
-        target_region = world.get_region(f'Run Section {i + 1}', player)
-        connection = Entrance(player, f'From Section {i} To Section {i + 1}', source_region)
-        connection.access_rule = lambda state: state.has(f'Progression Item', player, round(i * ((world.progression_item_count*world.required_prog_item_factor) / ((2-((i-1)/(num_of_sections-1)))*num_of_sections))))
+        source_region = world.get_region(f"Run Section {i}", player)
+        target_region = world.get_region(f"Run Section {i + 1}", player)
+        connection = Entrance(player, f"From Section {i} To Section {i + 1}", source_region)
+        connection.access_rule = lambda state: state.has(f"Progression Item", player, round(i * (
+                (progression_item_count * required_prog_item_factor) / (
+                (2 - ((i - 1) / (num_of_sections - 1))) * num_of_sections))))
         source_region.exits.append(connection)
         connection.connect(target_region)
 

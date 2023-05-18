@@ -43,12 +43,14 @@ class Goal(Choice):
     option_note_marks = 17
     default = 5
 
+
 class NoteMarkAmount(Range):
     """Number of full marks needed to beat the game (if goal is note marks). """
     display_name = "Full Note Amount"
     range_start = 1
     range_end = 408
     default = 20
+
 
 class FullNoteAmount(Range):
     """Number of full notes needed to beat the game (if goal is full notes). """
@@ -160,6 +162,7 @@ class TrapItemWeights(CustomItemWeightsBase):
     display_name = "Custom Trap Item Weights"
     default = default_trap_items_weights
     valid_keys = {key for key, value in item_table.items() if value.is_trap()}
+
 
 class SplitStartItems(Choice):
     """

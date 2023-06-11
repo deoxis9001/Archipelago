@@ -36,7 +36,8 @@ class TheBindingOfIsaacRepentanceWorld(World):
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = location_table
-    item_name_groups = {"Any Progression": [name for name, data in item_table.items() if data.is_progression()]}
+    item_name_groups = {
+        "Any Progression": [name for name, data in item_table.items() if data.is_progression() and data.id is not None]}
 
     data_version = 5
     web = TheBindingOfIsaacRepentanceWeb()

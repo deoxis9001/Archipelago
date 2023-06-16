@@ -26,6 +26,8 @@ blitz_byte = 0xF51D28
 menu_address = 0xF50059
 formation_id = 0xF511E0
 animation_byte = 0xF5009A
+event_trigger_byte = 0xF5115C
+event_argument_byte = 0xF511E5
 
 espers = [  # This is the internal order of the Espers in the game. Editing this will break things.
     "Ramuh", "Ifrit", "Shiva",

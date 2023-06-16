@@ -99,15 +99,16 @@ class FF6WCWorld(World):
         return return_location
 
     def generate_early(self):
-        if self.multiworld.EnableFlagstring[self.player].value == "true":
-
+        if (self.multiworld.Flagstring[self.player].value).capitalize() != "False":
             self.starting_characters = []
             character_list = []
             flags = self.multiworld.Flagstring[self.player].value
             # Determining Starting Characters
             flags_list = flags.split(" ")
-            sc1_index = flags_list.index("-sc1") + 1
-            character_list.append(flags_list[sc1_index])
+            sc1_index = sc2_index = sc3_index = sc4_index = 0
+            if "-sc1" in flags_list:
+                sc1_index = flags_list.index("-sc1") + 1
+                character_list.append(flags_list[sc1_index])
             if "-sc2" in flags_list:
                 sc2_index = flags_list.index("-sc2") + 1
                 character_list.append(flags_list[sc2_index])
@@ -132,15 +133,19 @@ class FF6WCWorld(World):
                 elif character_list[character] not in character_list:
                     character_list[character] = character_list[character]
 
-            for x in range(len(character_list)):
-                if x == 0:
-                    flags_list[sc1_index] = character_list[x]
-                if x == 1:
-                    flags_list[sc2_index] = character_list[x]
-                if x == 2:
-                    flags_list[sc3_index] = character_list[x]
-                if x == 3:
-                    flags_list[sc4_index] = character_list[x]
+            x = 0
+            if sc1_index != 0:
+                flags_list[sc1_index] = character_list[x]
+                x += 1
+            if sc2_index != 0:
+                flags_list[sc2_index] = character_list[x]
+                x += 1
+            if sc3_index != 0:
+                flags_list[sc3_index] = character_list[x]
+                x += 1
+            if sc4_index != 0:
+                flags_list[sc4_index] = character_list[x]
+                x += 1
 
             self.multiworld.StartingCharacterCount[self.player].value = len(character_list)
             starting_character_options = list(self.multiworld.StartingCharacter1[self.player].name_lookup.values())
@@ -291,7 +296,7 @@ class FF6WCWorld(World):
 
     def create_items(self):
         # Setting variables for item restrictions based on custom flagstring or AllowStrongestItems value
-        if self.multiworld.EnableFlagstring[self.player]:
+        if (self.multiworld.Flagstring[self.player].value).capitalize() != "False":
             if "-nfps" in self.multiworld.Flagstring[self.player].value.split(" "):
                 self.no_paladin_shields = True
             if "-nee" in self.multiworld.Flagstring[self.player].value.split(" "):

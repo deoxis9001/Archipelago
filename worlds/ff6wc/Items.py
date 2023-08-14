@@ -2,7 +2,7 @@ from BaseClasses import Item
 import typing
 from typing import Dict
 
-from worlds.ff6wc import Rom
+from . import Rom
 
 
 class ItemData(typing.NamedTuple):

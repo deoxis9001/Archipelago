@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from SNIClient import SNIContext
 else:
     SNIContext = typing.Any
-from worlds.ff6wc import Rom, Locations
+from . import Rom, Locations
 
 snes_logger: Logger = logging.getLogger("SNES")
 

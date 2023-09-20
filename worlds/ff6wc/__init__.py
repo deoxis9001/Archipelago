@@ -10,7 +10,7 @@ import traceback
 from typing import NamedTuple, Union, ClassVar
 import logging
 
-from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification
+from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from . import Logic
 from .Rom import FF6WCDeltaPatch, NA10HASH, get_base_rom_path
 from .Client import FF6WCClient
@@ -41,9 +41,19 @@ if APVersion == "0.4.2":
 
 class FF6WCWeb(WebWorld):
     theme = "dirt"
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the FF6WC randomizer and connecting to an Archipelago server.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["bigmalletman"]
+    )
+    tutorials = [setup_en]
 
 
 class FF6WCWorld(World):
+    """Final Fantasy VI, initially called Final Fantasy III on the Super Nintendo in North America, is a role-playing game and the last in the series to feature 2D sprite based graphics. Worlds Collide is an open-world randomizer for Final Fantasy VI. Players begin aboard the airship and can travel freely between the World of Balance and the World of Ruin to discover characters and espers. Once you've gathered enough, you can face off against Kefka. Currently based on Worlds Collide version 1.2.2."""
     if APVersion == "0.4.2":
         settings: ClassVar[FF6WCSettings]
 

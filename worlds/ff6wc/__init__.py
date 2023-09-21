@@ -386,6 +386,8 @@ class FF6WCWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
         filler_pool = []
+        # Each filler item has a chest item tier weight
+        filler_pool_weights = []
         good_filler_pool = []
 
         for item in Items.items:
@@ -398,6 +400,8 @@ class FF6WCWorld(World):
                 continue
             if item != "ArchplgoItem":
                 filler_pool.append(item)
+                # Each filler item has a chest item tier weight
+                filler_pool_weights.append(Items.item_name_weight.get(item))
             if item in Items.good_items:
                 good_filler_pool.append(item)
 
@@ -409,14 +413,13 @@ class FF6WCWorld(World):
             for _ in range(major_items):
                 item_pool.append(self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool)))
             self.multiworld.itempool += item_pool
-        # Note that for stability in generation and simplicity, this method generates an excess of good items in
-        # Treasuresanity seeds due to not knowing which minor checks have been selected to have characters or espers.
         else:
             for _ in range(major_items):
                 item_pool.append(self.create_good_filler_item(self.multiworld.random.choice(good_filler_pool)))
             minor_items = len(Locations.all_minor_checks) - progression_items
             for _ in range(minor_items):
-                item_pool.append(self.create_filler_item(self.multiworld.random.choice(filler_pool)))
+                # random filler item, but use chest item tier weights
+                item_pool.append(self.create_filler_item(self.multiworld.random.choices(filler_pool, filler_pool_weights)[0]))
             self.multiworld.itempool += item_pool
 
     def set_rules(self):

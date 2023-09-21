@@ -15,6 +15,7 @@ espers = Rom.espers
 characters = Rom.characters
 
 items = list(Rom.item_name_id.keys())
+item_name_weight = {v[0]: v[1] for k, v in Rom.item_id_name_weight.items()} # call .get(item) to get the chest item tier weight
 
 all_items = [*espers, *characters, *items]
 

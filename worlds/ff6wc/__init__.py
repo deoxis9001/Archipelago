@@ -21,22 +21,19 @@ from .Locations import location_table
 from .Items import item_table, items, good_items
 from .Options import ff6wc_options, generate_flagstring
 import Utils
+import settings
 
 from .WorldsCollide.wc import WC
 
 APVersion = Utils.__version__
 
-if APVersion == "0.4.2":
-    import settings
-    # for the 0.4.1 holdouts
-    class FF6WCSettings(settings.Group):
-        class RomFile(settings.SNESRomPath):
-            """File name of the FF6 NA 1.0 rom"""
-            description = "Final Fantasy III (USA) ROM File"
-            copy_to = "Final Fantasy III (USA).sfc"
-            md5s = [NA10HASH]
-
-        rom_file: RomFile = RomFile(RomFile.copy_to)
+class FF6WCSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the FF6 NA 1.0 rom"""
+        description = "Final Fantasy III (USA) ROM File"
+        copy_to = "Final Fantasy III (USA).sfc"
+        md5s = [NA10HASH]
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class FF6WCWeb(WebWorld):
@@ -54,8 +51,7 @@ class FF6WCWeb(WebWorld):
 
 class FF6WCWorld(World):
     """Final Fantasy VI, initially called Final Fantasy III on the Super Nintendo in North America, is a role-playing game and the last in the series to feature 2D sprite based graphics. Worlds Collide is an open-world randomizer for Final Fantasy VI. Players begin aboard the airship and can travel freely between the World of Balance and the World of Ruin to discover characters and espers. Once you've gathered enough, you can face off against Kefka. Currently based on Worlds Collide version 1.2.2."""
-    if APVersion == "0.4.2":
-        settings: ClassVar[FF6WCSettings]
+    settings: ClassVar[FF6WCSettings]
 
     option_definitions = ff6wc_options
     game = "Final Fantasy 6 Worlds Collide"

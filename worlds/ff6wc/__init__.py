@@ -66,7 +66,7 @@ class FF6WCWorld(World):
         "Sabin Major": {*Locations.major_sabin_checks},
         "Celes Major": {*Locations.major_celes_checks},
         "Shadow Major": {*Locations.major_shadow_checks},
-        "Cyan Major": {*Locations.major_cyan_checks},
+        "Cyan Major": {*Locations.major_cyan_checks},a
         "Gau Major": {*Locations.major_gau_checks},
         "Setzer Major": {*Locations.major_setzer_checks},
         "Mog Major": {*Locations.major_mog_checks},
@@ -74,7 +74,7 @@ class FF6WCWorld(World):
         "Relm Major": {*Locations.major_relm_checks},
         "Umaro Major": {*Locations.major_umaro_checks},
         "Gogo Major": {*Locations.major_gogo_checks},
-		"Kefka Major": {*Locations.major_kefka_checks},
+        "Kefka Major": {*Locations.major_kefka_checks},
         "Generic Major": {*Locations.major_generic_checks},
         "All Major": {*Locations.major_checks},
 		"Terra Minor": {*Locations.minor_terra_checks},
@@ -89,7 +89,7 @@ class FF6WCWorld(World):
         "Relm Minor": {*Locations.minor_relm_checks},
         "Umaro Minor": {*Locations.minor_umaro_checks},
         "Gogo Minor": {*Locations.minor_gogo_checks},
-		"Kefka Minor": {*Locations.minor_kefka_checks},
+        "Kefka Minor": {*Locations.minor_kefka_checks},
         "Generic Minor": {*Locations.minor_generic_checks},
         "All Minor": {*Locations.minor_checks}
     }

@@ -66,7 +66,7 @@ class FF6WCWorld(World):
         "Sabin Major": {*Locations.major_sabin_checks},
         "Celes Major": {*Locations.major_celes_checks},
         "Shadow Major": {*Locations.major_shadow_checks},
-        "Cyan Major": {*Locations.major_cyan_checks},a
+        "Cyan Major": {*Locations.major_cyan_checks},
         "Gau Major": {*Locations.major_gau_checks},
         "Setzer Major": {*Locations.major_setzer_checks},
         "Mog Major": {*Locations.major_mog_checks},
@@ -77,7 +77,7 @@ class FF6WCWorld(World):
         "Kefka Major": {*Locations.major_kefka_checks},
         "Generic Major": {*Locations.major_generic_checks},
         "All Major": {*Locations.major_checks},
-		"Terra Minor": {*Locations.minor_terra_checks},
+        "Terra Minor": {*Locations.minor_terra_checks},
         "Edgar Minor": {*Locations.minor_edgar_checks},
         "Sabin Minor": {*Locations.minor_sabin_checks},
         "Celes Minor": {*Locations.minor_celes_checks},

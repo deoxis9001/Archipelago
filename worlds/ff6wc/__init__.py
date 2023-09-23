@@ -25,8 +25,6 @@ import settings
 
 from .WorldsCollide.wc import WC
 
-APVersion = Utils.__version__
-
 class FF6WCSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
         """File name of the FF6 NA 1.0 rom"""

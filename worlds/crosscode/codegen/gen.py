@@ -11,7 +11,7 @@ import jinja2
 from worlds.crosscode.codegen.merge import merge
 
 from .ast import AstGenerator
-from .context import Context, make_context_from_directory
+from .context import Context, make_context_from_package
 from .emit import emit_dict, emit_list
 from .util import BASE_ID, GENERATED_COMMENT, RESERVED_ITEM_IDS
 from .lists import ListInfo
@@ -28,7 +28,6 @@ class FileGenerator:
     ast_generator: AstGenerator
 
     def __init__(self, world_dir: str, lists: typing.Optional[ListInfo] = None):
-        data_dir = os.path.join(world_dir, "data")
         data_out_dir = os.path.join(world_dir, "data", "out")
         template_dir = os.path.join(world_dir, "templates")
 
@@ -36,7 +35,7 @@ class FileGenerator:
             loader=jinja2.FileSystemLoader(template_dir))
 
         if lists == None:
-            self.ctx = make_context_from_directory(data_dir)
+            self.ctx = make_context_from_package(world_dir.replace('/', '.'))
             self.lists = ListInfo(self.ctx)
             self.lists.build()
         else:

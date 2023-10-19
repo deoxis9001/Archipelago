@@ -1,6 +1,7 @@
 import json
 import os
 import typing
+import pkgutil
 
 from BaseClasses import ItemClassification
 
@@ -19,14 +20,12 @@ Modifications to this file will not be kept.
 If you need to change something here, check out codegen.py and the templates directory.
 """
 
-
-def get_json_object(filename: str):
-    with open(filename, "r") as f:
-        return json.load(f)
+def get_json_object(package, filename: str):
+    return json.loads(pkgutil.get_data(package, filename).decode())
 
 
-def load_json_with_includes(filename: str) -> typing.Dict[str, typing.Any]:
-    master = get_json_object(filename)
+def load_json_with_includes(package, filename: str) -> typing.Dict[str, typing.Any]:
+    master = get_json_object(package, filename)
     dirname = os.path.dirname(filename)
 
     if not isinstance(master, dict):
@@ -36,15 +35,15 @@ def load_json_with_includes(filename: str) -> typing.Dict[str, typing.Any]:
 
     includes = master.pop("includes")
     for subfilename in includes:
-        subfile = load_json_with_includes(os.path.join(dirname, subfilename))
+        subfile = load_json_with_includes(package, os.path.join(dirname, subfilename))
 
         master = merge(master, subfile, apply_diffs=False)
 
     return master
 
 
-def load_world_json(filename: str) -> tuple[dict[str, typing.Any], dict[str, dict[str, typing.Any]]]:
-    master = load_json_with_includes(filename)
+def load_world_json(package, filename: str, zipped=False) -> tuple[dict[str, typing.Any], dict[str, dict[str, typing.Any]]]:
+    master = load_json_with_includes(package, filename)
     dirname = os.path.dirname(filename)
 
     if "addons" not in master:
@@ -54,6 +53,7 @@ def load_world_json(filename: str) -> tuple[dict[str, typing.Any], dict[str, dic
     loaded_addons = {}
     for addon_name in addons:
         subfile = load_json_with_includes(
+            package,
             os.path.join(dirname, "addons", addon_name, "master.json")
         )
 

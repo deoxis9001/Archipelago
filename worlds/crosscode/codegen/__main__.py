@@ -14,7 +14,7 @@
 
 import argparse
 
-from .context import make_context_from_directory
+from .context import make_context_from_package
 from .gen import FileGenerator
 from .lists import ListInfo
 
@@ -52,7 +52,7 @@ else:
     from ..Items import items_dict, single_items_dict
     from ..Locations import locations_dict, events_dict
 
-    ctx = make_context_from_directory("worlds/crosscode/data")
+    ctx = make_context_from_package("worlds.crosscode")
 
     lists = ListInfo(ctx)
     lists.single_items_dict = single_items_dict

@@ -7,7 +7,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.crosscode.types.Condition import LocationCondition
 from worlds.generic.Rules import add_rule, set_rule
 
-from .codegen.context import Context, make_context_from_directory
+from .codegen.context import Context, make_context_from_package
 
 from .Common import *
 from .Logic import condition_satisfied, has_clearance
@@ -80,7 +80,7 @@ class CrossCodeWorld(World):
 
     addons: list[str]
 
-    ctx: Context = make_context_from_directory("worlds/crosscode/data", False)
+    ctx: Context = make_context_from_package("worlds.crosscode", False)
 
     def register_reachability(self, option: Reachability, items: typing.Iterable[str]):
         if option == Reachability.option_own_world:

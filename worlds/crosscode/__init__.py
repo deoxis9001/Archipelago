@@ -239,6 +239,7 @@ class CrossCodeWorld(World):
             "options": {
                 "vtShadeLock": self.multiworld.vt_shade_lock[self.player].value,
                 "vtSkip": self.multiworld.vt_skip[self.player].value,
+                "questRando": self.multiworld.quest_rando[self.player].value,
                 "hiddenQuestRewardMode": self.multiworld.hidden_quest_reward_mode[self.player].current_key,
                 "hiddenQuestObfuscationLevel": self.multiworld.hidden_quest_obfuscation_level[self.player].current_key,
                 "questDialogHints": self.multiworld.quest_dialog_hints[self.player].value,

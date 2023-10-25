@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from SNIClient import SNIContext
 else:
     SNIContext = typing.Any
-from worlds.ff6wc import Rom, Locations
+from . import Rom, Locations
 
 snes_logger: Logger = logging.getLogger("SNES")
 
@@ -271,7 +271,7 @@ class FF6WCClient(SNIClient):
 
         victory_value = victory_data[0]
         #for now
-        if victory_value != 0x00:
+        if victory_value & 0x02:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 

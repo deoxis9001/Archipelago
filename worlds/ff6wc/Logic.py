@@ -1,6 +1,6 @@
 from worlds.AutoWorld import LogicMixin, World
-from worlds.ff6wc import Locations
-from worlds.ff6wc.Locations import dragons
+from . import Locations
+from .Locations import dragons
 
 
 class LogicFunctions(LogicMixin):

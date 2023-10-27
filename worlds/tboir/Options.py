@@ -1,6 +1,6 @@
 import typing
 from Options import Option, DefaultOnToggle, Toggle, Range, Choice, DeathLink, OptionDict, AssembleOptions
-from ..tboir import default_weights, default_junk_items_weights, item_table
+from . import default_weights, default_junk_items_weights, item_table
 from .Items import default_trap_items_weights
 
 

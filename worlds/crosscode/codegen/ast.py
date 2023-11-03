@@ -45,6 +45,9 @@ class AstGenerator:
             ]
         )
 
+        if data.area is not None:
+            ast_item.keywords.append(ast.keyword(arg="area", value=ast.Constant(data.area)))
+
         ast.fix_missing_locations(ast_item)
         return ast_item
 

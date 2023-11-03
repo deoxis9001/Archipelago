@@ -1,6 +1,8 @@
 from Options import AssembleOptions, Choice, DefaultOnToggle, Toggle
 import typing
 
+from worlds.AutoWorld import World
+
 class VTShadeLock(DefaultOnToggle):
     """
     If enabled, adds a locked gate before the final dungeon that only opens when all four shades are collected and all four bosses are beaten.
@@ -74,17 +76,84 @@ class Reachability(Choice):
 
     default = 2
 
-class ShadeLocations(Reachability):
+    items: dict[str, set[str]]
+
+    def register_locality(self, local_items: set[str], non_local_items: set[str]):
+        if self.value == Reachability.option_own_world:
+            for _, lst in self.items.items():
+                local_items |= lst
+        elif self.value == Reachability.option_different_world:
+            for _, lst in self.items.items():
+                non_local_items |= lst
+
+class DungeonReachability(Reachability):
+    option_own_dungeons = 10
+    option_original_dungeons = 11
+
+    def register_pre_fill_lists(
+        self,
+        specific_dungeons: dict[str, set[str]],
+        all_dungeons: set[str]
+    ):
+        if self.value == DungeonReachability.option_own_dungeons:
+            for _, lst in self.items.items():
+                all_dungeons |= lst
+        if self.value == DungeonReachability.option_original_dungeons:
+            for key, lst in self.items.items():
+                specific_dungeons[key] |= lst
+
+class ShadeShuffle(Reachability):
     """
     Where shades will appear.
     """
-    display_name = "Shade Locations"
+    display_name = "Shade Shuffle"
 
-class ElementLocations(Reachability):
+    items = {
+        "any": {
+            "Green Leaf Shade", "Yellow Sand Shade", "Blue Ice Shade",
+            "Red Flame Shade", "Purple Bolt Shade", "Azure Drop Shade",
+            "Green Seed Shade", "Star Shade", "Meteor Shade",
+        }
+    }
+
+class ElementShuffle(DungeonReachability):
     """
     Where elements will appear.
     """
-    display_name = "Element Locations"
+    display_name = "Element Shuffle"
+
+    items = {
+        "cold-dng": { "Heat" },
+        "heat-dng": { "Cold" },
+        "wave-dng": { "Shock" },
+        "shock-dng": { "Wave" },
+    }
+
+class SmallKeyShuffle(DungeonReachability):
+    """
+    Where small keys will appear.
+    """
+    display_name = "Small Key Shuffle"
+
+    items = {
+        "cold-dng": { "Mine Key" },
+        "heat-dng": { "Faj'ro Key" },
+        "wave-dng": { "So'najiz Key" },
+        "shock-dng": { "Zir'vitar Key" },
+        "tree-dng": { "Krys'kajo Key" },
+    }
+
+class MasterKeyShuffle(DungeonReachability):
+    """
+    Where master keys will appear.
+    """
+    display_name = "Master Key Shuffle"
+
+    items = {
+        "cold-dng": { "Mine Master Key" },
+        "heat-dng": { "Faj'ro Master Key" },
+        "tree-dng": { "Kajo Master Key" },
+    }
 
 crosscode_options_pairs = [
     ("vt_shade_lock", VTShadeLock),
@@ -95,8 +164,10 @@ crosscode_options_pairs = [
     ("quest_dialog_hints", QuestDialogHints),
     ("start_with_green_leaf_shade", StartWithGreenLeafShade),
     ("start_with_chest_detector", StartWithChestDetector),
-    ("shade_locations", ShadeLocations),
-    ("element_locations", ElementLocations),
+    ("shade_shuffle", ShadeShuffle),
+    ("element_shuffle", ElementShuffle),
+    ("small_key_shuffle", SmallKeyShuffle),
+    ("master_key_shuffle", MasterKeyShuffle),
 ]
 
 addon_options = ["vt_shade_lock", "quest_rando"]

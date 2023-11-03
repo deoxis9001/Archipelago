@@ -1,3 +1,4 @@
+from collections import defaultdict
 import traceback
 from copy import deepcopy
 import sys
@@ -74,6 +75,15 @@ class CrossCodeWorld(World):
     logic_mode: str
     region_pack: RegionsData
 
+    pre_fill_specific_dungeons_names: dict[str, set[str]]
+    pre_fill_any_dungeon_names: set[str]
+
+    pre_fill_specific_dungeons: dict[str, list[CrossCodeItem]]
+    pre_fill_any_dungeon: list[CrossCodeItem]
+
+    dungeon_location_list: dict[str, set[CrossCodeLocation]]
+    dungeon_areas = {"cold-dng", "heat-dng", "shock-dng", "wave-dng", "tree-dng"}
+
     location_events: dict[str, Location]
 
     world_data: WorldData
@@ -81,16 +91,6 @@ class CrossCodeWorld(World):
     addons: list[str]
 
     ctx: Context = make_context_from_package("worlds.crosscode", False)
-
-    def register_reachability(self, option: Reachability, items: typing.Iterable[str]):
-        if option == Reachability.option_own_world:
-            local_items = self.multiworld.local_items[self.player].value
-            for item in items:
-                local_items.add(item)
-        elif option == Reachability.option_different_world:
-            non_local_items = self.multiworld.non_local_items[self.player].value
-            for item in items:
-                non_local_items.add(item)
 
     def create_location(self, location: str, event_from_location=False) -> CrossCodeLocation:
         data, access = self.world_data.locations_data[location]
@@ -135,19 +135,25 @@ class CrossCodeWorld(World):
         if self.multiworld.start_with_chest_detector[self.player].value:
             start_inventory["Chest Detector"] = 1
 
-        shade_loc: Reachability = self.multiworld.shade_locations[self.player].value
-        element_loc: Reachability = self.multiworld.element_locations[self.player].value
+        self.pre_fill_any_dungeon_names = set()
+        self.pre_fill_specific_dungeons_names = defaultdict(set)
 
-        self.register_reachability(
-            shade_loc,
-            (
-                "Green Leaf Shade", "Yellow Sand Shade", "Blue Ice Shade",
-                "Red Flame Shade", "Purple Bolt Shade", "Azure Drop Shade",
-                "Green Seed Shade", "Star Shade", "Meteor Shade",
+        self.pre_fill_any_dungeon = []
+        self.pre_fill_specific_dungeons = defaultdict(list)
+        
+        self.dungeon_location_list = defaultdict(set)
+
+        local_items = self.multiworld.local_items[self.player].value
+        non_local_items = self.multiworld.non_local_items[self.player].value
+
+        for key in ("shade_shuffle", "element_shuffle", "small_key_shuffle", "master_key_shuffle"):
+            getattr(self.multiworld, key)[self.player].register_locality(local_items, non_local_items)
+
+        for key in ("element_shuffle", "small_key_shuffle", "master_key_shuffle"):
+            getattr(self.multiworld, key)[self.player].register_pre_fill_lists(
+                self.pre_fill_specific_dungeons_names,
+                self.pre_fill_any_dungeon_names
             )
-        )
-
-        self.register_reachability(element_loc, ("Heat", "Cold", "Shock", "Wave"))
 
     def create_regions(self):
         self.region_dict = {name: Region(name, self.player, self.multiworld) for name in self.region_pack.region_list if name not in self.region_pack.excluded_regions}
@@ -177,6 +183,8 @@ class CrossCodeWorld(World):
             for data, access_info in self.world_data.locations_data.values():
                 if self.logic_mode in access_info.region and access_info.region[self.logic_mode] == name:
                     location = CrossCodeLocation(self.player, data, access_info, self.logic_mode, self.region_dict)
+                    if location.data.area is not None:
+                        self.dungeon_location_list[location.data.area].add(location)
                     region.locations.append(location)
                     self.create_event_conditions(access_info.cond)
 
@@ -211,6 +219,13 @@ class CrossCodeWorld(World):
 
             for _ in range(quantity[self.logic_mode]):
                 item = CrossCodeItem(self.player, data)
+
+                if item.name in self.pre_fill_any_dungeon_names:
+                    self.pre_fill_any_dungeon.append(item)
+                for dng, names in self.pre_fill_specific_dungeons_names.items():
+                    if item.name in names:
+                        self.pre_fill_specific_dungeons[dng].append(item)
+
                 try:
                     idx = exclude.index(item)
                 except ValueError:
@@ -232,6 +247,9 @@ class CrossCodeWorld(World):
                     add_rule(loc, condition_satisfied(self.player, self.logic_mode, loc.access.cond))
                 if loc.access.clearance != "Default":
                     add_rule(loc, has_clearance(self.player, loc.access.clearance))
+
+    def pre_fill(self):
+        breakpoint()
 
     def fill_slot_data(self):
         return {

@@ -15,6 +15,7 @@ class AccessInfo:
 class LocationData:
     name: str
     code: typing.Optional[int]
+    area: typing.Optional[str] = None
 
 class CrossCodeLocation(Location):
     game: str = "CrossCode"

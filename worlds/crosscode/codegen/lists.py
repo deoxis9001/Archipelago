@@ -69,6 +69,13 @@ class ListInfo:
                 num_rewards = 0
                 raise RuntimeError(f"Location of name '{name}' already exists with {self.reward_amounts[name]} rewards. Cannot add or overwrite with {num_rewards}.")
 
+        try:
+            area = raw_loc["location"]["map"].split('.')[0]
+            if area not in self.ctx.rando_data["dungeons"]:
+                area = None
+        except KeyError or AttributeError:
+            area = None
+
         location_names: list[str] = []
 
         for idx in range(num_rewards):
@@ -78,7 +85,7 @@ class ListInfo:
 
             location_names.append(full_name)
 
-            loc = LocationData(full_name, self.current_location_code)
+            loc = LocationData(full_name, self.current_location_code, area)
             self.current_location_code += 1
 
             self.locations_data[full_name] = loc
@@ -87,7 +94,8 @@ class ListInfo:
             event_name = f"{name} (Event)"
             event = LocationData(
                 name=f"{name} (Event)",
-                code=None
+                code=None,
+                area=None
             )
             self.events_data[event_name] = event
 

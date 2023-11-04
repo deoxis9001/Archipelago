@@ -1,9 +1,11 @@
+from copy import copy
 from collections import defaultdict
 import traceback
 from copy import deepcopy
 import sys
 import typing
 from BaseClasses import ItemClassification, Location, LocationProgressType, Region, Item
+from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from worlds.crosscode.types.Condition import LocationCondition
 from worlds.generic.Rules import add_rule, set_rule
@@ -249,7 +251,68 @@ class CrossCodeWorld(World):
                     add_rule(loc, has_clearance(self.player, loc.access.clearance))
 
     def pre_fill(self):
-        breakpoint()
+        allowed_locations_by_item: dict[Item, set[CrossCodeLocation]] = {}
+        all_items_list = list(self.pre_fill_any_dungeon)
+        all_locations: set[CrossCodeLocation] = set()
+
+        for dungeon in self.dungeon_areas:
+            for item in self.pre_fill_specific_dungeons[dungeon]: 
+                allowed_locations_by_item[item] = self.dungeon_location_list[dungeon]
+
+            all_items_list.extend(self.pre_fill_specific_dungeons[dungeon])
+            all_locations |= self.dungeon_location_list[dungeon]
+
+        for _, locations in self.dungeon_location_list.items():
+            for location in locations:
+                orig_rule = location.item_rule
+                location.item_rule = lambda item, location=location, orig_rule=orig_rule: \
+                    (item not in allowed_locations_by_item or location in allowed_locations_by_item[item]) and orig_rule(item)
+        
+        for item in self.pre_fill_any_dungeon:
+            allowed_locations_by_item[item] = all_locations
+
+        all_locations_list = list(all_locations)
+        self.random.shuffle(all_locations_list)
+
+        # Get the list of items and sort by priority
+        def priority(item) -> int:
+            # 0 - Master dungeon-specific
+            # 1 - Element dungeon-specific
+            # 2 - Key dungeon-specific
+            # 3 - Other dungeon-specific
+            # 4 - Master any local dungeon
+            # 5 - Element any local dungeon
+            # 6 - Key any local dungeon
+            # 7 - Other any local dungeon
+            i = 2
+            if item.name in ("Heat", "Cold", "Shock", "Wave"):
+                i = 0
+            else:
+                if "Master" in item.name:
+                    i = 1
+                elif "Key" in item.name:
+                    i = 2
+                if allowed_locations_by_item[item] is all_locations:
+                    i += 4
+            return i
+        all_items_list.sort(key=priority)
+
+        # Set up state
+        all_state = self.multiworld.get_all_state(use_cache=False)
+        # Remove dungeon items we are about to put in from the state so that we don't double count
+        for item in all_items_list:
+            all_state.remove(item)
+
+        # Finally, fill!
+        fill_restrictive(
+            self.multiworld,
+            all_state,
+            all_locations_list,
+            all_items_list,
+            lock=True,
+            single_player_placement=True,
+            allow_partial=False
+        )
 
     def fill_slot_data(self):
         return {

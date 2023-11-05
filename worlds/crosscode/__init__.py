@@ -222,12 +222,6 @@ class CrossCodeWorld(World):
             for _ in range(quantity[self.logic_mode]):
                 item = CrossCodeItem(self.player, data)
 
-                if item.name in self.pre_fill_any_dungeon_names:
-                    self.pre_fill_any_dungeon.append(item)
-                for dng, names in self.pre_fill_specific_dungeons_names.items():
-                    if item.name in names:
-                        self.pre_fill_specific_dungeons[dng].append(item)
-
                 try:
                     idx = exclude.index(item)
                 except ValueError:
@@ -235,7 +229,20 @@ class CrossCodeWorld(World):
                     continue
 
                 exclude.pop(idx)
-                self.multiworld.itempool.append(self.create_item("Sandwich x3"))
+
+                add_to_pool = True
+
+                if item.name in self.pre_fill_any_dungeon_names:
+                    self.pre_fill_any_dungeon.append(item)
+                    add_to_pool = False
+
+                for dng, names in self.pre_fill_specific_dungeons_names.items():
+                    if item.name in names:
+                        self.pre_fill_specific_dungeons[dng].append(item)
+                        add_to_pool = False
+
+                if add_to_pool:
+                    self.multiworld.itempool.append(self.create_item("Sandwich x3"))
 
         for _ in range(self.world_data.num_needed_items[self.logic_mode]):
             self.multiworld.itempool.append(self.create_item("Sandwich x3"))

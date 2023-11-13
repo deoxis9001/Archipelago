@@ -41,7 +41,7 @@ class HiddenQuestObfuscationLevel(Choice):
     [Hide Text] Obscures item name and receiving player. The icon will still be accurate.
     [Hide All] The item name and receiving player will all be hidden and the icon will be replaced with a generic archipelago logo.
     """
-    display_name = "Show Hidden Quest Rewards"
+    display_name = "Hidden Quest Obfuscation Level"
 
     option_hide_item = 0
     option_hide_text = 1

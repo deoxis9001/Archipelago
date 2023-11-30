@@ -18,6 +18,7 @@ class FF6WCClient(SNIClient):
     game: str = "Final Fantasy 6 Worlds Collide"
     location_names: typing.List = list(Rom.event_flag_location_names)
     location_ids = None
+    dialog_ids = dict()
 
     def __init__(self):
         super()
@@ -35,6 +36,8 @@ class FF6WCClient(SNIClient):
         ctx.items_handling = 0b111
 
         ctx.rom = rom_name
+
+        ctx
 
         return True
 
@@ -183,6 +186,8 @@ class FF6WCClient(SNIClient):
                     allow_local_network_item = True
                 elif item_name not in Rom.item_name_id.keys():
                     allow_local_network_item = True
+                elif item.location == -1:
+                    allow_local_network_item = True
                 else:
                     self.increment_items_received(ctx, items_received_amount)
                     return
@@ -212,6 +217,7 @@ class FF6WCClient(SNIClient):
                     if new_init_data == character_init_data[0]:
                         self.increment_items_received(ctx, items_received_amount)
                         return
+                    self.set_dialogue_byte(ctx, item_name)
                     snes_buffered_write(ctx, Rom.event_argument_byte, bytes([character_index]))
                     snes_buffered_write(ctx, Rom.event_trigger_byte, bytes([1]))
                     snes_logger.info('Received %s from %s (%s)' % (
@@ -232,6 +238,7 @@ class FF6WCClient(SNIClient):
                 new_data = esper_data[0] | esper_bit
                 self.increment_items_received(ctx, items_received_amount)
                 if esper_obtained == 0:
+                    self.set_dialogue_byte(ctx, item_name)
                     snes_buffered_write(ctx, Rom.event_argument_byte, bytes([esper_index]))
                     snes_buffered_write(ctx, Rom.event_trigger_byte, bytes([2]))
                 snes_logger.info('Received %s from %s (%s)' % (
@@ -240,6 +247,7 @@ class FF6WCClient(SNIClient):
                     ctx.location_names[item.location]))
 
             else:
+                self.set_dialogue_byte(ctx, item_name)
                 snes_buffered_write(ctx, Rom.event_argument_byte, bytes([Rom.item_name_id[item_name]]))
                 snes_buffered_write(ctx, Rom.event_trigger_byte, bytes([3]))
                 self.increment_items_received(ctx, items_received_amount)
@@ -279,3 +287,8 @@ class FF6WCClient(SNIClient):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         items_received_amount += 1
         snes_buffered_write(ctx, Rom.items_received_address, items_received_amount.to_bytes(2, 'little'))
+
+    def set_dialogue_byte(self, ctx: SNIContext, item):
+        from SNIClient import snes_buffered_write
+        dialog_id = ctx.slot_data["dialogs"][item]
+        snes_buffered_write(ctx, Rom.event_dialog_byte, dialog_id.to_bytes(2, 'little'))

@@ -7,7 +7,7 @@ import string
 import subprocess
 import threading
 import traceback
-from typing import NamedTuple, Union, ClassVar
+from typing import NamedTuple, Union, ClassVar, Dict
 import logging
 
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
@@ -136,7 +136,9 @@ class FF6WCWorld(World):
         self.no_exp_eggs = False
         self.generator_in_use = threading.Event()
         self.wc = None
+        self.wc_complete = threading.Event()
         self.rom_name_available_event = threading.Event()
+        self.dialog_id_file = ""
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -559,8 +561,17 @@ class FF6WCWorld(World):
             item.classification = ItemClassification.useful
         return
 
+    def fill_slot_data(self):
+        slot_data = dict()
+        self.wc_complete.wait()
+        with open(self.dialog_id_file) as file:
+            slot_data["dialogs"] = json.load(file)
+            return slot_data
+
+
     def generate_output(self, output_directory: str):
         locations = dict()
+        locations["output directory"] = output_directory
         # get all locations
         for region in self.multiworld.regions:
             if region.player == self.player:
@@ -604,6 +615,7 @@ class FF6WCWorld(World):
                     player=self.player,
                     player_name=self.multiworld.player_name[self.player],
                     patched_path=output_file)
+                self.dialog_id_file = os.path.join(output_directory, "dialogs.txt")
                 patch.write()
                 os.remove(output_file)
                 os.remove(placement_file)
@@ -612,6 +624,8 @@ class FF6WCWorld(World):
                 print(''.join(traceback.format_tb(ex.__traceback__)))
                 print(ex)
                 raise ex
+            finally:
+                self.wc_complete.set()
 
     def modify_multidata(self, multidata: dict):
         import base64

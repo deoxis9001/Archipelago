@@ -147,6 +147,7 @@ class CommonContext:
     game: typing.Optional[str] = None
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
+    slot_data = None
 
     # data package
     # Contents in flux until connection to server is made, to download correct data for this multiworld.
@@ -756,6 +757,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
         ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
+        ctx.slot_data = args["slot_data"]
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         msgs = []

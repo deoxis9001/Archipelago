@@ -5,8 +5,8 @@ import json
 
 from .Data import item_table, progressive_item_table, location_table, region_table
 from .Game import game_name, filler_item_name, starting_items
-from .Locations import location_id_to_name, location_name_to_id, location_name_to_location
-from .Items import item_id_to_name, item_name_to_id, item_name_to_item, advancement_item_names
+from .Locations import location_id_to_name, location_name_to_id, location_name_to_location, location_name_groups
+from .Items import item_id_to_name, item_name_to_id, item_name_to_item, advancement_item_names, item_name_groups
 
 from .Regions import create_regions
 from .Items import ManualItem
@@ -41,7 +41,7 @@ class ManualWorld(World):
     """
     Manual games allow you to set custom check locations and custom item names that will be rolled into a multiworld.
     This allows any variety of game -- PC, console, board games, Microsoft Word memes... really anything -- to be part of a multiworld randomizer.
-    The key component to including these games is some level of manual restriction. Since the items are not actually withheld from the player, 
+    The key component to including these games is some level of manual restriction. Since the items are not actually withheld from the player,
     the player must manually refrain from using these gathered items until the tracker shows that they have been acquired or sent.
     """
     game: str = game_name
@@ -57,11 +57,13 @@ class ManualWorld(World):
     item_id_to_name = item_id_to_name
     item_name_to_id = item_name_to_id
     item_name_to_item = item_name_to_item
+    item_name_groups = item_name_groups
     advancement_item_names = advancement_item_names
     location_table = location_table # this is likely imported from Data instead of Locations because the Game Complete location should not be in here, but is used for lookups
     location_id_to_name = location_id_to_name
     location_name_to_id = location_name_to_id
     location_name_to_location = location_name_to_location
+    location_name_groups = location_name_groups
 
     def pre_fill(self):
         before_pre_fill(self, self.multiworld, self.player)

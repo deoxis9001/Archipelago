@@ -203,10 +203,10 @@ class ManualContext(SuperContext):
                 return self.container
 
             def clear_lists(self):
-                self.listed_items = {"(no category)": []}
-                self.item_categories = ["(no category)"]
-                self.listed_locations = {"(no category)": [], "(Hinted)": []}
-                self.location_categories = ["(no category)", "(Hinted)"]
+                self.listed_items = {"(No Category)": []}
+                self.item_categories = ["(No Category)"]
+                self.listed_locations = {"(No Category)": [], "(Hinted)": []}
+                self.location_categories = ["(No Category)", "(Hinted)"]
 
             def set_active_item_accordion(self, instance):
                 index = 0

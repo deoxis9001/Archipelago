@@ -90,7 +90,11 @@ class ManualContext(SuperContext):
         if location:
             return location
         return AutoWorldRegister.world_types[self.game].location_name_to_location[name]
-    
+
+    def get_location_by_id(self, id):
+        name = self.location_names[id]
+        return self.get_location_by_name(name)
+
     def get_item_by_name(self, name):
         item = self.item_table.get(name)
         if item:
@@ -197,13 +201,13 @@ class ManualContext(SuperContext):
                     self.ctx.build_gui(self)
 
                 return self.container
-            
+
             def clear_lists(self):
                 self.listed_items = {"(no category)": []}
                 self.item_categories = ["(no category)"]
-                self.listed_locations = {"(no category)": []}
-                self.location_categories = ["(no category)"]
-                
+                self.listed_locations = {"(no category)": [], "(Hinted)": []}
+                self.location_categories = ["(no category)", "(Hinted)"]
+
             def set_active_item_accordion(self, instance):
                 index = 0
 
@@ -223,6 +227,21 @@ class ManualContext(SuperContext):
                         return
                     
                     index += 1
+
+            def update_hints(self):
+                super().update_hints()
+                rebuild = False
+                for hint in self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", []):
+                    if hint["finding_player"] == self.ctx.slot:
+                        if hint["location"] in self.ctx.missing_locations:
+                            location = self.ctx.get_location_by_id(hint["location"])
+                            if "(Hinted)" not in location["category"]:
+                                location["category"].append("(Hinted)")
+                                rebuild = True
+
+                if rebuild:
+                    self.build_tracker_and_locations_table()
+                self.update_tracker_and_locations_table()
 
             def build_tracker_and_locations_table(self):
                 self.tracker_and_locations_panel.clear_widgets()

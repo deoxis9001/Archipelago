@@ -41,7 +41,7 @@ class ManualWorld(World):
     """
     Manual games allow you to set custom check locations and custom item names that will be rolled into a multiworld.
     This allows any variety of game -- PC, console, board games, Microsoft Word memes... really anything -- to be part of a multiworld randomizer.
-    The key component to including these games is some level of manual restriction. Since the items are not actually withheld from the player, 
+    The key component to including these games is some level of manual restriction. Since the items are not actually withheld from the player,
     the player must manually refrain from using these gathered items until the tracker shows that they have been acquired or sent.
     """
     game: str = game_name
@@ -71,7 +71,7 @@ class ManualWorld(World):
 
         location_game_complete.place_locked_item(
             ManualItem("__Victory__", ItemClassification.progression, None, player=self.player))
-        
+
         after_pre_fill(self, self.multiworld, self.player)
 
     def generate_basic(self):
@@ -102,7 +102,20 @@ class ManualWorld(World):
             for i in range(item_count):
                 new_item = self.create_item(name)
                 pool.append(new_item)
-                
+
+            if item.get("early") and item.get("local"):
+              # both
+                self.multiworld.local_early_items[self.player][name] = item_count
+
+            elif item.get("early"):
+                # only early
+                self.multiworld.early_items[self.player][name] = item_count
+
+            elif item.get("local"):
+              # only local
+                if name not in self.multiworld.local_items[self.player].value:
+                    self.multiworld.local_items[self.player].value.add(name)
+
         items_started = []
 
         if starting_items:
@@ -162,7 +175,7 @@ class ManualWorld(World):
                     continue
 
                 eligible_items = [item for item in self.multiworld.itempool if item.name in location["place_item"] and item.player == self.player]
-                
+
                 if len(eligible_items) == 0:
                     raise Exception("Could not find a suitable item to place at %s. No items that match %s." % (location["name"], ", ".join(location["place_item"])))
 
@@ -193,7 +206,7 @@ class ManualWorld(World):
             self.multiworld.itempool.remove(item_to_place)
 
         after_generate_basic(self, self.multiworld, self.player)
-                        
+
     def create_item(self, name: str) -> Item:
         name = before_create_item(name, self, self.multiworld, self.player)
 
@@ -214,7 +227,7 @@ class ManualWorld(World):
 
         item_object = ManualItem(name, classification,
                         self.item_name_to_id[name], player=self.player)
-        
+
         item_object = after_create_item(item_object, self, self.multiworld, self.player)
 
         return item_object
@@ -232,7 +245,7 @@ class ManualWorld(World):
         create_regions(self, self.multiworld, self.player)
 
         after_create_regions(self, self.multiworld, self.player)
-        
+
     def fill_slot_data(self):
         slot_data = before_fill_slot_data({}, self, self.multiworld, self.player)
 

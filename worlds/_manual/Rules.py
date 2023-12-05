@@ -28,7 +28,7 @@ def infix_to_postfix(expr, location):
         while stack:
             postfix += stack.pop()
     except Exception:
-        raise KeyError("Invalid logic format for location/region {}.".format(location)) 
+        raise KeyError("Invalid logic format for location/region {}.".format(location))
     return postfix
 
 
@@ -52,8 +52,8 @@ def evaluate_postfix(expr, location):
                 op = stack.pop()
                 stack.append(not op)
     except Exception:
-        raise KeyError("Invalid logic format for location/region {}.".format(location)) 
-    
+        raise KeyError("Invalid logic format for location/region {}.".format(location))
+
     if len(stack) != 1:
         raise KeyError("Invalid logic format for location/region {}.".format(location))
     return stack.pop()
@@ -80,19 +80,32 @@ def set_rules(base: World, world: MultiWorld, player: int):
 
             if len(item_parts) > 1:
                 item_name = item_parts[0]
-                item_count = int(item_parts[1])
+                item_count = item_parts[1]
 
             total = 0
 
             if require_type == 'category':
-                category_items = [item["name"] for item in base.item_name_to_item.values() if "category" in item and item_name in item["category"]]
+                category_items = [item for item in base.item_name_to_item.values() if "category" in item and item_name in item["category"]]
+                if item_count.lower() == 'all':
+                    item_count = sum([base.item_name_to_item[category_item["name"]]['count'] for category_item in category_items])
+                elif item_count.lower() == 'half':
+                    item_count = sum([base.item_name_to_item[category_item["name"]]['count'] for category_item in category_items]) / 2
+                else:
+                    item_count = int(item_count)
 
                 for category_item in category_items:
-                    total += state.count(category_item, player)
+                    total += state.count(category_item["name"], player)
 
                     if total >= item_count:
                         requires_list = requires_list.replace(item_base, "1")
             elif require_type == 'item':
+                if item_count.lower() == 'all':
+                    item_count = base.item_name_to_item[item_name]['count']
+                elif item_count.lower() == 'half':
+                    item_count = base.item_name_to_item[item_name]['count'] / 2
+                else:
+                    item_count = int(item_count)
+
                 total = state.count(item_name, player)
 
                 if total >= item_count:
@@ -116,7 +129,7 @@ def set_rules(base: World, world: MultiWorld, player: int):
             if (isinstance(item, dict) and "or" in item and isinstance(item["or"], list)) or (isinstance(item, list)):
                 canAccessOr = True
                 or_items = item
-                
+
                 if isinstance(item, dict):
                     or_items = item["or"]
 

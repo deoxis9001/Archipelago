@@ -90,7 +90,11 @@ class ManualContext(SuperContext):
         if location:
             return location
         return AutoWorldRegister.world_types[self.game].location_name_to_location[name]
-    
+
+    def get_location_by_id(self, id):
+        name = self.location_names[id]
+        return self.get_location_by_name(name)
+
     def get_item_by_name(self, name):
         item = self.item_table.get(name)
         if item:
@@ -159,10 +163,10 @@ class ManualContext(SuperContext):
                 ("Manual", "Manual"),
             ]
             base_title = "Archipelago Manual Client"
-            listed_items = {"(no category)": []}
-            item_categories = ["(no category)"]
-            listed_locations = {"(no category)": []}
-            location_categories = ["(no category)"]
+            listed_items = {"(No Category)": []}
+            item_categories = ["(No Category)"]
+            listed_locations = {"(No Category)": []}
+            location_categories = ["(No Category)"]
 
             active_item_accordion = 0
             active_location_accordion = 0
@@ -197,13 +201,13 @@ class ManualContext(SuperContext):
                     self.ctx.build_gui(self)
 
                 return self.container
-            
+
             def clear_lists(self):
-                self.listed_items = {"(no category)": []}
-                self.item_categories = ["(no category)"]
-                self.listed_locations = {"(no category)": []}
-                self.location_categories = ["(no category)"]
-                
+                self.listed_items = {"(No Category)": []}
+                self.item_categories = ["(No Category)"]
+                self.listed_locations = {"(No Category)": [], "(Hinted)": []}
+                self.location_categories = ["(No Category)", "(Hinted)"]
+
             def set_active_item_accordion(self, instance):
                 index = 0
 
@@ -223,6 +227,21 @@ class ManualContext(SuperContext):
                         return
                     
                     index += 1
+
+            def update_hints(self):
+                super().update_hints()
+                rebuild = False
+                for hint in self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", []):
+                    if hint["finding_player"] == self.ctx.slot:
+                        if hint["location"] in self.ctx.missing_locations:
+                            location = self.ctx.get_location_by_id(hint["location"])
+                            if "(Hinted)" not in location["category"]:
+                                location["category"].append("(Hinted)")
+                                rebuild = True
+
+                if rebuild:
+                    self.build_tracker_and_locations_table()
+                self.update_tracker_and_locations_table()
 
             def build_tracker_and_locations_table(self):
                 self.tracker_and_locations_panel.clear_widgets()
@@ -268,7 +287,7 @@ class ManualContext(SuperContext):
 
                             self.listed_locations[category].append(location_id)
                     else: # leave it in the generic category
-                        self.listed_locations["(no category)"].append(location_id)
+                        self.listed_locations["(No Category)"].append(location_id)
 
                 victory_location =  self.ctx.get_location_by_name("__Manual Game Complete__")
 
@@ -310,7 +329,7 @@ class ManualContext(SuperContext):
                     locations_in_category = len(self.listed_locations[location_category])
 
                     if ("category" in victory_location_data and location_category in victory_location_data["category"]) or \
-                        ("category" not in victory_location_data and location_category == "(no category)"):
+                        ("category" not in victory_location_data and location_category == "(No Category)"):
                         locations_in_category += 1
 
                     category_tree = locations_panel.add_node(
@@ -329,8 +348,8 @@ class ManualContext(SuperContext):
 
                     # if this is the category that Victory is in, display the Victory button
                     # if ("category" in victory_location_data and location_category in victory_location_data["category"]) or \
-                    #     ("category" not in victory_location_data and location_category == "(no category)"):
-                    if (location_category == "(no category)"):
+                    #     ("category" not in victory_location_data and location_category == "(No Category)"):
+                    if (location_category == "(No Category)"):
 
                         # Add the Victory location to be marked at any point, which is why locations length has 1 added to it above
                         location_button = TreeViewButton(text="VICTORY! (seed finished)", size_hint=(None, None), height=30, width=400)
@@ -398,12 +417,12 @@ class ManualContext(SuperContext):
                                     item_data = self.ctx.get_item_by_name(item_name)
 
                                     if "category" not in item_data or not item_data["category"]:
-                                        item_data["category"] = ["(no category)"]
+                                        item_data["category"] = ["(No Category)"]
 
                                     if category_name in item_data["category"] and network_item.item not in self.listed_items[category_name]:
                                         item_name_parts = self.ctx.item_names[network_item.item].split(":")
                                         item_count = len(list(i for i in self.ctx.items_received if i.item == network_item.item))
-                                        item_text = Label(text="%s (%s)" % (item_name_parts[0], item_count), 
+                                        item_text = Label(text="%s (%s)" % (item_name_parts[0], item_count),
                                                     size_hint=(None, None), height=30, width=400, bold=True)
                                         
                                         category_grid.add_widget(item_text)

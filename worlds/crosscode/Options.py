@@ -102,7 +102,7 @@ crosscode_options_pairs = [
 addon_options = ["vt_shade_lock", "quest_rando"]
 
 try:
-    from .OptionsGenerated import LogicMode
+    from .GeneratedOptions import LogicMode
     crosscode_options_pairs.insert(0, ("logic_mode", LogicMode))
 except ImportError:
     pass

@@ -232,7 +232,7 @@ class ManualWorld(World):
                         eligible_items = list(filter((item).__ne__, eligible_items))
 
                 if len(eligible_items) == 0:
-                    raise Exception("Could not find a suitable item to place at %s. No items that match placed_items(_category) because of forbidden %s." % (location["name"], ", ".join(location["forbidden_items"])))
+                    raise Exception("Could not find a suitable item to place at %s. No items that match placed_items(_category) because of forbidden %s." % (location["name"], ", ".join(location["dont_place_item"])))
 
             if "dont_place_item_category" in location:
                 if len(location["dont_place_item_category"]) == 0:
@@ -244,7 +244,7 @@ class ManualWorld(World):
                         eligible_items = list(filter((item).__ne__, eligible_items))
 
                 if len(eligible_items) == 0:
-                    raise Exception("Could not find a suitable item to place at %s. No items that match placed_items(_category) because of forbidden categories %s." % (location["name"], ", ".join(location["forbidden_item_categories"])))
+                    raise Exception("Could not find a suitable item to place at %s. No items that match placed_items(_category) because of forbidden categories %s." % (location["name"], ", ".join(location["dont_place_item_category"])))
                 forbidden_item_names.clear()
 
 

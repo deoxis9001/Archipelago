@@ -169,7 +169,7 @@ class ManualWorld(World):
         self.multiworld.itempool += pool
 
         # Handle item forbidding
-        locations_with_forbid = [location for location in location_name_to_location.values() if "forbidden_items" in location or "forbidden_item_category" in location]
+        locations_with_forbid = [location for location in location_name_to_location.values() if "dont_place_item" in location or "dont_place_item_category" in location]
 
         for location in locations_with_forbid:
             location_to_forbid_list = list(filter(lambda l: l.name == location["name"], self.multiworld.get_unfilled_locations(player=self.player)))
@@ -178,19 +178,19 @@ class ManualWorld(World):
             else:
                 raise Exception("Failed to find a suitable location named %s to forbid items" % (location["name"]))
 
-            if "forbidden_items" in location:
-                if len(location["forbidden_items"]) == 0:
+            if "dont_place_item" in location:
+                if len(location["dont_place_item"]) == 0:
                     continue
 
                 for item in self.multiworld.itempool:
-                    if item.name in location["forbidden_items"]:
+                    if item.name in location["dont_place_item"]:
                         forbid_item(location_to_forbid, item, self.player)
 
-            if "forbidden_item_categories" in location:
-                if len(location["forbidden_item_categories"]) == 0:
+            if "dont_place_item_category" in location:
+                if len(location["dont_place_item_category"]) == 0:
                     continue
 
-                forbidden_item_names = [i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["forbidden_item_categories"])]
+                forbidden_item_names = [i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["dont_place_item_category"])]
 
                 for item in self.multiworld.itempool:
                     if item.name in forbidden_item_names:
@@ -223,22 +223,22 @@ class ManualWorld(World):
                 if len(eligible_items) == 0:
                     raise Exception("Could not find a suitable item to place at %s. No items that match categories %s." % (location["name"], ", ".join(location["place_item_category"])))
 
-            if "forbidden_items" in location:
-                if len(location["forbidden_items"]) == 0:
+            if "dont_place_item" in location:
+                if len(location["dont_place_item"]) == 0:
                     continue
 
                 for item in eligible_items:
-                    if item.name in location["forbidden_items"]:
+                    if item.name in location["dont_place_item"]:
                         eligible_items = list(filter((item).__ne__, eligible_items))
 
                 if len(eligible_items) == 0:
                     raise Exception("Could not find a suitable item to place at %s. No items that match placed_items(_category) because of forbidden %s." % (location["name"], ", ".join(location["forbidden_items"])))
 
-            if "forbidden_item_categories" in location:
-                if len(location["forbidden_item_categories"]) == 0:
+            if "dont_place_item_category" in location:
+                if len(location["dont_place_item_category"]) == 0:
                     continue
 
-                forbidden_item_names = [i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["forbidden_item_categories"])]
+                forbidden_item_names = [i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["dont_place_item_category"])]
                 for item in eligible_items:
                     if item.name in forbidden_item_names:
                         eligible_items = list(filter((item).__ne__, eligible_items))

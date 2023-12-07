@@ -3,6 +3,8 @@ import os
 import random
 import json
 
+from worlds.generic.Rules import forbid_item
+
 from .Data import item_table, progressive_item_table, location_table, region_table
 from .Game import game_name, filler_item_name, starting_items
 from .Locations import location_id_to_name, location_name_to_id, location_name_to_location, location_name_groups
@@ -166,6 +168,36 @@ class ManualWorld(World):
         # then will remove specific item placements below from the overall pool
         self.multiworld.itempool += pool
 
+        # Handle item forbidding
+        locations_with_forbid = [location for location in location_name_to_location.values() if "forbidden_items" in location or "forbidden_item_category" in location]
+
+        for location in locations_with_forbid:
+            location_to_forbid_list = list(filter(lambda l: l.name == location["name"], self.multiworld.get_unfilled_locations(player=self.player)))
+            if len(location_to_forbid_list) > 0:
+                location_to_forbid = location_to_forbid_list[0]
+            else:
+                raise Exception("Failed to find a suitable location named %s to forbid items" % (location["name"]))
+
+            if "forbidden_items" in location:
+                if len(location["forbidden_items"]) == 0:
+                    continue
+
+                for item in self.multiworld.itempool:
+                    if item.name in location["forbidden_items"]:
+                        forbid_item(location_to_forbid, item, self.player)
+
+            if "forbidden_item_categories" in location:
+                if len(location["forbidden_item_categories"]) == 0:
+                    continue
+
+                forbidden_item_names = [i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["forbidden_item_categories"])]
+
+                for item in self.multiworld.itempool:
+                    if item.name in forbidden_item_names:
+                        forbid_item(location_to_forbid, item, self.player)
+
+                forbidden_item_names.clear()
+
         # Handle specific item placements using fill_restrictive
         locations_with_placements = [location for location in location_name_to_location.values() if "place_item" in location or "place_item_category" in location]
 
@@ -190,6 +222,31 @@ class ManualWorld(World):
 
                 if len(eligible_items) == 0:
                     raise Exception("Could not find a suitable item to place at %s. No items that match categories %s." % (location["name"], ", ".join(location["place_item_category"])))
+
+            if "forbidden_items" in location:
+                if len(location["forbidden_items"]) == 0:
+                    continue
+
+                for item in eligible_items:
+                    if item.name in location["forbidden_items"]:
+                        eligible_items = list(filter((item).__ne__, eligible_items))
+
+                if len(eligible_items) == 0:
+                    raise Exception("Could not find a suitable item to place at %s. No items that match placed_items(_category) because of forbidden %s." % (location["name"], ", ".join(location["forbidden_items"])))
+
+            if "forbidden_item_categories" in location:
+                if len(location["forbidden_item_categories"]) == 0:
+                    continue
+
+                forbidden_item_names = [i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["forbidden_item_categories"])]
+                for item in eligible_items:
+                    if item.name in forbidden_item_names:
+                        eligible_items = list(filter((item).__ne__, eligible_items))
+
+                if len(eligible_items) == 0:
+                    raise Exception("Could not find a suitable item to place at %s. No items that match placed_items(_category) because of forbidden categories %s." % (location["name"], ", ".join(location["forbidden_item_categories"])))
+                forbidden_item_names.clear()
+
 
             # if we made it here and items is empty, then we encountered an unknown issue... but also can't do anything to place, so error
             if len(eligible_items) == 0:

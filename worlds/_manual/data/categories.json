@@ -3,6 +3,6 @@
         "hidden": true
     },
     "Example Yaml-option category": {
-        "requires_yaml": ["DLC_enabled"]
+        "yaml_option": ["DLC_enabled"]
     }
 }

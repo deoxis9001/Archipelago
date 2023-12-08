@@ -1,5 +1,8 @@
 {
     "Example Logic only category": {
         "hidden": true
+    },
+    "Example Yaml-option category": {
+        "requires_yaml": ["DLC_enabled"]
     }
 }

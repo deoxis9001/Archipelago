@@ -14,7 +14,7 @@ from .Regions import create_regions
 from .Items import ManualItem
 from .Rules import set_rules
 from .Options import manual_options
-from .Helpers import is_option_enabled, get_option_value
+from .Helpers import is_category_enabled, is_option_enabled, get_option_value
 
 from BaseClasses import ItemClassification, Tutorial, Item
 from worlds.AutoWorld import World, WebWorld
@@ -109,6 +109,12 @@ class ManualWorld(World):
 
             if item_count == 0:
                 continue
+
+            if "category" in item:
+                for category in item["category"]:
+                    if not is_category_enabled(self.multiworld, self.player, category):
+                        item_count = 0
+                        break
 
             for i in range(item_count):
                 new_item = self.create_item(name)

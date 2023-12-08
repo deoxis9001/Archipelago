@@ -1,6 +1,9 @@
 from base64 import b64encode
 import os
 import json
+from typing import Callable, Optional
+
+from worlds.LauncherComponents import Component, SuffixIdentifier, components, Type, launch_subprocess
 
 from .Data import item_table, progressive_item_table, location_table, region_table
 from .Game import game_name, filler_item_name, starting_items
@@ -297,3 +300,27 @@ class ManualWorld(World):
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
+
+def launch_client(*args):
+    from .ManualClient import launch as Main
+    launch_subprocess(Main, name="Manual client")
+
+class VersionedComponent(Component):
+    def __init__(self, display_name: str, script_name: Optional[str] = None, func: Optional[Callable] = None, version: int = 0, file_identifier: Optional[Callable[[str], bool]] = None):
+        super().__init__(display_name=display_name, script_name=script_name, func=func, component_type=Type.CLIENT, file_identifier=file_identifier)
+        self.version = version
+
+def add_client_to_launcher() -> None:
+    version = 20231206 # YYYYMMDD
+    found = False
+    for c in components:
+        if c.display_name == "Manual Client":
+            found = True
+            if getattr(c, "version", 0) < version:  # We have a newer version of the Manual Client than the one the last apworld added
+                c.version = version
+                c.func = launch_client
+                return
+    if not found:
+        components.append(VersionedComponent("Manual Client", "ManualClient", func=launch_client, version=version, file_identifier=SuffixIdentifier('.apmanual')))
+
+add_client_to_launcher()

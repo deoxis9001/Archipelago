@@ -76,7 +76,7 @@ def set_rules(base: World, world: MultiWorld, player: int):
 
             item_parts = item.split(":")
             item_name = item
-            item_count = 1
+            item_count = "1"
 
             if len(item_parts) > 1:
                 item_name = item_parts[0]
@@ -167,31 +167,31 @@ def set_rules(base: World, world: MultiWorld, player: int):
         # if it's not a usable object of some sort, default to true
         if not area:
             return True
-        
+
         # don't require the "requires" key for locations and regions if they don't need to use it
         if "requires" not in area.keys():
             return True
-        
+
         if isinstance(area["requires"], str):
             return checkRequireStringForArea(state, area)
         else:  # item access is in dict form
             return checkRequireDictForArea(state, area)
-    
+
     # Region access rules
     for region in regionMap.keys():
         if region != "Menu":
             for exitRegion in world.get_region(region, player).exits:
                 def fullRegionCheck(state, region=regionMap[region]):
                     return fullLocationOrRegionCheck(state, region)
-                
-                set_rule(world.get_entrance(exitRegion.name, player), fullRegionCheck)    
+
+                set_rule(world.get_entrance(exitRegion.name, player), fullRegionCheck)
 
     # Location access rules
     for location in base.location_table:
         locFromWorld = world.get_location(location["name"], player)
 
         locationRegion = regionMap[location["region"]] if "region" in location else None
-        
+
         if "requires" in location: # Location has requires, check them alongside the region requires
             def checkBothLocationAndRegion(state, location=location, region=locationRegion):
                 locationCheck = fullLocationOrRegionCheck(state, location)
@@ -201,17 +201,17 @@ def set_rules(base: World, world: MultiWorld, player: int):
                     regionCheck = fullLocationOrRegionCheck(state, region)
 
                 return locationCheck and regionCheck
-            
+
             set_rule(locFromWorld, checkBothLocationAndRegion)
         elif "region" in location: # Only region access required, check the location's region's requires
             def fullRegionCheck(state, region=locationRegion):
                 return fullLocationOrRegionCheck(state, region)
-            
+
             set_rule(locFromWorld, fullRegionCheck)
         else: # No location region and no location requires? It's accessible.
             def allRegionsAccessible(state):
                 return True
-            
+
             set_rule(locFromWorld, allRegionsAccessible)
 
     # Victory requirement

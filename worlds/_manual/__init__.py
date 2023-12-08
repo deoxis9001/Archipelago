@@ -1,6 +1,5 @@
 from base64 import b64encode
 import os
-import random
 import json
 
 from .Data import item_table, progressive_item_table, location_table, region_table
@@ -79,6 +78,7 @@ class ManualWorld(World):
     def generate_basic(self):
         # Generate item pool
         pool = []
+        traps = []
         configured_item_names = self.item_id_to_name.copy()
 
         for name in configured_item_names.values():
@@ -98,8 +98,14 @@ class ManualWorld(World):
             item = self.item_name_to_item[name]
             item_count = 1
 
+            if item.get("trap"):
+                traps.append(name)
+
             if "count" in item:
                 item_count = int(item["count"])
+
+            if item_count == 0:
+                continue
 
             for i in range(item_count):
                 new_item = self.create_item(name)
@@ -142,7 +148,7 @@ class ManualWorld(World):
                     items_in_categories = [item["name"] for item in self.item_name_to_item.values() if "category" in item and len(set(starting_item_block["item_categories"]).intersection(item["category"])) > 0]
                     items = [item for item in pool if item.name in items_in_categories]
 
-                random.shuffle(items)
+                self.random.shuffle(items)
 
                 # if the setting lists a specific number of random items that should be pulled, only use a subset equal to that number
                 if "random" in starting_item_block:
@@ -156,7 +162,18 @@ class ManualWorld(World):
         extras = len(location_table) - len(pool) - 1 # subtracting 1 because of Victory; seems right
 
         if extras > 0:
-            for i in range(0, extras):
+            trap_percent = get_option_value(self.multiworld, self.player, "filler_traps")
+            if not traps:
+                trap_percent = 0
+
+            trap_count = extras * trap_percent // 100
+            filler_count = extras - trap_count
+
+            for i in range(0, trap_count):
+                extra_item = self.create_item(self.random.choice(traps))
+                pool.append(extra_item)
+
+            for i in range(0, filler_count):
                 extra_item = self.create_item(filler_item_name)
                 pool.append(extra_item)
 
@@ -195,7 +212,7 @@ class ManualWorld(World):
             if len(eligible_items) == 0:
                 raise Exception("Custom item placement at location %s failed." % (location["name"]))
 
-            item_to_place = random.choice(eligible_items)
+            item_to_place = self.random.choice(eligible_items)
             location_to_place_list = list(filter(lambda l: l.name == location["name"], self.multiworld.get_unfilled_locations(player=self.player)))
 
             if len(location_to_place_list) > 0:
@@ -208,6 +225,11 @@ class ManualWorld(World):
             self.multiworld.itempool.remove(item_to_place)
 
         after_generate_basic(self, self.multiworld, self.player)
+
+        # Uncomment these to generate a diagram of your manual.  Only works on 0.4.4+
+
+        # from Utils import visualize_regions
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), f"{self.game}.puml")
 
     def create_item(self, name: str) -> Item:
         name = before_create_item(name, self, self.multiworld, self.player)

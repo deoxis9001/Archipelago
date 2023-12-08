@@ -281,7 +281,7 @@ class ManualWorld(World):
 
 def launch_client(*args):
     from .ManualClient import launch as Main
-    launch_subprocess(Main, name="Universal Tracker client")
+    launch_subprocess(Main, name="Manual client")
 
 class VersionedComponent(Component):
     def __init__(self, display_name: str, script_name: Optional[str] = None, func: Optional[Callable] = None, version: int = 0, file_identifier: Optional[Callable[[str], bool]] = None):

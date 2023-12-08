@@ -5,7 +5,7 @@ from typing import Callable, Optional
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, components, Type, launch_subprocess
 
-from .Data import item_table, progressive_item_table, location_table, region_table
+from .Data import item_table, progressive_item_table, location_table, region_table, category_table
 from .Game import game_name, filler_item_name, starting_items
 from .Locations import location_id_to_name, location_name_to_id, location_name_to_location, location_name_groups
 from .Items import item_id_to_name, item_name_to_id, item_name_to_item, advancement_item_names, item_name_groups
@@ -17,7 +17,6 @@ from .Options import manual_options
 from .Helpers import is_option_enabled, get_option_value
 
 from BaseClasses import ItemClassification, Tutorial, Item
-from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 
 from .hooks.World import \
@@ -55,6 +54,7 @@ class ManualWorld(World):
 
     # These properties are set from the imports of the same name above.
     item_table = item_table
+    category_table = category_table
     progressive_item_table = progressive_item_table
     item_id_to_name = item_id_to_name
     item_name_to_id = item_name_to_id
@@ -291,6 +291,7 @@ class ManualWorld(World):
             'locations': self.location_name_to_location,
             # todo: extract connections out of mutliworld.get_regions() instead, in case hooks have modified the regions.
             'regions': region_table,
+            'categories': category_table,
 
         }
 

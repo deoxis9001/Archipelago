@@ -107,14 +107,14 @@ class ManualWorld(World):
             if "count" in item:
                 item_count = int(item["count"])
 
-            if item_count == 0:
-                continue
-
             if "category" in item:
-                for category in item["category"]:
+                for category in item.get("category", []):
                     if not is_category_enabled(self.multiworld, self.player, category):
                         item_count = 0
                         break
+
+            if item_count == 0:
+                continue
 
             for i in range(item_count):
                 new_item = self.create_item(name)
@@ -168,7 +168,7 @@ class ManualWorld(World):
                     self.multiworld.push_precollected(starting_item)
                     pool.remove(starting_item)
 
-        extras = len(location_table) - len(pool) - 1 # subtracting 1 because of Victory; seems right
+        extras = len(self.multiworld.get_unfilled_locations(player=self.player)) - len(pool) - 1 # subtracting 1 because of Victory; seems right
 
         if extras > 0:
             trap_percent = get_option_value(self.multiworld, self.player, "filler_traps")

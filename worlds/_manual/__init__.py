@@ -195,7 +195,6 @@ class ManualWorld(World):
 
         # Handle item forbidding
         locations_with_forbid = [location for location in location_name_to_location.values() if "dont_place_item" in location or "dont_place_item_category" in location]
-        tmp = self.multiworld.get_unfilled_locations(player=self.player)
         for location in locations_with_forbid:
             location_to_forbid_list = list(filter(lambda l: l.name == location["name"], self.multiworld.get_unfilled_locations(player=self.player)))
             if len(location_to_forbid_list) > 0:
@@ -209,36 +208,16 @@ class ManualWorld(World):
                 if len(location["dont_place_item"]) == 0:
                     continue
                 
-                #forbidden_item_names += location["dont_place_item"]
-                forbidden_item_names += [i["name"] for i in item_name_to_item.values() if i["name"] in location["dont_place_item"]]
-                
-                #forbid_items_for_player(location_to_forbid, location["dont_place_item"], self.player)
-                # for item in self.multiworld.itempool:
-                #     if item.name in location["dont_place_item"]:
-                #         forbid_item(location_to_forbid, item, self.player)
-
-            # if "place_item_category" in location:
-            #     if len(location["place_item_category"]) == 0:
-            #         continue
-
-            #     eligible_item_names = [i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["place_item_category"])]
-            #     eligible_items = [item for item in self.multiworld.itempool if item.name in eligible_item_names and item.player == self.player]
-
-            #     if len(eligible_items) == 0:
-            #         raise Exception("Could not find a suitable item to place at %s. No items that match categories %s." % (location["name"], ", ".join(location["place_item_category"])))
-
+                forbidden_item_names.extend([i["name"] for i in item_name_to_item.values() if i["name"] in location["dont_place_item"]])
             if "dont_place_item_category" in location:
                 if len(location["dont_place_item_category"]) == 0:
                     continue
 
-                forbidden_item_names.append([i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["dont_place_item_category"])])
+                forbidden_item_names.extend([i["name"] for i in item_name_to_item.values() if "category" in i and set(i["category"]).intersection(location["dont_place_item_category"])])
 
-                # for item in self.multiworld.itempool:
-                #     if item.name in forbidden_item_names:
-                #         forbid_item(location_to_forbid, item, self.player)
             if len(forbidden_item_names) > 0:
-                forbid_items_for_player(location_to_forbid, forbidden_item_names, self.player)
-                forbidden_item_names.clear()
+                forbidden_items = [item for item in self.multiworld.itempool if item.name in forbidden_item_names and item.player == self.player]
+                forbid_items_for_player(location_to_forbid, forbidden_items, self.player)
 
         # Handle specific item placements using fill_restrictive
         locations_with_placements = [location for location in location_name_to_location.values() if "place_item" in location or "place_item_category" in location]

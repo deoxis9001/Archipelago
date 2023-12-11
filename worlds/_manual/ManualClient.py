@@ -38,6 +38,7 @@ class ManualContext(SuperContext):
     location_table = {}
     item_table = {}
     region_table = {}
+    category_table = {}
 
     tracker_reachable_locations = []
 
@@ -256,6 +257,9 @@ class ManualContext(SuperContext):
                 for item in self.ctx.item_table.values() or AutoWorldRegister.world_types[self.ctx.game].item_name_to_item.values():
                     if "category" in item and len(item["category"]) > 0:
                         for category in item["category"]:
+                            category_settings = self.ctx.category_table.get(category) or getattr(AutoWorldRegister.world_types[self.ctx.game], "category_table", {}).get(category, {})
+                            if "hidden" in category_settings and category_settings["hidden"]:
+                                continue
                             if category not in self.item_categories:
                                 self.item_categories.append(category)
 
@@ -278,6 +282,9 @@ class ManualContext(SuperContext):
 
                     if "category" in location and len(location["category"]) > 0:
                         for category in location["category"]:
+                            category_settings = self.ctx.category_table.get(category) or getattr(AutoWorldRegister.world_types[self.ctx.game], "category_table", {}).get(category, {})
+                            if "hidden" in category_settings and category_settings["hidden"]:
+                                continue
                             if category not in self.location_categories:
                                 self.location_categories.append(category)
 
@@ -576,9 +583,10 @@ async def main(args):
     ctx = ManualContext(args.connect, args.password, config_file.get("game"), config_file.get("player_name"))
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
-    ctx.item_table = config_file.get("items") or {}
-    ctx.location_table = config_file.get("locations") or {}
-    ctx.region_table = config_file.get("regions") or {}
+    ctx.item_table = config_file.get("items", {})
+    ctx.location_table = config_file.get("locations", {})
+    ctx.region_table = config_file.get("regions", {})
+    ctx.category_table = config_file.get("categories", {})
 
     if tracker_loaded:
         ctx.run_generator()

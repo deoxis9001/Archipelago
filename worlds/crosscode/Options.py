@@ -155,6 +155,19 @@ class MasterKeyShuffle(DungeonReachability):
         "tree-dng": { "Kajo Master Key" },
     }
 
+class ChestKeyShuffle(DungeonReachability):
+    """
+    Where the Thief's Key, White Key, and Radiant Key (the keys that open bronze, silver, and gold chests, respectively) may appear.
+    """
+
+    display_name = "Chest Key Shuffle"
+
+    items = {
+        "cold-dng": { "Thief's Key" },
+        "heat-dng": { "White Key" },
+        "wave-dng": { "Radiant Key" },
+    }
+
 crosscode_options_pairs = [
     ("vt_shade_lock", VTShadeLock),
     ("vt_skip", VTSkip),
@@ -168,6 +181,7 @@ crosscode_options_pairs = [
     ("element_shuffle", ElementShuffle),
     ("small_key_shuffle", SmallKeyShuffle),
     ("master_key_shuffle", MasterKeyShuffle),
+    ("chest_key_shuffle", ChestKeyShuffle),
 ]
 
 addon_options = ["vt_shade_lock", "quest_rando"]

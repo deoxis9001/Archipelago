@@ -224,11 +224,11 @@ class CrossCodeWorld(World):
 
                 try:
                     idx = exclude.index(item)
-                except ValueError:
-                    self.multiworld.itempool.append(item)
+                    exclude.pop(idx)
+                    self.multiworld.itempool.append(self.create_item("Sandwich x3"))
                     continue
-
-                exclude.pop(idx)
+                except ValueError:
+                    pass
 
                 add_to_pool = True
 
@@ -242,7 +242,7 @@ class CrossCodeWorld(World):
                         add_to_pool = False
 
                 if add_to_pool:
-                    self.multiworld.itempool.append(self.create_item("Sandwich x3"))
+                    self.multiworld.itempool.append(item)
 
         for _ in range(self.world_data.num_needed_items[self.logic_mode]):
             self.multiworld.itempool.append(self.create_item("Sandwich x3"))
@@ -291,16 +291,15 @@ class CrossCodeWorld(World):
             # 5 - Element any local dungeon
             # 6 - Key any local dungeon
             # 7 - Other any local dungeon
-            i = 2
+            i = 3
             if item.name in ("Heat", "Cold", "Shock", "Wave"):
                 i = 0
-            else:
-                if "Master" in item.name:
-                    i = 1
-                elif "Key" in item.name:
-                    i = 2
-                if allowed_locations_by_item[item] is all_locations:
-                    i += 4
+            if "Master" in item.name:
+                i = 1
+            elif "Key" in item.name:
+                i = 2
+            if allowed_locations_by_item[item] is all_locations:
+                i += 4
             return i
         all_items_list.sort(key=priority)
 
@@ -310,6 +309,10 @@ class CrossCodeWorld(World):
         for item in all_items_list:
             all_state.remove(item)
 
+        print(f"master_key_shuffle: {self.multiworld.master_key_shuffle[self.player]}")
+        print(f"small_key_shuffle: {self.multiworld.small_key_shuffle[self.player]}")
+        print(f"element_shuffle: {self.multiworld.element_shuffle[self.player]}")
+
         # Finally, fill!
         fill_restrictive(
             self.multiworld,
@@ -318,7 +321,8 @@ class CrossCodeWorld(World):
             all_items_list,
             lock=True,
             single_player_placement=True,
-            allow_partial=False
+            allow_partial=False,
+            on_place=lambda loc: print(f"{self.player}: {loc.name} <- {loc.item.name}")
         )
 
     def fill_slot_data(self):

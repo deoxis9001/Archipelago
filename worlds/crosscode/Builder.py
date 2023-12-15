@@ -112,6 +112,16 @@ class WorldBuilder:
         self.__add_location_list(self.ctx.rando_data["elements"])
         self.__add_location_list(self.ctx.rando_data["quests"], True)
 
+        # for (name, _), (_, quantities) in self.items_dict.items():
+        #     try:
+        #         maxQuantities = self.ctx.rando_data["items"][name]["maxQuantities"]
+        #     except ValueError:
+        #         continue
+
+        #     for mode, quantity in quantities.items():
+        #         print(f"setting max quantity of {name}")
+        #         quantities[mode] = min(quantity, maxQuantities["mode"])
+
         return WorldData(
             region_packs=self.region_packs,
             locations_data=self.locations_access,

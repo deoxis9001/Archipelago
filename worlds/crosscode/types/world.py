@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 import typing
 
-from .Items import ItemData
-from .Locations import AccessInfo, LocationData
-from .Regions import RegionsData
+from .items import ItemData
+from .locations import AccessInfo, LocationData
+from .regions import RegionsData
 
 @dataclass
 class WorldData:

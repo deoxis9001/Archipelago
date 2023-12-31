@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from BaseClasses import Location, Region
 
-from .Condition import Condition
+from .condition import Condition
 
 @dataclass
 class AccessInfo:

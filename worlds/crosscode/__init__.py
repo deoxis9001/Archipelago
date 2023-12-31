@@ -4,26 +4,27 @@ import sys
 import typing
 from BaseClasses import ItemClassification, Location, LocationProgressType, Region, Item
 from worlds.AutoWorld import WebWorld, World
-from worlds.crosscode.types.Condition import LocationCondition
+from worlds.crosscode.types.condition import LocationCondition
 from worlds.generic.Rules import add_rule, set_rule
 
 from .codegen.context import Context, make_context_from_package
 
-from .Common import *
-from .Logic import condition_satisfied, has_clearance
+from .common import *
+from .logic import condition_satisfied, has_clearance
 
-from .types.Items import CrossCodeItem
-from .types.Locations import Condition, CrossCodeLocation
-from .types.World import WorldData
-from .types.Regions import RegionsData
-from .Options import CrossCodeOptions, Reachability, addon_options
+from .types.items import CrossCodeItem
+from .types.locations import CrossCodeLocation
+from .types.condition import Condition
+from .types.world import WorldData
+from .types.regions import RegionsData
+from .options import CrossCodeOptions, Reachability, addon_options
 
 loaded_correctly = True
 
 try:
-    from .Builder import WorldBuilder
-    from .Items import items_by_full_name
-    from .Locations import locations_data
+    from .builder import WorldBuilder
+    from .items import items_by_full_name
+    from .locations import locations_data
 
 except Exception as e:
     loaded_correctly = False

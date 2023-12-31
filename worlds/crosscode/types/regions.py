@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 import typing
 
-from .Condition import Condition
+from .condition import Condition
 
 @dataclass
 class RegionConnection:

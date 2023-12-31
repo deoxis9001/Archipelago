@@ -3,8 +3,8 @@
 # If you need to change something here, check out codegen.py and the templates directory.
 
 
-from .types.Locations import LocationData
-from .types.Condition import *
+from .types.locations import LocationData
+from .types.condition import *
 
 locations_data = [
     LocationData(code=3235824000, name='Vermillion Wasteland - Spiral Cliff - Bronze Chest'),

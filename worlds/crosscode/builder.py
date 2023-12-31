@@ -7,13 +7,13 @@ from .codegen.context import Context
 from .codegen.util import BASE_ID
 from .codegen.merge import merge
 
-from .types.Items import ItemData
-from .types.Locations import AccessInfo, LocationData
-from .types.Regions import RegionsData
-from .types.World import WorldData
+from .types.items import ItemData
+from .types.locations import AccessInfo, LocationData
+from .types.regions import RegionsData
+from .types.world import WorldData
 
-from .Items import items_dict, single_items_dict
-from .Locations import locations_dict, events_dict
+from .items import items_dict, single_items_dict
+from .locations import locations_dict, events_dict
 
 class WorldBuilder:
     ctx: Context

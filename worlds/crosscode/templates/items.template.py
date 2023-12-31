@@ -1,7 +1,7 @@
 {{generated_comment | indent("# ", True)}}
 
 from BaseClasses import ItemClassification
-from .types.Items import ItemData, SingleItemData
+from .types.items import ItemData, SingleItemData
 
 num_items = {{num_items}}
 

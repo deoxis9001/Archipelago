@@ -1,7 +1,7 @@
 import typing
 from BaseClasses import CollectionState
-from .types.Locations import Condition, LocationData
-from .types.Regions import RegionConnection
+from .types.locations import Condition, LocationData
+from .types.regions import RegionConnection
 
 # this is uncharacteristic of me, but i'm hardcoding something here. weird.
 clearance_items = {

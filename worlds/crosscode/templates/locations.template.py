@@ -1,7 +1,7 @@
 {{generated_comment | indent("# ", True)}}
 
-from .types.Locations import LocationData
-from .types.Condition import *
+from .types.locations import LocationData
+from .types.condition import *
 
 locations_data = {{locations_data}}
 

@@ -95,17 +95,6 @@ class FileGenerator:
         with open(os.path.join(self.world_dir, "Items.py"), "w") as f:
             f.write(items_complete)
 
-        template = self.environment.get_template("GeneratedOptions.template.py")
-
-        options_complete = template.render(
-            mode_index=self.ctx.rando_data["modes"].index(
-                self.ctx.rando_data["defaultMode"]),
-            **self.common_args
-        )
-
-        with open(os.path.join(self.world_dir, "GeneratedOptions.py"), "w") as f:
-            f.write(options_complete)
-
     def generate_mod_files(self):
         merged_data = deepcopy(self.ctx.rando_data)
         for addon in self.ctx.addons.values():

@@ -16,7 +16,7 @@ from .types.Items import CrossCodeItem
 from .types.Locations import Condition, CrossCodeLocation
 from .types.World import WorldData
 from .types.Regions import RegionsData
-from .Options import Reachability, crosscode_options, addon_options
+from .Options import CrossCodeOptions, Reachability, addon_options
 
 loaded_correctly = True
 
@@ -51,7 +51,8 @@ class CrossCodeWorld(World):
     game = NAME
     web = CrossCodeWebWorld()
 
-    option_definitions = crosscode_options
+    options_dataclass = CrossCodeOptions
+    options: CrossCodeOptions
     topology_present = True
 
     # ID of first item and location, could be hard-coded but code may be easier
@@ -84,11 +85,11 @@ class CrossCodeWorld(World):
 
     def register_reachability(self, option: Reachability, items: typing.Iterable[str]):
         if option == Reachability.option_own_world:
-            local_items = self.multiworld.local_items[self.player].value
+            local_items = self.options.local_items.value
             for item in items:
                 local_items.add(item)
         elif option == Reachability.option_different_world:
-            non_local_items = self.multiworld.non_local_items[self.player].value
+            non_local_items = self.options.non_local_items.value
             for item in items:
                 non_local_items.add(item)
 
@@ -115,7 +116,7 @@ class CrossCodeWorld(World):
         if not loaded_correctly:
             raise RuntimeError("Attempting to generate a CrossCode World after unsuccessful code generation")
 
-        self.addons = [name for name in addon_options if getattr(self.multiworld, name)[self.player]]
+        self.addons = [name for name in addon_options if getattr(self.options, name)]
 
         addonTuple = tuple(self.addons)
 
@@ -125,18 +126,18 @@ class CrossCodeWorld(World):
             self.world_data = WorldBuilder(deepcopy(self.ctx)).build(self.addons)
             world_data_dict[addonTuple] = self.world_data
 
-        start_inventory = self.multiworld.start_inventory[self.player].value
-        self.logic_mode = self.world_data.modes[self.multiworld.logic_mode[self.player].value]
+        start_inventory = self.options.start_inventory.value
+        self.logic_mode = self.options.logic_mode.current_key
         self.region_pack = self.world_data.region_packs[self.logic_mode]
 
-        if self.multiworld.start_with_green_leaf_shade[self.player].value:
+        if self.options.start_with_green_leaf_shade.value:
             start_inventory["Green Leaf Shade"] = 1
 
-        if self.multiworld.start_with_chest_detector[self.player].value:
+        if self.options.start_with_chest_detector.value:
             start_inventory["Chest Detector"] = 1
 
-        shade_loc: Reachability = self.multiworld.shade_locations[self.player].value
-        element_loc: Reachability = self.multiworld.element_locations[self.player].value
+        shade_loc: Reachability = self.options.shade_locations
+        element_loc: Reachability = self.options.element_locations
 
         self.register_reachability(
             shade_loc,
@@ -237,11 +238,11 @@ class CrossCodeWorld(World):
         return {
             "mode": self.logic_mode,
             "options": {
-                "vtShadeLock": self.multiworld.vt_shade_lock[self.player].value,
-                "vtSkip": self.multiworld.vt_skip[self.player].value,
-                "questRando": self.multiworld.quest_rando[self.player].value,
-                "hiddenQuestRewardMode": self.multiworld.hidden_quest_reward_mode[self.player].current_key,
-                "hiddenQuestObfuscationLevel": self.multiworld.hidden_quest_obfuscation_level[self.player].current_key,
-                "questDialogHints": self.multiworld.quest_dialog_hints[self.player].value,
+                "vtShadeLock": self.options.vt_shade_lock.value,
+                "vtSkip": self.options.vt_skip.value,
+                "questRando": self.options.quest_rando.value,
+                "hiddenQuestRewardMode": self.options.hidden_quest_reward_mode.current_key,
+                "hiddenQuestObfuscationLevel": self.options.hidden_quest_obfuscation_level.current_key,
+                "questDialogHints": self.options.quest_dialog_hints.value,
             }
         }

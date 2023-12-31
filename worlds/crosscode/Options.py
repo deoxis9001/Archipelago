@@ -1,5 +1,19 @@
-from Options import AssembleOptions, Choice, DefaultOnToggle, Toggle
+from dataclasses import dataclass
 import typing
+
+from Options import AssembleOptions, Choice, DefaultOnToggle, PerGameCommonOptions, Toggle
+
+class LogicMode(Choice):
+    """
+    Logic mode; in other words, how is the player allowed to access items.
+    [Linear] Progression follows the game's linear path, though sequence breaks are allowed and inevitably will still occur. Makes for a longer, more BK-heavy playthrough with fewer options at each point.
+    [Open] (Default) Progression is based only on whether it is possible to reach area given the current list of received items.
+    """
+    display_name = "Logic Mode"
+    option_linear = 0
+    option_open = 1
+    
+    default = 1
 
 class VTShadeLock(DefaultOnToggle):
     """
@@ -86,25 +100,19 @@ class ElementLocations(Reachability):
     """
     display_name = "Element Locations"
 
-crosscode_options_pairs = [
-    ("vt_shade_lock", VTShadeLock),
-    ("vt_skip", VTSkip),
-    ("quest_rando", QuestRando),
-    ("hidden_quest_reward_mode", HiddenQuestRewardMode),
-    ("hidden_quest_obfuscation_level", HiddenQuestObfuscationLevel),
-    ("quest_dialog_hints", QuestDialogHints),
-    ("start_with_green_leaf_shade", StartWithGreenLeafShade),
-    ("start_with_chest_detector", StartWithChestDetector),
-    ("shade_locations", ShadeLocations),
-    ("element_locations", ElementLocations),
-]
+
+@dataclass
+class CrossCodeOptions(PerGameCommonOptions):
+    logic_mode: LogicMode
+    vt_shade_lock: VTShadeLock
+    vt_skip: VTSkip
+    quest_rando: QuestRando
+    hidden_quest_reward_mode: HiddenQuestRewardMode
+    hidden_quest_obfuscation_level: HiddenQuestObfuscationLevel
+    quest_dialog_hints: QuestDialogHints
+    start_with_green_leaf_shade: StartWithGreenLeafShade
+    start_with_chest_detector: StartWithChestDetector
+    shade_locations: ShadeLocations
+    element_locations: ElementLocations
 
 addon_options = ["vt_shade_lock", "quest_rando"]
-
-try:
-    from .GeneratedOptions import LogicMode
-    crosscode_options_pairs.insert(0, ("logic_mode", LogicMode))
-except ImportError:
-    pass
-
-crosscode_options: typing.Dict[str, AssembleOptions] = dict(crosscode_options_pairs)

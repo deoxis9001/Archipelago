@@ -49,8 +49,8 @@ if namespace.python:
     fg = FileGenerator("worlds/crosscode")
     fg.generate_python_files()
 else:
-    from ..Items import items_dict, single_items_dict
-    from ..Locations import locations_dict, events_dict
+    from ..items import items_dict, single_items_dict
+    from ..locations import locations_dict, events_dict
 
     ctx = make_context_from_package("worlds.crosscode")
 

@@ -7,26 +7,27 @@ import typing
 from BaseClasses import ItemClassification, Location, LocationProgressType, Region, Item
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
-from worlds.crosscode.types.Condition import LocationCondition
+from worlds.crosscode.types.condition import LocationCondition
 from worlds.generic.Rules import add_rule, set_rule
 
 from .codegen.context import Context, make_context_from_package
 
-from .Common import *
-from .Logic import condition_satisfied, has_clearance
+from .common import *
+from .logic import condition_satisfied, has_clearance
 
-from .types.Items import CrossCodeItem
-from .types.Locations import Condition, CrossCodeLocation
-from .types.World import WorldData
-from .types.Regions import RegionsData
-from .Options import Reachability, crosscode_options, addon_options
+from .types.items import CrossCodeItem
+from .types.locations import CrossCodeLocation
+from .types.condition import Condition
+from .types.world import WorldData
+from .types.regions import RegionsData
+from .options import CrossCodeOptions, Reachability, addon_options
 
 loaded_correctly = True
 
 try:
-    from .Builder import WorldBuilder
-    from .Items import items_by_full_name
-    from .Locations import locations_data
+    from .builder import WorldBuilder
+    from .items import items_by_full_name
+    from .locations import locations_data
 
 except Exception as e:
     loaded_correctly = False
@@ -54,7 +55,8 @@ class CrossCodeWorld(World):
     game = NAME
     web = CrossCodeWebWorld()
 
-    option_definitions = crosscode_options
+    options_dataclass = CrossCodeOptions
+    options: CrossCodeOptions
     topology_present = True
 
     # ID of first item and location, could be hard-coded but code may be easier
@@ -117,7 +119,7 @@ class CrossCodeWorld(World):
         if not loaded_correctly:
             raise RuntimeError("Attempting to generate a CrossCode World after unsuccessful code generation")
 
-        self.addons = [name for name in addon_options if getattr(self.multiworld, name)[self.player]]
+        self.addons = [name for name in addon_options if getattr(self.options, name)]
 
         addonTuple = tuple(self.addons)
 
@@ -127,14 +129,14 @@ class CrossCodeWorld(World):
             self.world_data = WorldBuilder(deepcopy(self.ctx)).build(self.addons)
             world_data_dict[addonTuple] = self.world_data
 
-        start_inventory = self.multiworld.start_inventory[self.player].value
-        self.logic_mode = self.world_data.modes[self.multiworld.logic_mode[self.player].value]
+        start_inventory = self.options.start_inventory.value
+        self.logic_mode = self.options.logic_mode.current_key
         self.region_pack = self.world_data.region_packs[self.logic_mode]
 
-        if self.multiworld.start_with_green_leaf_shade[self.player].value:
+        if self.options.start_with_green_leaf_shade.value:
             start_inventory["Green Leaf Shade"] = 1
 
-        if self.multiworld.start_with_chest_detector[self.player].value:
+        if self.options.start_with_chest_detector.value:
             start_inventory["Chest Detector"] = 1
 
         self.pre_fill_any_dungeon_names = set()
@@ -149,10 +151,10 @@ class CrossCodeWorld(World):
         non_local_items = self.multiworld.non_local_items[self.player].value
 
         for key in ("shade_shuffle", "element_shuffle", "small_key_shuffle", "master_key_shuffle"):
-            getattr(self.multiworld, key)[self.player].register_locality(local_items, non_local_items)
+            getattr(self.options, key).register_locality(local_items, non_local_items)
 
         for key in ("element_shuffle", "small_key_shuffle", "master_key_shuffle"):
-            getattr(self.multiworld, key)[self.player].register_pre_fill_lists(
+            getattr(self.options, key).register_pre_fill_lists(
                 self.pre_fill_specific_dungeons_names,
                 self.pre_fill_any_dungeon_names
             )
@@ -309,9 +311,9 @@ class CrossCodeWorld(World):
         for item in all_items_list:
             all_state.remove(item)
 
-        print(f"master_key_shuffle: {self.multiworld.master_key_shuffle[self.player]}")
-        print(f"small_key_shuffle: {self.multiworld.small_key_shuffle[self.player]}")
-        print(f"element_shuffle: {self.multiworld.element_shuffle[self.player]}")
+        print(f"master_key_shuffle: {self.options.master_key_shuffle}")
+        print(f"small_key_shuffle: {self.options.small_key_shuffle}")
+        print(f"element_shuffle: {self.options.element_shuffle}")
 
         # Finally, fill!
         fill_restrictive(
@@ -329,11 +331,11 @@ class CrossCodeWorld(World):
         return {
             "mode": self.logic_mode,
             "options": {
-                "vtShadeLock": self.multiworld.vt_shade_lock[self.player].value,
-                "vtSkip": self.multiworld.vt_skip[self.player].value,
-                "questRando": self.multiworld.quest_rando[self.player].value,
-                "hiddenQuestRewardMode": self.multiworld.hidden_quest_reward_mode[self.player].current_key,
-                "hiddenQuestObfuscationLevel": self.multiworld.hidden_quest_obfuscation_level[self.player].current_key,
-                "questDialogHints": self.multiworld.quest_dialog_hints[self.player].value,
+                "vtShadeLock": self.options.vt_shade_lock.value,
+                "vtSkip": self.options.vt_skip.value,
+                "questRando": self.options.quest_rando.value,
+                "hiddenQuestRewardMode": self.options.hidden_quest_reward_mode.current_key,
+                "hiddenQuestObfuscationLevel": self.options.hidden_quest_obfuscation_level.current_key,
+                "questDialogHints": self.options.quest_dialog_hints.value,
             }
         }

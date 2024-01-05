@@ -6,10 +6,10 @@ from BaseClasses import ItemClassification
 from .context import Context
 from .util import BASE_ID, RESERVED_ITEM_IDS, get_item_classification
 
-from ..types.Items import ItemData, SingleItemData
-from ..types.Locations import AccessInfo, Condition
-from ..types.Regions import RegionConnection, RegionsData
-from ..types.Condition import ItemCondition, LocationCondition, QuestCondition, RegionCondition
+from ..types.items import ItemData, SingleItemData
+from ..types.locations import AccessInfo, Condition
+from ..types.regions import RegionConnection, RegionsData
+from ..types.condition import ItemCondition, LocationCondition, QuestCondition, RegionCondition
 
 class JsonParserError(Exception):
     subject: typing.Any

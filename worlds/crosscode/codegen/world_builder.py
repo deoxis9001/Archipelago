@@ -6,11 +6,10 @@ from .parse import JsonParser
 from .context import Context
 from .util import BASE_ID, RESERVED_ITEM_IDS
 
-
-from ..types.Items import ItemData, SingleItemData
-from ..types.Locations import LocationData
-from ..types.Regions import RegionsData
-from ..types.World import WorldData
+from ..types.items import ItemData, SingleItemData
+from ..types.locations import LocationData
+from ..types.regions import RegionsData
+from ..types.world import WorldData
 
 class WorldBuilder:
     ctx: Context

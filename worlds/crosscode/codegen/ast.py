@@ -1,10 +1,10 @@
 import typing
 import ast
 
-from ..types.Condition import Condition
-from ..types.Locations import LocationData
-from ..types.Regions import RegionConnection
-from ..types.Items import ItemData, SingleItemData
+from ..types.condition import Condition
+from ..types.locations import LocationData
+from ..types.regions import RegionConnection
+from ..types.items import ItemData, SingleItemData
 
 
 class AstGenerator:

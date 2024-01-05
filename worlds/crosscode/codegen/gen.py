@@ -55,18 +55,18 @@ class FileGenerator:
 
     def generate_python_files(self) -> None:
         # LOCATIONS
-        template = self.environment.get_template("Locations.template.py")
+        template = self.environment.get_template("locations.template.py")
 
         code_locations_data = emit_list([self.ast_generator.create_ast_call_location(loc) for loc in self.lists.locations_data.values()])
         code_events_data =  emit_list([self.ast_generator.create_ast_call_location(loc) for loc in self.lists.events_data.values()])
 
         locations_complete = template.render(locations_data=code_locations_data, events_data=code_events_data, **self.common_args)
 
-        with open(os.path.join(self.world_dir, "Locations.py"), "w") as f:
+        with open(os.path.join(self.world_dir, "locations.py"), "w") as f:
             f.write(locations_complete)
 
         # ITEMS
-        template = self.environment.get_template("Items.template.py")
+        template = self.environment.get_template("items.template.py")
 
         sorted_single_item_data = [(value.item_id, key, value) for key, value in self.lists.single_items_dict.items()]
         sorted_single_item_data.sort()
@@ -92,19 +92,8 @@ class FileGenerator:
             **self.common_args
         )
 
-        with open(os.path.join(self.world_dir, "Items.py"), "w") as f:
+        with open(os.path.join(self.world_dir, "items.py"), "w") as f:
             f.write(items_complete)
-
-        template = self.environment.get_template("OptionsGenerated.template.py")
-
-        options_complete = template.render(
-            mode_index=self.ctx.rando_data["modes"].index(
-                self.ctx.rando_data["defaultMode"]),
-            **self.common_args
-        )
-
-        with open(os.path.join(self.world_dir, "OptionsGenerated.py"), "w") as f:
-            f.write(options_complete)
 
     def generate_mod_files(self):
         merged_data = deepcopy(self.ctx.rando_data)

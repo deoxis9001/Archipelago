@@ -37,3 +37,13 @@ class RegionCondition(Condition):
 
     def satisfied(self, state: CollectionState, player: int, mode: str) -> bool:
         return mode != self.target_mode or state.has(f"{self.region_name} (Event)", player)
+
+@dataclass
+class AnyElementCondition(Condition):
+    def satisfied(self, state: CollectionState, player: int, mode: str) -> bool:
+        return any([
+                state.has("Heat", player),
+                state.has("Cold", player),
+                state.has("Shock", player),
+                state.has("Wave", player),
+        ])

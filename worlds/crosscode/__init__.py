@@ -150,10 +150,10 @@ class CrossCodeWorld(World):
         local_items = self.multiworld.local_items[self.player].value
         non_local_items = self.multiworld.non_local_items[self.player].value
 
-        for key in ("shade_shuffle", "element_shuffle", "small_key_shuffle", "master_key_shuffle"):
+        for key in ("shade_shuffle", "element_shuffle", "small_key_shuffle", "master_key_shuffle", "chest_key_shuffle"):
             getattr(self.options, key).register_locality(local_items, non_local_items)
 
-        for key in ("element_shuffle", "small_key_shuffle", "master_key_shuffle"):
+        for key in ("element_shuffle", "small_key_shuffle", "master_key_shuffle", "chest_key_shuffle"):
             getattr(self.options, key).register_pre_fill_lists(
                 self.pre_fill_specific_dungeons_names,
                 self.pre_fill_any_dungeon_names
@@ -314,6 +314,7 @@ class CrossCodeWorld(World):
         print(f"master_key_shuffle: {self.options.master_key_shuffle}")
         print(f"small_key_shuffle: {self.options.small_key_shuffle}")
         print(f"element_shuffle: {self.options.element_shuffle}")
+        print(f"chest_key_shuffle: {self.options.chest_key_shuffle}")
 
         # Finally, fill!
         fill_restrictive(

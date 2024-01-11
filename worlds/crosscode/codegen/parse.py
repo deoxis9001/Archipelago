@@ -9,7 +9,7 @@ from .util import BASE_ID, RESERVED_ITEM_IDS, get_item_classification
 from ..types.items import ItemData, SingleItemData
 from ..types.locations import AccessInfo, Condition
 from ..types.regions import RegionConnection, RegionsData
-from ..types.condition import ItemCondition, LocationCondition, QuestCondition, RegionCondition
+from ..types.condition import ItemCondition, LocationCondition, QuestCondition, RegionCondition, AnyElementCondition
 
 class JsonParserError(Exception):
     subject: typing.Any
@@ -87,6 +87,10 @@ class JsonParser:
                         "region condition",
                         f"expected 2 arguments, not {num_args}"
                     )
+            
+            elif cond[0] == "any_element":
+                result.append(AnyElementCondition())
+
             else:
                 raise JsonParserError(raw, cond, "condition", f"unknown type {cond[0]}")
 

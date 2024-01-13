@@ -473,6 +473,26 @@ class Palette(Choice):
     option_pink = 4
     option_inverted = 5
 
+class Music(Choice, LADXROption):
+    """
+    [Vanilla] Regular Music
+    [Shuffled] Shuffled Music
+    [Off] No music
+    """
+    ladxr_name = "music"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_off = 2
+
+    
+    def to_ladxr_option(self, all_options):
+        s = ""
+        if self.value == self.option_shuffled:
+            s = "random"
+        elif self.value == self.option_off:
+            s = "off"
+        return self.ladxr_name, s
+
 class WarpImprovements(DefaultOffToggle):
     """
     [On] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
@@ -523,6 +543,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'shuffle_maps': ShuffleMaps,
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
+    'music': Music,
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,

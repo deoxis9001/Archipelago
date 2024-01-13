@@ -1,0 +1,7 @@
+[submodule "worlds/ff6wc/WorldsCollide"]
+	path = worlds/ff6wc/WorldsCollide
+	url = https://github.com/Rosalie-A/WorldsCollide-AP
+[submodule "worlds/mlss"]
+	path = worlds/mlss
+	url = https://github.com/jamesbrq/ArchipelagoMLSS
+	branch = main

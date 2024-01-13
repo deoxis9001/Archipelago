@@ -176,6 +176,11 @@ Root: HKCR; Subkey: "{#MyAppName}advnpatch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}advnpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoAdventureClient.exe,0";                ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}advnpatch\shell\open\command";  ValueData: """{app}\ArchipelagoAdventureClient.exe"" ""%1""";       ValueType: string;  ValueName: "";
 
+Root: HKCR; Subkey: ".apwl4";                                    ValueData: "{#MyAppName}wl4patch";           Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}wl4patch";                      ValueData: "Archipelago Wario Land 4 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}wl4patch\DefaultIcon";          ValueData: "{app}\ArchipelagoWL4Client.exe,0";                        ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}wl4patch\shell\open\command";   ValueData: """{app}\ArchipelagoWL4Client.exe"" ""%1""";               ValueType: string;  ValueName: "";
+
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";      Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                         ValueType: string;  ValueName: "";

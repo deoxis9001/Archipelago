@@ -92,6 +92,8 @@ class CrossCodeWorld(World):
 
     world_data: WorldData
 
+    variables: dict[str, list[str]]
+
     addons: list[str]
 
     ctx: Context = make_context_from_package("worlds.crosscode", False)
@@ -129,9 +131,18 @@ class CrossCodeWorld(World):
             self.world_data = WorldBuilder(deepcopy(self.ctx)).build(self.addons)
             world_data_dict[addonTuple] = self.world_data
 
+        self.variables = defaultdict(list)
+
         start_inventory = self.options.start_inventory.value
         self.logic_mode = self.options.logic_mode.current_key
         self.region_pack = self.world_data.region_packs[self.logic_mode]
+
+        if self.options.vt_shade_lock.value in [1, 2]:
+            self.variables["vtShadeLock"].append("shades")
+        if self.options.vt_shade_lock.value in (1, 3):
+            self.variables["vtShadeLock"].append("bosses")
+        if self.options.vw_meteor_passage.value:
+            self.variables["vwPassage"].append("meteor")
 
         if self.options.start_with_green_leaf_shade.value:
             start_inventory["Green Leaf Shade"] = 1
@@ -159,6 +170,12 @@ class CrossCodeWorld(World):
                 self.pre_fill_any_dungeon_names
             )
 
+        self.logic_dict = {
+            "mode": self.logic_mode,
+            "variables": self.variables,
+            "variable_definitions": self.world_data.variable_definitions,
+        }
+
     def create_regions(self):
         self.region_dict = {name: Region(name, self.player, self.multiworld) for name in self.region_pack.region_list if name not in self.region_pack.excluded_regions}
         self.multiworld.regions.extend([val for val in self.region_dict.values()])
@@ -168,7 +185,7 @@ class CrossCodeWorld(World):
             self.region_dict[conn.region_from].connect(
                 self.region_dict[conn.region_to],
                 f"{conn.region_from} => {conn.region_to}",
-                condition_satisfied(self.player, self.logic_mode, conn.cond) if conn.cond is not None else None
+                condition_satisfied(self.player, conn.cond, **self.logic_dict) if conn.cond is not None else None
             )
 
             self.create_event_conditions(conn.cond)
@@ -201,6 +218,11 @@ class CrossCodeWorld(World):
             if name in self.region_pack.excluded_regions:
                 for location in region.locations:
                     location.progress_type = LocationProgressType.EXCLUDED
+
+        # also add any event conditions referenced in any possible value of a variable
+        for conds in self.world_data.variable_definitions.values():
+            for cond in conds.values():
+                self.create_event_conditions(cond)
         
         victory = Region("Floor ??", self.player, self.multiworld)
         self.multiworld.regions.append(victory)
@@ -255,7 +277,7 @@ class CrossCodeWorld(World):
                 if not isinstance(loc, CrossCodeLocation):
                     continue
                 if loc.access.cond is not None:
-                    add_rule(loc, condition_satisfied(self.player, self.logic_mode, loc.access.cond))
+                    add_rule(loc, condition_satisfied(self.player, loc.access.cond, **self.logic_dict))
                 if loc.access.clearance != "Default":
                     add_rule(loc, has_clearance(self.player, loc.access.clearance))
 
@@ -333,6 +355,7 @@ class CrossCodeWorld(World):
             "mode": self.logic_mode,
             "options": {
                 "vtShadeLock": self.options.vt_shade_lock.value,
+                "meteorPassage": self.options.vw_meteor_passage.value,
                 "vtSkip": self.options.vt_skip.value,
                 "questRando": self.options.quest_rando.value,
                 "hiddenQuestRewardMode": self.options.hidden_quest_reward_mode.current_key,

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-import typing
 
-from worlds.AutoWorld import World
-from Options import AssembleOptions, Choice, DefaultOnToggle, PerGameCommonOptions, Toggle
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Toggle
 
 class LogicMode(Choice):
     """
@@ -16,11 +14,26 @@ class LogicMode(Choice):
     
     default = 1
 
-class VTShadeLock(DefaultOnToggle):
+class VTShadeLock(Choice):
     """
-    If enabled, adds a locked gate before the final dungeon that only opens when all four shades are collected and all four bosses are beaten.
+    If set to a non-None value, creates an in-game barrier at the entrance of Vermillion Tower to prevent extremely quick playthroughs.
+    [Bosses] Vermillion Tower only opens when the bosses at the end of the first four dungeons have been beaten.
+    [Shades] Vermillion Tower only opens when the four shades acquired at the end of the first four dungeons have been acquired.
+    [Bosses and Shades] Vermillion Tower opens when both of the other conditions have been satisfied.
     """
     display_name = "Vermillion Tower Shade Lock"
+
+    option_none = 0
+    option_bosses_and_shades = 1
+    option_shades = 2
+    option_bosses = 3
+    default = 1
+
+class VWMeteorPassage(DefaultOnToggle):
+    """
+    If enabled, places a gate between Sapphire Ridge and Vermillion Wasteland unlockable with the meteor shade
+    """
+    display_name = "Vermillion Wasteland Meteor Passage"
 
 class VTSkip(DefaultOnToggle):
     """
@@ -185,6 +198,7 @@ class ChestKeyShuffle(DungeonReachability):
 class CrossCodeOptions(PerGameCommonOptions):
     logic_mode: LogicMode
     vt_shade_lock: VTShadeLock
+    vw_meteor_passage: VWMeteorPassage
     vt_skip: VTSkip
     quest_rando: QuestRando
     hidden_quest_reward_mode: HiddenQuestRewardMode
@@ -198,4 +212,4 @@ class CrossCodeOptions(PerGameCommonOptions):
     master_key_shuffle: MasterKeyShuffle
     chest_key_shuffle: ChestKeyShuffle
 
-addon_options = ["vt_shade_lock", "quest_rando"]
+addon_options = ["quest_rando"]

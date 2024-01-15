@@ -1,4 +1,7 @@
+from collections import defaultdict
 import typing
+
+from worlds.crosscode.types.condition import Condition
 
 from .codegen.ast import AstGenerator
 from .codegen.lists import ListInfo
@@ -21,6 +24,8 @@ class WorldBuilder:
     json_parser: JsonParser
     current_location_code: int
 
+    variable_definitions: dict[str, dict[str, list[Condition]]]
+
     lists: ListInfo
 
     region_packs: dict[str, RegionsData]
@@ -35,6 +40,8 @@ class WorldBuilder:
         self.ast_generator = AstGenerator()
         self.json_parser = JsonParser(self.ctx)
         self.current_location_code = BASE_ID
+
+        self.variable_definitions = defaultdict(dict)
 
         self.lists = ListInfo(self.ctx)
         self.lists.events_data = events_dict
@@ -99,6 +106,11 @@ class WorldBuilder:
         for name, raw_loc in loc_list.items():
             self.__add_location(name, raw_loc, create_events)
 
+    def __add_vars(self, variables: dict[str, dict[str, list[typing.Any]]]):
+        for name, values in variables.items():
+            for value, conds in values.items():
+                self.variable_definitions[name][value] = self.json_parser.parse_condition(conds)
+
     def build(self, addons: list[str]) -> WorldData:
         for name in addons:
             self.ctx.rando_data = merge(self.ctx.rando_data, self.ctx.addons[name])
@@ -106,6 +118,8 @@ class WorldBuilder:
         self.region_packs = self.json_parser.parse_regions_data_list(self.ctx.rando_data["regions"])
 
         self.num_needed_items = {mode: 0 for mode in self.region_packs}
+        
+        self.__add_vars(self.ctx.rando_data["vars"])
 
         self.__add_location_list(self.ctx.rando_data["chests"])
         self.__add_location_list(self.ctx.rando_data["cutscenes"])
@@ -119,7 +133,6 @@ class WorldBuilder:
                 continue
 
             for mode, quantity in quantities.items():
-                print(f"setting max quantity of {data.item.name}")
                 new_quantity = min(quantity, max_quantities[mode])
                 self.num_needed_items[mode] += quantity - new_quantity
                 quantities[mode] = new_quantity
@@ -130,4 +143,5 @@ class WorldBuilder:
             events_data=self.events_access,
             num_needed_items=self.num_needed_items,
             items_dict=self.items_dict,
+            variable_definitions=self.variable_definitions
         )

@@ -14,7 +14,11 @@ class ItemCondition(Condition):
     amount: int = 1
 
     def satisfied(self, state: CollectionState, player: int, **kwargs) -> bool:
-        return state.has(self.item_name, player, self.amount)
+        target = self.amount
+        if self.item_name in kwargs["keyrings"]:
+            target = 1
+
+        return state.has(self.item_name, player, target)
 
 @dataclass
 class QuestCondition(Condition):

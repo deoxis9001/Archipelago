@@ -16,7 +16,8 @@ class WorldData:
     num_needed_items: dict[str, int]
 
     items_dict: dict[tuple[str, int], tuple[ItemData, dict[str, int]]]
-    
+    keyring_items: set[str]
+
     variable_definitions: dict[str, dict[str, list[Condition]]]
 
     def __post_init__(self):

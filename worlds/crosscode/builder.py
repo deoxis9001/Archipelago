@@ -34,6 +34,7 @@ class WorldBuilder:
     items_dict: dict[tuple[str, int], tuple[ItemData, dict[str, int]]]
 
     num_needed_items: dict[str,int]
+    keyring_items: set[str]
 
     def __init__(self, ctx: Context):
         self.ctx = ctx
@@ -126,6 +127,8 @@ class WorldBuilder:
         self.__add_location_list(self.ctx.rando_data["elements"])
         self.__add_location_list(self.ctx.rando_data["quests"], True)
 
+        self.keyring_items = set(self.ctx.rando_data["keyringItems"])
+
         for (data, quantities) in self.items_dict.values():
             try:
                 max_quantities = self.ctx.rando_data["items"][data.item.name]["maxQuantity"]
@@ -143,5 +146,6 @@ class WorldBuilder:
             events_data=self.events_access,
             num_needed_items=self.num_needed_items,
             items_dict=self.items_dict,
+            keyring_items=self.keyring_items,
             variable_definitions=self.variable_definitions
         )

@@ -95,6 +95,12 @@ class StartWithChestDetector(DefaultOnToggle):
     """
     display_name = "Start with Chest Detector"
 
+class Keyrings(Toggle):
+    """
+    If enabled, all keys for each dungeon will be replaced with a singular item that unlocks every door in that dungeon.
+    """
+    display_name = "Keyrings"
+
 class Reachability(Choice):
     option_own_world = 0
     option_different_world = 1
@@ -206,6 +212,7 @@ class CrossCodeOptions(PerGameCommonOptions):
     quest_dialog_hints: QuestDialogHints
     start_with_green_leaf_shade: StartWithGreenLeafShade
     start_with_chest_detector: StartWithChestDetector
+    keyrings: Keyrings
     shade_shuffle: ShadeShuffle
     element_shuffle: ElementShuffle
     small_key_shuffle: SmallKeyShuffle

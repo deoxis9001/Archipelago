@@ -26,7 +26,7 @@ loaded_correctly = True
 
 try:
     from .builder import WorldBuilder
-    from .items import items_by_full_name
+    from .items import single_items_dict, items_by_full_name
     from .locations import locations_data
 
 except Exception as e:
@@ -174,6 +174,7 @@ class CrossCodeWorld(World):
             "mode": self.logic_mode,
             "variables": self.variables,
             "variable_definitions": self.world_data.variable_definitions,
+            "keyrings": self.world_data.keyring_items if self.options.keyrings.value else set(),
         }
 
     def create_regions(self):
@@ -238,12 +239,19 @@ class CrossCodeWorld(World):
 
     def create_items(self):
         exclude = self.multiworld.precollected_items[self.player][:]
+        local_num_needed_items = self.world_data.num_needed_items[self.logic_mode]
 
         for (data, quantity) in self.world_data.items_dict.values():
             if self.logic_mode not in quantity:
                 continue
 
-            for _ in range(quantity[self.logic_mode]):
+            true_quantity = quantity[self.logic_mode]
+
+            if self.options.keyrings.value and data.item.name in self.world_data.keyring_items:
+                local_num_needed_items += true_quantity - 1
+                true_quantity = 1
+
+            for _ in range(true_quantity):
                 item = CrossCodeItem(self.player, data)
 
                 try:
@@ -268,7 +276,7 @@ class CrossCodeWorld(World):
                 if add_to_pool:
                     self.multiworld.itempool.append(item)
 
-        for _ in range(self.world_data.num_needed_items[self.logic_mode]):
+        for _ in range(local_num_needed_items):
             self.multiworld.itempool.append(self.create_item("Sandwich x3"))
 
     def set_rules(self):
@@ -357,6 +365,7 @@ class CrossCodeWorld(World):
                 "vtShadeLock": self.options.vt_shade_lock.value,
                 "meteorPassage": self.options.vw_meteor_passage.value,
                 "vtSkip": self.options.vt_skip.value,
+                "keyrings": [single_items_dict[name].item_id for name in self.logic_dict["keyrings"]],
                 "questRando": self.options.quest_rando.value,
                 "hiddenQuestRewardMode": self.options.hidden_quest_reward_mode.current_key,
                 "hiddenQuestObfuscationLevel": self.options.hidden_quest_obfuscation_level.current_key,

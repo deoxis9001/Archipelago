@@ -4,7 +4,7 @@ import typing
 from BaseClasses import ItemClassification
 
 from .context import Context
-from .util import BASE_ID, RESERVED_ITEM_IDS, get_item_classification
+from .util import BASE_ID, RESERVED_ITEM_IDS, SP_UPGRADE_ID_OFFSET, SP_UPGRADE_NAME, get_item_classification
 
 from ..types.items import ItemData, SingleItemData
 from ..types.locations import AccessInfo, Condition
@@ -219,6 +219,26 @@ class JsonParser:
         self.items_dict[el, 1] = item
         return item
 
+    def parse_sp_reward(self, raw: list[typing.Any]) -> ItemData:
+        try:
+            return self.items_dict[SP_UPGRADE_NAME, 1]
+        except KeyError:
+            pass
+
+        try:
+            single_item = self.single_items_dict[SP_UPGRADE_NAME]
+        except KeyError:
+            single_item = SingleItemData(SP_UPGRADE_NAME, 0, ItemClassification.progression)
+            self.single_items_dict[SP_UPGRADE_NAME] = single_item
+
+        combo_id = BASE_ID + SP_UPGRADE_ID_OFFSET
+
+        return ItemData(
+            item=single_item,
+            amount=1,
+            combo_id=combo_id,
+        )
+
     def parse_reward(self, raw: list[typing.Any]) -> ItemData:
         kind, *info = raw
 
@@ -226,6 +246,8 @@ class JsonParser:
             return self.parse_item_reward(info)
         elif kind == "element":
             return self.parse_element_reward(info)
+        elif kind == "sp":
+            return self.parse_sp_reward(info)
         else:
             raise RuntimeError(f"Error parsing reward {raw}: unrecognized type")
 

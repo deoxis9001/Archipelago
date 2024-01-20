@@ -10,7 +10,6 @@
 *.apz5
 *.aptloz
 *.apemerald
-*.apwl4
 *.pyc
 *.pyd
 *.sfc
@@ -44,6 +43,7 @@ EnemizerCLI/
 /SNI/
 /sni-*/
 /appimagetool*
+/host.yaml
 /options.yaml
 /config.yaml
 /logs/
@@ -198,4 +198,3 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
-

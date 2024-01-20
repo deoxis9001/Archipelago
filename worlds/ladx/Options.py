@@ -1,7 +1,7 @@
 import os.path
 import typing
 import logging
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText, OptionList
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText
 from collections import defaultdict
 import Utils
 
@@ -67,107 +67,34 @@ class Boomerang(Choice):
     gift = 1
     default = gift
 
-class BossShuffle(Choice):
-    none = 0
-    shuffle = 1
-    random = 2
-    default = none
+class EntranceShuffle(Choice, LADXROption):
+    """
+    [WARNING] Experimental, may fail to fill
+    Randomizes where overworld entrances lead to.
+    [Simple] Single-entrance caves/houses that have items are shuffled amongst each other.
+    If random start location and/or dungeon shuffle is enabled, then these will be shuffled with all the non-connector entrance pool.
+    Note, some entrances can lead into water, use the warp-to-home from the save&quit menu to escape this."""
 
-class EntranceShuffle(Choice):
-    option_vanilla = 0
+    #[Advanced] Simple, but two-way connector caves are shuffled in their own pool as well.
+    #[Expert] Advanced, but caves/houses without items are also shuffled into the Simple entrance pool.
+    #[Insanity] Expert, but the Raft Minigame hut and Mamu's cave are added to the non-connector pool.
+
+    option_none = 0
     option_simple = 1
-    option_mixed = 2
-    alias_false = option_vanilla
+    #option_advanced = 2
+    #option_expert = 3    
+    #option_insanity = 4
+    default = option_none
+    display_name = "Experimental Entrance Shuffle"
+    ladxr_name = "entranceshuffle"
 
-class StartShufflePool(OptionList):
+class DungeonShuffle(DefaultOffToggle, LADXROption):
     """
-    Shuffle Start Location
-
-    Decides which entrance pool(s) the start location is allowed to pull from.
-
-    If the chosen entrance isn't shuffled, a swap will be performed instead.
-
-    Connectors aren't allowed for now, due to having to work out which connectors are legal or not.
-
-    Valid options:
-        - single
-        - dummy
-        - trade
-        - annoying
-        - water        
-        - dungeon
+    [WARNING] Experimental, may fail to fill
+    Randomizes dungeon entrances within eachother
     """
-    # TODO: also allow specifying a specific entrance or list of entrances
-    valid_keys = [
-        "single",
-        "dummy",
-        "trade",
-        "annoying",
-        "water",
-        # "connector",
-        "dungeon"
-    ]
-    # option_single = 1
-    # option_dummy = 2
-    # option_trade = 3
-    # option_annoying = 4
-    # option_water = 5
-    # option_connector = 6
-    # option_dungeon = 7
-
-class SingleEntranceShuffle(EntranceShuffle):
-    """
-    Shuffle Single Entrances (non connectors with checks inside)
-    [Vanilla] No changes
-    [Simple] The entrances will be shuffled amongst themselves
-    [Mixed] The entrances will be shuffled among all other entrances
-    """
-    entrance_type=["single", "trade"]
-
-class DummyEntranceShuffle(EntranceShuffle):
-    """
-    Shuffle Dummy Entrances (non connectors with no checks inside)
-    [Vanilla] No changes
-    [Simple] The entrances will be shuffled amongst themselves
-    [Mixed] The entrances will be shuffled among all other entrances
-    """
-    entrance_type=["dummy"]
-
-class AnnoyingEntranceShuffle(EntranceShuffle):
-    """
-    Shuffle Annoying Entrances (entrances that will be really annoying if moved - mamu or raft house)
-    [Vanilla] No changes
-    [Simple] The entrances will be shuffled amongst themselves
-    [Mixed] The entrances will be shuffled among all other entrances
-    """
-    entrance_type=["insanity"]
-
-class WaterEntranceShuffle(EntranceShuffle):
-    """
-    Shuffle Water Entrances (entrances that drop you into water)
-    [Vanilla] No changes
-    [Simple] The entrances will be shuffled amongst themselves
-    [Mixed] The entrances will be shuffled among all other entrances
-    """
-    entrance_type=["water"]
-
-class ConnectorEntranceShuffle(EntranceShuffle):
-    """
-    Shuffle Connector Entrances
-    [Vanilla] No changes
-    [Simple] The entrances will be shuffled amongst themselves
-    [Mixed] The entrances will be shuffled among all other entrances
-    """
-    entrance_type=["connector"]
-
-class DungeonEntranceShuffle(EntranceShuffle):
-    """
-    Shuffle Dungeon Entrances
-    [Vanilla] No changes
-    [Simple] The entrances will be shuffled amongst themselves
-    [Mixed] The entrances will be shuffled among other entrances
-    """
-    entrance_type=["dungeon"]
+    display_name = "Experimental Dungeon Shuffle"
+    ladxr_name = "dungeonshuffle"
 
 class APTitleScreen(DefaultOnToggle):
     """
@@ -175,12 +102,11 @@ class APTitleScreen(DefaultOnToggle):
     """
     display_name = "AP Title Screen"
 
-class OwnItemOnTarin(DefaultOnToggle):
-    """
-    Forces one of your own items to be on Tarin.
-    This is to prevent being insta-bk'd at the start of the game.
-    This has little effect in single player games, and isn't always neccessary in ER.
-    """
+class BossShuffle(Choice):
+    none = 0
+    shuffle = 1
+    random = 2
+    default = none
 
 
 class DungeonItemShuffle(Choice):
@@ -374,21 +300,6 @@ class Overworld(Choice, LADXROption):
 # [Disable] no music in the whole game""",
 #                 aesthetic=True),
 
-class BootsControls(Choice):
-    """
-    Adds additional button to activate Pegasus Boots (does nothing if you haven't picked up your boots!)
-    [Vanilla] Nothing changes, you have to equip the boots to use them
-    [Bracelet] Holding down the button for the bracelet also activates boots (somewhat like Link to the Past)
-    [Press A] Holding down A activates boots
-    [Press B] Holding down B activates boots
-    """
-    display_name = "Boots Controls"
-    option_vanilla = 0
-    option_bracelet = 1
-    option_press_a = 2
-    option_press_b = 3
-    
-
 class LinkPalette(Choice, LADXROption):
     """
     Sets link's palette
@@ -532,13 +443,8 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
-    'start_shuffle': StartShufflePool,
-    'single_entrance_shuffle': SingleEntranceShuffle,
-    'dummy_entrance_shuffle': DummyEntranceShuffle,
-    'annoying_entrance_shuffle': AnnoyingEntranceShuffle,
-    'water_entrance_shuffle': WaterEntranceShuffle,
-    'connector_entrance_shuffle': ConnectorEntranceShuffle,
-    'dungeon_entrance_shuffle': DungeonEntranceShuffle,
+    'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
+    'experimental_entrance_shuffle': EntranceShuffle,
     # 'bossshuffle': BossShuffle,
     # 'minibossshuffle': BossShuffle,
     'goal': Goal,
@@ -562,6 +468,5 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
-    'tarin_gifts_your_item': OwnItemOnTarin,
-    'boots_controls': BootsControls,   
+    
 }

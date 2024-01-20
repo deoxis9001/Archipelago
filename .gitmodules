@@ -1,0 +1,4 @@
+[submodule "worlds/mlss"]
+	path = worlds/mlss
+	url = https://github.com/jamesbrq/ArchipelagoMLSS
+	branch = main

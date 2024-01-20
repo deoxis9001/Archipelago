@@ -1,0 +1,3 @@
+[submodule "worlds/_manuel"]
+	path = worlds/_manuel
+	url = https://github.com/ManualForArchipelago/Manual

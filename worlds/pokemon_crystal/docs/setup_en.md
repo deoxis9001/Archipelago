@@ -1,0 +1,1 @@
+# Pokémon Crystal Setup Guide

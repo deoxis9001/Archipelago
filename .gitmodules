@@ -1,5 +1,5 @@
-[submodule "worlds/_manuel"]
-	path = worlds/_manuel
+[submodule "worlds/_manual"]
+	path = worlds/_manual
 	url = https://github.com/ManualForArchipelago/Manual
 [submodule "worlds/mlss"]
 	path = worlds/mlss

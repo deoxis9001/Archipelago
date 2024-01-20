@@ -1,6 +1,3 @@
 [submodule "worlds/mlss"]
 	path = worlds/mlss
 	url = https://github.com/jamesbrq/ArchipelagoMLSS
-[submodule "worlds/ff6wc"]
-	path = worlds/ff6wc
-	url = https://github.com/Rosalie-A/WorldsCollide-AP

@@ -1,6 +1,6 @@
-from typing import Dict, Type
+from dataclasses import dataclass
 
-from Options import Choice, Option, Toggle, DeathLink, Range
+from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range
 
 
 class Difficulty(Choice):
@@ -13,6 +13,17 @@ class Difficulty(Choice):
     option_hard = 1
     option_s_hard = 2
     default = 0
+
+
+class Logic(Choice):
+    '''
+    Advanced logic enables some strategies that are more difficult or can risk forcing a Give Up, many of which involve Grab.
+    See the Discord thread for the tricks Advanced accounts for.
+    '''
+    display_name = 'Logic'
+    option_basic = 0
+    option_advanced = 1
+    default = option_basic
 
 
 class PoolJewels(Range):
@@ -81,6 +92,19 @@ class SmashThroughHardBlocks(Toggle):
     display_name = "Smash Hard Blocks Without Stopping"
 
 
+class MultiworldSend(Choice):
+    '''
+    When to send items items to other worlds.
+    On escape: Like your own items, only count other players' items when the level is complete.
+    Immediately: Send other players' items as soon as you take them from the box.
+    Regardless of this setting, sending items from a level you can't clear is not in logic.
+    '''
+    display_name = "Send Other Players' Items"
+    option_on_escape = 0
+    option_immediately = 1
+    default = option_on_escape
+
+
 class MusicShuffle(Choice):
     '''
     Music shuffle type
@@ -104,15 +128,17 @@ class WarioVoiceShuffle(Toggle):
     display_name = "Shuffle Wario's voices"
 
 
-wl4_options: Dict[str, Type[Option]] = {
-    'difficulty': Difficulty,
-    'pool_jewels': PoolJewels,
-    'golden_jewels': GoldenJewels,
-    'required_jewels': RequiredJewels,
-    'open_doors': OpenDoors,
-    'portal': Portal,
-    'smash_through_hard_blocks': SmashThroughHardBlocks,
-    'death_link': DeathLink,
-    'music_shuffle': MusicShuffle,
-    'wario_voice_shuffle': WarioVoiceShuffle,
-}
+@dataclass
+class WL4Options(PerGameCommonOptions):
+    difficulty: Difficulty
+    logic: Logic
+    pool_jewels: PoolJewels
+    golden_jewels: GoldenJewels
+    required_jewels: RequiredJewels
+    open_doors: OpenDoors
+    portal: Portal
+    smash_through_hard_blocks: SmashThroughHardBlocks
+    send_multiworld_items: MultiworldSend
+    death_link: DeathLink
+    music_shuffle: MusicShuffle
+    wario_voice_shuffle: WarioVoiceShuffle

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import functools
 import itertools
-from typing import TYPE_CHECKING, Iterable, Iterator, List
+from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -71,6 +71,46 @@ def batches(iterable: Iterable, n: int):
         return _batched(iterable, n)
 
 
+# These flags are communicated to the tracker as a bitfield in this order, from
+# least to most significant bit.
+LEVEL_CLEAR_FLAGS = [
+    'Hall of Hieroglyphs',
+    None,
+    None,
+    None,
+    'Spoiled Rotten',
+    'Palm Tree Paradise',
+    'Wildflower Fields',
+    'Mystic Lake',
+    'Monsoon Jungle',
+    'Cractus',
+    'The Curious Factory',
+    'The Toxic Landfill',
+    '40 Below Fridge',
+    'Pinball Zone',
+    'Cuckoo Condor',
+    'Toy Block Tower',
+    'The Big Board',
+    'Doodle Woods',
+    'Domino Row',
+    'Aerodent',
+    'Crescent Moon Village',
+    'Arabian Night',
+    'Fiery Cavern',
+    'Hotel Horror',
+    'Catbat',
+    'Golden Passage',
+    None,
+    None,
+    None,
+    None,
+]
+
+TRACKER_EVENT_FLAGS = [
+    *filter(None, LEVEL_CLEAR_FLAGS),
+]
+
+
 # class WL4CommandProcessor(ClientCommandProcessor):
 #     def _cmd_deathlink(self):
 #         '''Toggle death link from client. Overrides default setting.'''
@@ -105,6 +145,7 @@ class WL4Client(BizHawkClient):
     system = 'GBA'
     patch_suffix = '.apwl4'
     local_checked_locations: List[int]
+    local_set_events: Dict[str, bool]
     rom_slot_name: str
 
     death_link: DeathLinkCtx
@@ -112,6 +153,7 @@ class WL4Client(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = []
+        self.local_set_events = {}
 
     async def validate_rom(self, client_ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -209,6 +251,7 @@ class WL4Client(BizHawkClient):
             self.death_link.enabled = True
 
         locations = []
+        events = {flag: False for flag in TRACKER_EVENT_FLAGS}
         game_clear = False
 
         # Parse item status bits
@@ -221,7 +264,12 @@ class WL4Client(BizHawkClient):
                     if status_bits & bit and location_id in client_ctx.server_locations:
                         locations.append(location_id)
 
-            # TODO: Boss event flags
+            for level in range(5):
+                keyzer_bit = item_status[passage * 6 + level] & (1 << 5)
+                level_name = LEVEL_CLEAR_FLAGS[passage * 5 + level]
+                if level_name:
+                    level_clear = bool(keyzer_bit)
+                    events[level_name] = level_clear
 
         if item_status[Passage.GOLDEN * 6 + 4] & 0x10:
             game_clear = True
@@ -241,7 +289,20 @@ class WL4Client(BizHawkClient):
                 'status': ClientStatus.CLIENT_GOAL
             }])
 
-        # TODO: Send tracker event flags
+        # Send tracker event flags
+        if self.local_set_events != events and client_ctx.slot is not None:
+            event_bitfield = 0
+            for i, flag in enumerate(TRACKER_EVENT_FLAGS):
+                if events[flag]:
+                    event_bitfield |= 1 << i
+            await client_ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"wl4_events_{client_ctx.team}_{client_ctx.slot}",
+                "default": 0,
+                "want_reply": False,
+                "operations": [{"operation": "or", "value": event_bitfield}]
+            }])
+            self.local_set_events = events
 
         # Send death link
         if self.death_link.enabled:
@@ -296,4 +357,3 @@ class WL4Client(BizHawkClient):
             tags = args.get('tags', [])
             if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
                 self.death_link.pending = True
-                ctx.on_deathlink(args['data'])

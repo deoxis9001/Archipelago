@@ -3,7 +3,8 @@ from typing import NamedTuple, Optional, Sequence, Tuple, Union
 from BaseClasses import Location, MultiWorld, Region
 
 from .data import ap_id_offset
-from .types import Difficulty, ItemFlag, LocationType, Passage
+from .options import Difficulty
+from .types import ItemFlag, LocationType, Passage
 
 
 class LocationData(NamedTuple):
@@ -25,12 +26,12 @@ class LocationData(NamedTuple):
         return self.status_bit[0:2]
 
 
-_NORMAL = (Difficulty.NORMAL,)
-_HARD = (Difficulty.HARD,)
-_S_HARD = (Difficulty.S_HARD,)
-_EASIER = (Difficulty.NORMAL, Difficulty.HARD)
-_HARDER = (Difficulty.HARD, Difficulty.S_HARD)
-_ALL = (Difficulty.NORMAL, Difficulty.HARD, Difficulty.S_HARD)
+_NORMAL = (Difficulty.option_normal,)
+_HARD = (Difficulty.option_hard,)
+_S_HARD = (Difficulty.option_s_hard,)
+_EASIER = _NORMAL + _HARD
+_HARDER = _HARD + _S_HARD
+_ALL = _NORMAL + _HARD + _S_HARD
 
 
     # Location                                                         Source              Passage        Level  Bit in level data       Region              Difficulties
@@ -127,7 +128,7 @@ location_table = {
     'Pinball Zone - Rolling Room Box':                    LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_NE),      'Early Rooms',      _EASIER),
     'Pinball Zone - Switch Room Box':                     LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_NE),      'Late Rooms',       _S_HARD),
     'Pinball Zone - Fruit Room Box':                      LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_SE),      'Early Rooms',      _ALL),
-    'Pinball Zone - Jungle Room Box':                     LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_SW),      'Late Rooms',       _ALL),
+    'Pinball Zone - Jungle Room Box':                     LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_SW),      'Jungle Room',      _ALL),
     'Pinball Zone - Snow Room Box':                       LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_NW),      'Late Rooms',       _ALL),
     'Pinball Zone - CD Box':                              LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.CD),            'Late Rooms',       _ALL),
     'Pinball Zone - Full Health Item Box':                LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.FULL_HEALTH),   'Late Rooms',       _EASIER),
@@ -271,7 +272,3 @@ def get_level_locations(passage: Passage, level: int):
 
 def get_level_location_data(passage: Passage, level: int):
     return filter(lambda l: l[1].level_id() == (passage, level), location_table.items())
-
-def setup_locations(world: MultiWorld, player: int):
-    return {name for name in location_name_to_id
-            if world.difficulty[player].value in location_table[name].difficulties}

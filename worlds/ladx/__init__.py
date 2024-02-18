@@ -28,7 +28,7 @@ from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion, create_regions_from_ladxr, get_locations_to_id)
-from .Options import links_awakening_options, DungeonItemShuffle, EntranceShuffle, ShuffleInstruments
+from .Options import DungeonItemShuffle, links_awakening_options,  EntranceShuffle, ShuffleInstruments
 from .Rom import LADXDeltaPatch
 
 
@@ -420,18 +420,29 @@ class LinksAwakeningWorld(World):
         
         for option in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
             option = "shuffle_" + option
+            option_name = option
             option = self.player_options[option]
 
             dungeon_item_types[option.ladxr_item] = option.value
-
-            if option.value == DungeonItemShuffle.option_own_world:
-                self.multiworld.local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
-                }
-            elif option.value == DungeonItemShuffle.option_different_world:
-                self.multiworld.non_local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
-                }
+            
+            if option_name=="shuffle_instruments":
+                if option.value == DungeonItemShuffle.option_own_world:
+                   self.multiworld.local_items[self.player].value |= {
+                        ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 9)
+                   }
+                elif option.value == DungeonItemShuffle.option_different_world:
+                    self.multiworld.non_local_items[self.player].value |= {
+                       ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 9)
+                    }
+            else:
+                if option.value == DungeonItemShuffle.option_own_world:
+                    self.multiworld.local_items[self.player].value |= {
+                        ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
+                    }
+                elif option.value == DungeonItemShuffle.option_different_world:
+                    self.multiworld.non_local_items[self.player].value |= {
+                        ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, 10)
+                    }
         # option_original_dungeon = 0
         # option_own_dungeons = 1
         # option_own_world = 2

@@ -12,7 +12,7 @@ from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
 from .data.logic.constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS
+    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS
 from .data.logic.regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
 
@@ -42,7 +42,6 @@ class OracleOfSeasonsWorld(World):
     location_name_to_id = build_location_name_to_id_dict()
     item_name_to_id = build_item_name_to_id_dict()
 
-    companion = COMPANIONS[0]
     default_seed = SEED_ITEMS[0]
 
     default_seasons = {
@@ -78,6 +77,13 @@ class OracleOfSeasonsWorld(World):
         "temple remains upper portal": "subrosia portal 7",
     }
 
+    lost_woods_item_sequence = [
+        "winter", "left",
+        "autumn", "left",
+        "spring", "left",
+        "summer", "left"
+    ]
+
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
         self.pre_fill_items = []
@@ -88,7 +94,6 @@ class OracleOfSeasonsWorld(World):
         return slot_data
 
     def generate_early(self):
-        self.companion = self.options.animal_companion.value
         self.default_seed = self.random.choice(SEED_ITEMS)
 
         if self.options.default_seasons == "randomized":
@@ -105,11 +110,22 @@ class OracleOfSeasonsWorld(World):
             self.dungeon_entrances = dict(zip(self.dungeon_entrances, shuffled_entrances))
 
         if self.options.shuffle_portals == "shuffled":
-            shuffled_portals = list(self.portal_connections.values())
-            self.random.shuffle(shuffled_portals)
-            self.portal_connections = dict(zip(self.portal_connections, shuffled_portals))
+            def shuffle_portals():
+                shuffled_portals = list(self.portal_connections.values())
+                self.random.shuffle(shuffled_portals)
+                self.portal_connections = dict(zip(self.portal_connections, shuffled_portals))
+            shuffle_portals()
+            while self.portal_connections["temple remains upper portal"] == "subrosia portal 6":
+                shuffle_portals()
 
-        # TODO: Randomize rings?
+        if self.options.lost_woods_item_sequence == "randomized":
+            authorized_directions = [direction for direction in DIRECTIONS if direction != "right"]
+            self.lost_woods_item_sequence = [
+                self.random.choice(SEASONS), self.random.choice(authorized_directions),
+                self.random.choice(SEASONS), self.random.choice(authorized_directions),
+                self.random.choice(SEASONS), self.random.choice(authorized_directions),
+                self.random.choice(SEASONS), "left"
+            ]
 
     def create_regions(self):
         # Create regions
@@ -126,11 +142,48 @@ class OracleOfSeasonsWorld(World):
             if "local" in location_data and location_data["local"] is True:
                 location.item_rule = lambda item: item.player == self.player
 
+        self.create_events()
+
+    def create_event(self, region_name, event_item_name):
+        region = self.multiworld.get_region(region_name, self.player)
+        location = Location(self.player, region_name + ".event", None, region)
+        region.locations.append(location)
+        location.place_locked_item(Item(event_item_name, ItemClassification.progression, None, self.player))
+
+    def create_events(self):
+        self.create_event("subrosian smithy bell", "Pirate's Bell")
+        self.create_event("bomb flower", "Bomb Flower")
+        for i in range(8):
+            self.create_event(f"d{i+1} boss", ESSENCES[i])
+        self.create_event("maku seed", "Maku Seed")
+
+        self.create_event("maple trade", "_met_maple")
+        self.create_event("spool stump", "_reached_spool_stump")
+        self.create_event("bomb temple remains", "_triggered_volcano")
+        self.create_event("temple remains lower stump", "_reached_remains_stump")
+        self.create_event("temple remains upper stump", "_reached_remains_stump")
+        self.create_event("d1 stump", "_reached_eyeglass_stump")
+        self.create_event("d5 stump", "_reached_eyeglass_stump")
+        self.create_event("d2 stump", "_reached_d2_stump")
+        self.create_event("sunken city dimitri", "_saved_dimitri_in_sunken_city")
+        self.create_event("ghastly stump", "_reached_ghastly_stump")
+        self.create_event("coast stump", "_reached_coast_stump")
+        self.create_event("subrosia market sector", "_reached_rosa")
+        self.create_event("subrosian dance hall", "_reached_subrosian_dance_hall")
+        self.create_event("subrosia pirates sector", "_met_pirates")
+        self.create_event("tower of autumn", "_opened_tower_of_autumn")
+        self.create_event("d2 moblin chest", "_reached_d2_bracelet_room")
+        self.create_event("d5 drop ball", "_dropped_d5_magnet_ball")
+        self.create_event("d8 SE crystal", "_dropped_d8_SE_crystal")
+        self.create_event("d8 NE crystal", "_dropped_d8_NE_crystal")
+        self.create_event("d2 rupee room", "_reached_d2_rupee_room")
+        self.create_event("d6 rupee room", "_reached_d6_rupee_room")
+
+        self.create_event("onox beaten", "_beaten_onox")
+
     def set_rules(self):
         create_connections(self.multiworld, self.player)
-
-        self.multiworld.completion_condition[self.player] = lambda state: \
-            state.can_reach("onox beaten", None, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_onox", self.player)
 
     def create_item(self, name: str) -> Item:
         ap_code = self.item_name_to_id[name]
@@ -138,12 +191,7 @@ class OracleOfSeasonsWorld(World):
         return Item(name, classification, ap_code, self.player)
 
     def create_items(self):
-        def is_prefill_item(item: Item):
-            return item.name in SEED_ITEMS or any([item.name.startswith("Small Key"),
-                                                   item.name.startswith("Boss Key"),
-                                                   item.name.startswith("Dungeon Map"),
-                                                   item.name.startswith("Compass")])
-
+        ring_count = 0
         for loc_data in LOCATIONS_DATA.values():
             if "randomized" in loc_data and loc_data["randomized"] is False:
                 continue
@@ -154,13 +202,27 @@ class OracleOfSeasonsWorld(World):
             if item_name == "Ricky's Gloves":  # Ricky's gloves are useless in current logic
                 item_name = "Gasha Seed"
             elif item_name == "Rod of Seasons":  # No lone rod of seasons supported for now
-                item_name = "Fool's Ore"
+                item_name = "Fool's Ore" if self.options.fools_ore != "excluded" else "Gasha Seed"
+            elif item_name == "Flute":
+                item_name = str(self.options.animal_companion.value) + "'s Flute"
 
-            item = self.create_item(item_name)
-            if is_prefill_item(item):
-                self.pre_fill_items.append(item)
+            if "Ring" in item_name:
+                ring_count += 1
             else:
-                self.multiworld.itempool.append(item)
+                self.multiworld.itempool.append(self.create_item(item_name))
+
+        self.create_rings(ring_count)
+
+    def create_rings(self, amount):
+        # Get a subset of as many rings as needed, with a potential filter on quality depending on chosen options
+        ring_names = [name for name, idata in ITEMS_DATA.items() if "ring" in idata and idata["ring"] is True]
+        if self.options.ring_quality == "only_useful":
+            ring_names = [name for name in ring_names if ITEMS_DATA[name]["classification"] == ItemClassification.useful]
+
+        self.multiworld.random.shuffle(ring_names)
+        del ring_names[amount:]
+        for ring_name in ring_names:
+            self.multiworld.itempool.append(self.create_item(ring_name))
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
@@ -230,8 +292,12 @@ class OracleOfSeasonsWorld(World):
     def generate_output(self, output_directory: str):
         yamlObj = {
             "settings": {
-                "companion": self.companion,
-                "warp to start": self.options.warp_to_start
+                "companion": self.options.animal_companion.value,
+                "warp_to_start": self.options.warp_to_start,
+                "required_essences": self.options.required_essences.value,
+                "fools_ore_damage": 3 if self.options.fools_ore == "balanced" else 12,
+                "heart_beep_interval": self.options.heart_beep_interval,
+                "lost_woods_item_sequence": "winter up winter right winter down summer left"
              },
             "default seasons": {},
             "locations": {}

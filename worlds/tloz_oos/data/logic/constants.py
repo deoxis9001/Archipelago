@@ -11,6 +11,13 @@ SEASONS = [
     "winter"
 ]
 
+DIRECTIONS = [
+    "up",
+    "right",
+    "down",
+    "left"
+]
+
 SEASON_ITEMS = {
     "winter": "Rod of Seasons (Winter)",
     "summer": "Rod of Seasons (Summer)",
@@ -68,3 +75,13 @@ PORTALS_CONVERSION_TABLE = {
     "subrosia portal 7": "d8 entrance",
 }
 
+ESSENCES = [
+    "Fertile Soil",
+    "Gift of Time",
+    "Bright Sun",
+    "Soothing Rain",
+    "Nurturing Warmth",
+    "Blowing Wind",
+    "Seed of Life",
+    "Changing Seasons",
+]

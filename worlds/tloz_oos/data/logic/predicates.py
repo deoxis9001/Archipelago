@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState
-from worlds.tloz_oos.data.logic.constants import DUNGEON_NAMES, SEASON_ITEMS
+from worlds.tloz_oos.data.logic.constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES
 
 
 # Items predicates ############################################################
@@ -127,7 +127,7 @@ def oos_option_hard_logic(state: CollectionState, player: int):
 
 
 def oos_option_allow_warp_to_start(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.warp_to_start is True
+    return state.multiworld.worlds[player].options.warp_to_start.value
 
 
 def oos_option_shuffled_dungeons(state: CollectionState, player: int):
@@ -135,15 +135,15 @@ def oos_option_shuffled_dungeons(state: CollectionState, player: int):
 
 
 def oos_is_companion_ricky(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].companion == "Ricky"
+    return state.multiworld.worlds[player].options.animal_companion.value == "Ricky"
 
 
 def oos_is_companion_moosh(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].companion == "Moosh"
+    return state.multiworld.worlds[player].options.animal_companion.value == "Moosh"
 
 
 def oos_is_companion_dimitri(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].companion == "Dimitri"
+    return state.multiworld.worlds[player].options.animal_companion.value == "Dimitri"
 
 
 def oos_get_default_season(state: CollectionState, player: int, area_name: str):
@@ -156,13 +156,24 @@ def oos_can_remove_season(state: CollectionState, player: int, season: str):
         [state.has(item_name, player) for season_name, item_name in SEASON_ITEMS.items() if season_name != season])
 
 
-def oos_has_needed_essences(state: CollectionState, player: int):
-    essence_count = 0
-    for region in ["d1 boss", "d2 boss", "d3 boss", "d4 boss", "d5 boss", "d6 boss", "d7 boss", "d8 boss"]:
-        if state.can_reach(region, None, player):
-            essence_count += 1
+def oos_has_essences(state: CollectionState, player: int, target_count: int):
+    essence_count = [state.has(essence, player) for essence in ESSENCES].count(True)
+    return essence_count >= target_count
 
-    return essence_count >= state.multiworld.worlds[player].options.required_essences
+
+def oos_has_needed_essences(state: CollectionState, player: int):
+    return oos_has_essences(state, player, state.multiworld.worlds[player].options.required_essences)
+
+
+def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):
+    world = state.multiworld.worlds[player]
+    return all([
+        world.options.lost_woods_item_sequence == "vanilla" or state.has("Phonograph", player),
+        "winter" not in world.lost_woods_item_sequence or oos_has_winter(state, player),
+        "spring" not in world.lost_woods_item_sequence or oos_has_spring(state, player),
+        "summer" not in world.lost_woods_item_sequence or oos_has_summer(state, player),
+        "autumn" not in world.lost_woods_item_sequence or oos_has_autumn(state, player)
+    ])
 
 
 # Various item predicates ###########################################
@@ -177,6 +188,12 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
     rupees += state.count("Rupees (20)", player) * 20
     rupees += state.count("Rupees (50)", player) * 50
     rupees += state.count("Rupees (100)", player) * 100
+
+    if state.has("_reached_d2_rupee_room", player):
+        rupees += 150
+    if state.has("_reached_d6_rupee_room", player):
+        rupees += 90
+
     return rupees >= amount
 
 
@@ -185,10 +202,7 @@ def oos_can_farm_rupees(state: CollectionState, player: int):
 
 
 def oos_can_date_rosa(state: CollectionState, player: int):
-    return all([
-        state.has("Ribbon", player),
-        state.can_reach("subrosia market sector", None, player)
-    ])
+    return state.has("_reached_rosa", player) and state.has("Ribbon", player)
 
 
 def oos_can_farm_ore(state: CollectionState, player: int):
@@ -196,7 +210,7 @@ def oos_can_farm_ore(state: CollectionState, player: int):
         oos_has_shovel(state, player),
         oos_has_sword(state, player),
         oos_has_magic_boomerang(state, player),
-        state.can_reach("subrosian dance hall", None, player)
+        state.has("_reached_subrosian_dance_hall", player)
     ])
 
 
@@ -233,7 +247,7 @@ def oos_has_bombs(state: CollectionState, player: int):
             # With hard logic, player is expected to know they can get free bombs
             # from D2 moblin room even if they never had bombs before
             oos_option_hard_logic(state, player),
-            state.can_reach("d2 moblin chest", None, player),
+            state.has("_reached_d2_bracelet_room", player),
             any([
                 oos_has_sword(state, player),
                 oos_has_fools_ore(state, player)
@@ -741,57 +755,31 @@ def oos_can_remove_rockslide(state: CollectionState, player: int, can_summon_com
 def oos_season_in_spool_swamp(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "SPOOL_SWAMP") == season:
         return True
-
-    return all([
-        oos_has_season(state, player, season),
-        state.can_reach("spool stump", None, player)
-    ])
+    return oos_has_season(state, player, season) and state.has("_reached_spool_stump", player)
 
 
 def oos_season_in_eyeglass_lake(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "EYEGLASS_LAKE") == season:
         return True
-
-    return all([
-        oos_has_season(state, player, season),
-        any([
-            state.can_reach("d1 stump", None, player),
-            state.can_reach("d5 stump", None, player)
-        ])
-    ])
+    return oos_has_season(state, player, season) and state.has("_reached_eyeglass_stump", player)
 
 
 def oos_season_in_temple_remains(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "TEMPLE_REMAINS") == season:
         return True
-
-    return all([
-        oos_has_season(state, player, season),
-        any([
-            state.can_reach("temple remains lower stump", None, player),
-            state.can_reach("temple remains upper stump", None, player)
-        ])
-    ])
+    return oos_has_season(state, player, season) and state.has("_reached_remains_stump", player)
 
 
 def oos_season_in_north_horon(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "NORTH_HORON") == season:
         return True
-
-    return all([
-        oos_has_season(state, player, season),
-        state.can_reach("ghastly stump", None, player),
-    ])
+    return oos_has_season(state, player, season) and state.has("_reached_ghastly_stump", player)
 
 
 def oos_season_in_western_coast(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "WESTERN_COAST") == season:
         return True
-
-    return all([
-        oos_has_season(state, player, season),
-        state.can_reach("coast stump", None, player)
-    ])
+    return oos_has_season(state, player, season) and state.has("_reached_coast_stump", player)
 
 
 def oos_season_in_eastern_suburbs(state: CollectionState, player: int, season: str):
@@ -812,11 +800,7 @@ def oos_season_in_woods_of_winter(state: CollectionState, player: int, season: s
 def oos_season_in_central_woods_of_winter(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "WOODS_OF_WINTER") == season:
         return True
-
-    return all([
-        oos_has_season(state, player, season),
-        state.can_reach("d2 stump", None, player)
-    ])
+    return oos_has_season(state, player, season) and state.has("_reached_d2_stump", player)
 
 
 def oos_season_in_mt_cucco(state: CollectionState, player: int, season: str):

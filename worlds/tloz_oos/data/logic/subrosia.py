@@ -13,8 +13,7 @@ def make_subrosia_logic(player: int):
         ["subrosia portal 6", "subrosia volcano sector", True, None],
         ["subrosia portal 7", "d8 entrance", True, None],
 
-        ["subrosia pirates sector", "western coast after ship", False, lambda state: \
-            state.can_reach("subrosian smithy bell", None, player)],
+        ["subrosia pirates sector", "western coast after ship", False, lambda state: state.has("Pirate's Bell", player)],
 
         # Regions ###############################################################
 
@@ -73,7 +72,7 @@ def make_subrosia_logic(player: int):
         ])],
         ["subrosia temple sector", "tower of autumn", False, lambda state: all([
             oos_has_feather(state, player),
-            state.can_reach("bomb flower", None, player)  # state.has("Bomb Flower", player)
+            state.has("Bomb Flower", player)
         ])],
 
         ["subrosia market sector", "subrosia seaside", False, lambda state: oos_has_shovel(state, player)],
@@ -115,7 +114,7 @@ def make_subrosia_logic(player: int):
         ["subrosia furnace sector", "great furnace", False, lambda state: all([
             state.has("Red Ore", player),
             state.has("Blue Ore", player),
-            state.can_reach("tower of autumn", None, player)
+            state.has("_opened_tower_of_autumn", player)
         ])],
         ["subrosia furnace sector", "bomb flower", False, lambda state: all([
             oos_has_feather(state, player),

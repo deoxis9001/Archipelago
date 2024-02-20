@@ -101,6 +101,53 @@ class OracleOfSeasonsPortalShuffle(Choice):
     default = 0
 
 
+class OracleOfSeasonsLostWoodsItemSequence(Choice):
+    """
+    This option defines how the "secret sequence" (both directions and seasons) leading to the Noble Sword pedestal
+    is handled by the randomizer.
+    - Vanilla: the sequence is the same as in the original game
+    - Randomized: the sequence is randomized, and you need to use the Phonograph on the Deku Scrub to learn the sequence
+    """
+    display_name = "Lost Woods Item Sequence"
+
+    option_vanilla = 0
+    option_randomized = 1
+
+    default = 1
+
+
+class OracleOfSeasonsRingQuality(Choice):
+    """
+    Defines the quality of the rings that will be shuffled in your seed:
+    - Any: any ring can potentially be shuffled (including literally useless ones)
+    - Only Useful: only useful rings will be shuffled
+    """
+    display_name = "Rings Quality"
+
+    option_any = 0
+    option_only_useful = 1
+
+    default = 1
+
+
+class OracleOfSeasonsFoolsOre(Choice):
+    """
+    In the vanilla game, the Fool's Ore is the item "given" by the strange brothers in "exchange" for your feather.
+    The way the vanilla game is done means you never get to use it, but it's by far the strongest weapon in the game
+    (dealing 4 times more damage than a L-2 sword!)
+    - Vanilla: Fool's Ore appears in the item pool with its stats unchanged
+    - Balanced: Fool's Ore appears in the item pool but its stats are lowered to become comparable to a L-2 sword
+    - Excluded: Fool's Ore doesn't appear in the item pool at all. Problem solved!
+    """
+    display_name = "Fool's Ore"
+
+    option_vanilla = 0
+    option_balanced = 1
+    option_excluded = 2
+
+    default = 1
+
+
 class OracleOfSeasonsWarpToStart(DefaultOnToggle):
     """
     When enabled, you can warp to start by holding Start while exiting map screen.
@@ -108,6 +155,23 @@ class OracleOfSeasonsWarpToStart(DefaultOnToggle):
     most softlock situations from happening
     """
     display_name = "Warp to Start"
+
+
+class OracleOfSeasonsHeartBeepInterval(Choice):
+    """
+    - Default: play the beeping sound at the usual frequency when low on health
+    - Half: play the beeping sound two times less when low on health
+    - Quarter: play the beeping sound four times less when low on health
+    - Disabled: never play the beeping sound when low on health
+    """
+    display_name = "Heart Beep Frequency"
+
+    option_default = 0
+    option_half = 1
+    option_quarter = 2
+    option_disabled = 3
+
+    default = 0
 
 
 @dataclass
@@ -119,5 +183,9 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     animal_companion: OracleOfSeasonsAnimalCompanion
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle
+    lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
+    ring_quality: OracleOfSeasonsRingQuality
+    fools_ore: OracleOfSeasonsFoolsOre
     warp_to_start: OracleOfSeasonsWarpToStart
+    heart_beep_interval: OracleOfSeasonsHeartBeepInterval
     death_link: DeathLink

@@ -167,6 +167,7 @@ LOCATIONS_DATA = {
         "region_id": "mt. cucco, talon's cave",
         "vanilla_item": "Subrosian Ring",
         "flag_byte": 0xCAB6,
+        "bit_mask": 0x60  # 0x60 is needed here to ensure we're not sending Talon's wakeup item as a false positive
     },
     "tarm ruins, under tree": {
         "region_id": "tarm ruins, under tree",
@@ -949,7 +950,7 @@ LOCATIONS_DATA = {
     },
     "vasu's gift": {
         "region_id": "vasu's gift",
-        "vanilla_item": "Rupees (50)",  # Friendship Ring doesn't really exist anymore
+        "vanilla_item": "Friendship Ring",
         "flag_byte": 0xC891
     },
     "goron's gift": {
@@ -1001,7 +1002,8 @@ LOCATIONS_DATA = {
     "talon trade": {
         "region_id": "talon trade",
         "vanilla_item": "Mushroom",
-        "flag_byte": 0xCAB6
+        "flag_byte": 0xCAB6,
+        "bit_mask": 0x40
     },
     "syrup trade": {
         "region_id": "syrup trade",

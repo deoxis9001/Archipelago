@@ -313,7 +313,7 @@ def make_holodrum_logic(player: int):
 
         ["north horon", "temple remains lower stump", True, lambda state: oos_can_jump_3_wide_pit(state, player)],
 
-        ["ghastly stump", "mrs. ruul trade", False, lambda state: state.can_reach("maple trade", None, player)],
+        ["ghastly stump", "mrs. ruul trade", False, lambda state: state.has("_met_maple", player)],
             # TODO: state.has("Ghastly Doll", player)],     once Maple item is randomized
 
         ["north horon", "ghastly stump", True, lambda state: any([
@@ -454,10 +454,7 @@ def make_holodrum_logic(player: int):
             ])
         ])],
 
-        ["sunken city", "moblin keep bridge", False, lambda state: all([
-            oos_is_companion_ricky(state, player),
-            state.can_reach("sunken city", None, player)
-        ])],
+        ["sunken city", "moblin keep bridge", False, lambda state: oos_is_companion_ricky(state, player)],
 
         ["north horon", "moblin keep bridge", False, lambda state: all([
             any([
@@ -566,7 +563,7 @@ def make_holodrum_logic(player: int):
                     oos_has_winter(state, player),
                     any([
                         oos_can_swim(state, player, True),
-                        state.can_reach("sunken city dimitri", None, player)
+                        state.has("_saved_dimitri_in_sunken_city", player)
                     ])
                 ])
             ]),
@@ -695,13 +692,7 @@ def make_holodrum_logic(player: int):
             oos_can_break_mushroom(state, player, False)
         ])],
 
-        ["lost woods stump", "lost woods", False, lambda state: all([
-            oos_has_winter(state, player),
-            oos_has_autumn(state, player),
-            oos_has_spring(state, player),
-            oos_has_summer(state, player),
-            state.has("Phonograph", player)
-        ])],
+        ["lost woods stump", "lost woods", False, lambda state: oos_can_reach_lost_woods_pedestal(state, player)],
 
         ["lost woods stump", "d6 sector", False, lambda state: all([
             oos_has_winter(state, player),
@@ -729,7 +720,7 @@ def make_holodrum_logic(player: int):
 
         # SAMASA DESERT ######################################################################################
 
-        ["suburbs", "samasa desert", False, lambda state: state.can_reach("subrosia pirates sector", None, player)],
+        ["suburbs", "samasa desert", False, lambda state: state.has("_met_pirates", player)],
         ["samasa desert", "samasa desert pit", False, lambda state: oos_has_bracelet(state, player)],
         ["samasa desert", "samasa desert chest", False, lambda state: oos_has_flippers(state, player)],
 
@@ -775,19 +766,19 @@ def make_holodrum_logic(player: int):
                 oos_can_jump_1_wide_pit(state, player, False)
             ]),
             all([
-                state.can_reach("bomb temple remains", None, player),
+                state.has("_triggered_volcano", player),
                 oos_can_jump_2_wide_liquid(state, player)
             ]),
         ])],
 
         ["temple remains lower stump", "temple remains heart piece", False, lambda state: all([
-            state.can_reach("bomb temple remains", None, player),
+            state.has("_triggered_volcano", player),
             oos_can_jump_2_wide_liquid(state, player),
             oos_can_remove_rockslide(state, player, False),
         ])],
 
         ["temple remains lower stump", "temple remains upper portal", True, lambda state: all([
-            state.can_reach("bomb temple remains", None, player),
+            state.has("_triggered_volcano", player),
             oos_season_in_temple_remains(state, player, "summer"),
             oos_can_jump_2_wide_liquid(state, player),
             any([
@@ -800,7 +791,7 @@ def make_holodrum_logic(player: int):
             oos_can_jump_1_wide_pit(state, player, False)],
 
         ["temple remains upper portal", "temple remains lower stump", False, lambda state: all([
-            state.can_reach("bomb temple remains", None, player),
+            state.has("_triggered_volcano", player),
             oos_can_jump_1_wide_liquid(state, player, False)
         ])],
 
@@ -813,7 +804,7 @@ def make_holodrum_logic(player: int):
 
         ["maku tree", "maku seed", False, lambda state: oos_has_needed_essences(state, player)],
 
-        ["north horon", "d9 entrance", False, lambda state: state.can_reach("maku seed", None, player)],
+        ["north horon", "d9 entrance", False, lambda state: state.has("Maku Seed", player)],
         ["d9 entrance", "onox beaten", False, lambda state: all([
             oos_can_kill_armored_enemy(state, player),
             oos_has_bombs(state, player),

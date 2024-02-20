@@ -82,7 +82,7 @@ def make_d2_logic(player: int):
         ["d2 torch room", "d2 arrow room", False, lambda state: oos_can_use_ember_seeds(state, player)],
 
         ["d2 arrow room", "d2 torch room", False, None],  # Backwards path
-        ["d2 arrow room", "d2 rupee room", False, lambda state: oos_has_bombs(state, player)],  # TODO: Fixed rupees!
+        ["d2 arrow room", "d2 rupee room", False, lambda state: oos_has_bombs(state, player)],
         ["d2 arrow room", "d2 rope chest", False, lambda state: oos_can_kill_normal_enemy(state, player)],
         ["d2 arrow room", "d2 blade chest", False, lambda state: oos_can_kill_normal_enemy(state, player)],
 
@@ -411,7 +411,7 @@ def make_d5_logic(player: int):
 
         ["d5 post syger", "d5 basement", False, lambda state: all([
             oos_has_small_keys(state, player, 5, 5),
-            state.can_reach("d5 drop ball", None, player),
+            state.has("_dropped_d5_magnet_ball", player),
             oos_has_magnet_gloves(state, player),
             any([
                 oos_can_kill_magunesu(state, player),
@@ -793,8 +793,8 @@ def make_d8_logic(player: int):
         ["d8 ice puzzle room", "d8 spark chest", False, lambda state: all([
             oos_has_small_keys(state, player, 8, 4),
             all([
-                state.can_reach("d8 SE crystal", None, player),
-                state.can_reach("d8 NE crystal", None, player),
+                state.has("_dropped_d8_NE_crystal", player),
+                state.has("_dropped_d8_SE_crystal", player),
                 oos_can_break_pot(state, player)
             ])
         ])],

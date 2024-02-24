@@ -85,3 +85,10 @@ ESSENCES = [
     "Seed of Life",
     "Changing Seasons",
 ]
+
+DUNGEON_ITEMS = [
+    "Small Key",
+    "Boss Key",
+    "Compass",
+    "Dungeon Map"
+]

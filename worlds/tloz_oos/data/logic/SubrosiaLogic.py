@@ -1,4 +1,4 @@
-from worlds.tloz_oos.data.logic.predicates import *
+from worlds.tloz_oos.data.logic.LogicPredicates import *
 
 
 def make_subrosia_logic(player: int):
@@ -91,6 +91,15 @@ def make_subrosia_logic(player: int):
                 oos_can_jump_4_wide_pit(state, player)
             ])
         ])],
+        ["subrosian wilds chest", "subrosian wilds digging spot", False, lambda state: all([
+            any([
+                oos_can_jump_3_wide_pit(state, player),
+                oos_has_magnet_gloves(state, player)
+            ]),
+            oos_has_feather(state, player),
+            oos_has_shovel(state, player)
+        ])],
+
         ["subrosia hide and seek sector", "subrosian house", False, lambda state: oos_has_feather(state, player)],
         ["subrosia hide and seek sector", "subrosian 2d cave", False, lambda state: oos_has_feather(state, player)],
 

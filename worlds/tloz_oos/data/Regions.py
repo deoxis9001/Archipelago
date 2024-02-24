@@ -15,7 +15,7 @@ REGIONS = [
     "maple trade",
     "subrosian chef trade",
     "biggoron trade",
-    "tick-tock trade",
+    "tick tock trade",
     "ingo trade",
     "guru-guru trade",
     "mayor's gift",

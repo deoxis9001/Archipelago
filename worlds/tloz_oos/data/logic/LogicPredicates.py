@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState
-from worlds.tloz_oos.data.logic.constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES
+from worlds.tloz_oos.data.Constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES
 
 
 # Items predicates ############################################################
@@ -168,7 +168,13 @@ def oos_has_needed_essences(state: CollectionState, player: int):
 def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):
     world = state.multiworld.worlds[player]
     return all([
-        world.options.lost_woods_item_sequence == "vanilla" or state.has("Phonograph", player),
+        any([
+            world.options.lost_woods_item_sequence == "vanilla",
+            all([
+                oos_can_use_ember_seeds(state, player),
+                state.has("Phonograph", player)
+            ])
+        ]),
         "winter" not in world.lost_woods_item_sequence or oos_has_winter(state, player),
         "spring" not in world.lost_woods_item_sequence or oos_has_spring(state, player),
         "summer" not in world.lost_woods_item_sequence or oos_has_summer(state, player),
@@ -194,11 +200,15 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
     if state.has("_reached_d6_rupee_room", player):
         rupees += 90
 
+    # TODO: Count spendings by subtracting the price of all shop locations currently containing a progression item?
+
     return rupees >= amount
 
 
 def oos_can_farm_rupees(state: CollectionState, player: int):
-    return oos_has_shovel(state, player)
+    # Farming rupees is not *that* hard by itself, but it's just really boring most of the time if you don't know how
+    # to optimize it efficiently doing RNG manips and such, so we let it in the hard logic domain for now
+    return oos_option_hard_logic(state, player) and oos_has_shovel(state, player)
 
 
 def oos_can_date_rosa(state: CollectionState, player: int):
@@ -476,10 +486,17 @@ def oos_can_break_bush(state: CollectionState, player: int, can_summon_companion
         oos_has_sword(state, player),
         oos_has_magic_boomerang(state, player),
         oos_has_bracelet(state, player),
-        oos_has_bombs(state, player),
-        oos_can_use_ember_seeds(state, player),
-        oos_can_use_gale_seeds_offensively(state, player),
-        (can_summon_companion and oos_has_flute(state, player))
+        (can_summon_companion and oos_has_flute(state, player)),
+        all([
+            # Consumables need at least medium logic, since they need a good knowledge of the game
+            # not to be frustrating
+            oos_option_medium_logic(state, player),
+            any([
+                oos_has_bombs(state, player),
+                oos_can_use_ember_seeds(state, player),
+                oos_can_use_gale_seeds_offensively(state, player),
+            ])
+        ]),
     ])
 
 

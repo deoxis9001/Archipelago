@@ -368,61 +368,51 @@ ITEMS_DATA = {
 
     "Cuccodex": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x00
+        'id': 0x55
     },
     "Lon Lon Egg": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x01
+        'id': 0x56
     },
     "Ghastly Doll": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x02
+        'id': 0x57
     },
     "Iron Pot": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x03
+        'id': 0x35
     },
     "Lava Soup": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x04
+        'id': 0x38
     },
     "Goron Vase": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x05
+        'id': 0x39
     },
     "Fish": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x06
+        'id': 0x3a
     },
     "Megaphone": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x07
+        'id': 0x3b
     },
     "Mushroom": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x08
+        'id': 0x3c
     },
     "Wooden Bird": {
         'classification': ItemClassification.progression,
-        'id': 0x41,
-        'subid': 0x09
+        'id': 0x3d
     },
     "Engine Grease": {
         'classification': ItemClassification.progression,
-        'id': 0x41
+        'id': 0x3e
     },
     "Phonograph": {
          'classification': ItemClassification.progression,
-         'id': 0x41,
+         'id': 0x3f
     },
 
     "Gnarled Key": {

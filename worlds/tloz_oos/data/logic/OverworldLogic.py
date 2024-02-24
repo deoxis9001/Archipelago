@@ -1,4 +1,4 @@
-from worlds.tloz_oos.data.logic.predicates import *
+from worlds.tloz_oos.data.logic.LogicPredicates import *
 
 
 def make_holodrum_logic(player: int):
@@ -11,7 +11,7 @@ def make_holodrum_logic(player: int):
         ["horon village", "horon heart piece", False, lambda state: oos_can_use_ember_seeds(state, player)],
         ["horon village", "dr. left reward", False, lambda state: oos_can_use_ember_seeds(state, player)],
         ["horon village", "old man trade", False, lambda state: state.has("Fish", player)],
-        ["horon village", "tick-tock trade", False, lambda state: state.has("Wooden Bird", player)],
+        ["horon village", "tick tock trade", False, lambda state: state.has("Wooden Bird", player)],
         ["horon village", "maku tree", False, lambda state: oos_has_sword(state, player)],
         ["horon village", "horon village SE chest", False, lambda state: oos_has_bombs(state, player)],
         ["horon village", "horon village SW chest", False, lambda state: oos_can_break_mushroom(state, player, True)],
@@ -336,17 +336,21 @@ def make_holodrum_logic(player: int):
             oos_can_break_bush(state, player, True),
         ])],
 
-        # Goron Mountain <-> North Horon <-> D1 <-> Treehouse <-> Spool swamp waterway
-        ["spool swamp south", "old man in treehouse", True, lambda state: oos_can_swim(state, player, True)],
-        ["old man in treehouse", "d1 island", True, lambda state: oos_can_swim(state, player, True)],
-        ["old man in treehouse", "cave south of mrs. ruul", False, lambda state: oos_can_swim(state, player, False)],
+        # Goron Mountain <-> North Horon <-> D1 island <-> Spool swamp waterway
+        ["spool swamp south", "d1 island", True, lambda state: oos_can_swim(state, player, True)],
         ["d1 island", "north horon", True, lambda state: oos_can_swim(state, player, True)],
         ["north horon", "goron mountain entrance", True, lambda state: oos_can_swim(state, player, True)],
         ["goron mountain entrance", "natzu region, across water", True, lambda state: oos_can_swim(state, player, True)],
-        ["ghastly stump", "old man in treehouse", True, lambda state: all([
+        ["ghastly stump", "d1 island", True, lambda state: all([
             oos_can_break_bush(state, player, True),
             oos_can_swim(state, player, True)
         ])],
+
+        ["d1 island", "old man in treehouse", False, lambda state: all([
+            oos_can_swim(state, player, True),
+            oos_has_essences(state, player, 5)
+        ])],
+        ["d1 island", "cave south of mrs. ruul", False, lambda state: oos_can_swim(state, player, False)],
 
         # SPOOL SWAMP #############################################################################################
 

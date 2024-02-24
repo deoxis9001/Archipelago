@@ -1,4 +1,4 @@
-from worlds.tloz_oos.data.logic.predicates import *
+from worlds.tloz_oos.data.logic.LogicPredicates import *
 
 
 def make_d0_logic(player: int):
@@ -176,7 +176,7 @@ def make_d4_logic(player: int):
         ])],
         ["d4 north of entrance", "d4 pot puzzle", False, lambda state: all([
             oos_has_bombs(state, player),
-            oos_can_break_pot(state, player)
+            oos_has_bracelet(state, player)
         ])],
         ["d4 north of entrance", "d4 maze chest", False, lambda state: any([
             oos_can_trigger_lever_from_minecart(state, player),

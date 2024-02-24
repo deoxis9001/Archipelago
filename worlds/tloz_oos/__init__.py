@@ -11,10 +11,11 @@ from worlds.tloz_oos.data.Items import *
 from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
-from .data.logic.constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS
-from .data.logic.regions import REGIONS
+from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
+    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS
+from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
+
 
 class OracleOfSeasonsWeb(WebWorld):
     theme = "grass"
@@ -200,7 +201,7 @@ class OracleOfSeasonsWorld(World):
 
             item_name = loc_data['vanilla_item']
             if item_name == "Ricky's Gloves":  # Ricky's gloves are useless in current logic
-                item_name = "Gasha Seed"
+                item_name = "Progressive Sword"
             elif item_name == "Rod of Seasons":  # No lone rod of seasons supported for now
                 item_name = "Fool's Ore" if self.options.fools_ore != "excluded" else "Gasha Seed"
             elif item_name == "Flute":
@@ -208,6 +209,8 @@ class OracleOfSeasonsWorld(World):
 
             if "Ring" in item_name:
                 ring_count += 1
+            elif any([(string in item_name) for string in DUNGEON_ITEMS]):
+                self.pre_fill_items.append(self.create_item(item_name))
             else:
                 self.multiworld.itempool.append(self.create_item(item_name))
 
@@ -293,11 +296,12 @@ class OracleOfSeasonsWorld(World):
         yamlObj = {
             "settings": {
                 "companion": self.options.animal_companion.value,
-                "warp_to_start": self.options.warp_to_start,
+                "warp_to_start": self.options.warp_to_start.current_key,
                 "required_essences": self.options.required_essences.value,
                 "fools_ore_damage": 3 if self.options.fools_ore == "balanced" else 12,
-                "heart_beep_interval": self.options.heart_beep_interval,
-                "lost_woods_item_sequence": "winter up winter right winter down summer left"
+                "heart_beep_interval": self.options.heart_beep_interval.current_key,
+                "lost_woods_item_sequence": ' '.join(self.lost_woods_item_sequence),
+                "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},
             "locations": {}
@@ -317,6 +321,8 @@ class OracleOfSeasonsWorld(World):
                 yamlObj["subrosia portals"][PORTALS_CONVERSION_TABLE[portal_holo]] = PORTALS_CONVERSION_TABLE[portal_sub]
 
         for loc in self.multiworld.get_locations(self.player):
+            if loc.address is None:
+                continue
             item_name = loc.item.name if loc.item.player == loc.player else "Archipelago Item"
             yamlObj["locations"][loc.name] = item_name
 

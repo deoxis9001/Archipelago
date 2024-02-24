@@ -10,7 +10,8 @@ LOCATIONS_DATA = {
     "maku tree": {
         "region_id": "maku tree",
         "vanilla_item": "Gnarled Key",
-        "flag_byte": 0xC80B  # TODO: Might require more map flags (for different essence counts)
+        "flag_byte": [0xC80B, 0xC80C, 0xC82B, 0xC82C, 0xC82D, 0xC85B, 0xC85C, 0xC85D, 0xC87B]
+        # Maku Tree has several rooms depending on the amount of essences owned
     },
     "horon village SW chest": {
         "region_id": "horon village SW chest",
@@ -202,7 +203,8 @@ LOCATIONS_DATA = {
     "shop, 150 rupees": {
         "region_id": "shop, 150 rupees",
         "vanilla_item": "Flute",
-        "local": True  # TODO
+        "flag_byte": 0xC693,
+        "bit_mask": 0x80
     },
     "member's shop 1": {
         "region_id": "member's shop",
@@ -256,12 +258,17 @@ LOCATIONS_DATA = {
     "subrosia seaside": {
         "region_id": "subrosia seaside",
         "vanilla_item": "Star Ore",
-        "flag_byte": 0xC865  # or C866, C875, C876
+        "flag_byte": [0xC865, 0xC866, 0xC875, 0xC876]
     },
     "subrosian wilds chest": {
         "region_id": "subrosian wilds chest",
         "vanilla_item": "Blue Ore",
         "flag_byte": 0xC841
+    },
+    "subrosian wilds digging spot": {
+        "region_id": "subrosian wilds digging spot",
+        "vanilla_item": "Rupees (100)",
+        "flag_byte": 0xC840
     },
     "subrosia village chest": {
         "region_id": "subrosia village chest",
@@ -1010,8 +1017,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Wooden Bird",
         "flag_byte": 0xC89C
     },
-    "tick-tock trade": {
-        "region_id": "tick-tock trade",
+    "tick tock trade": {
+        "region_id": "tick tock trade",
         "vanilla_item": "Engine Grease",
         "flag_byte": 0xC883
     },

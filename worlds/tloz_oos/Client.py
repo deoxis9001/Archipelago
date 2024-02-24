@@ -11,15 +11,17 @@ if TYPE_CHECKING:
 
 ROM_ADDRS = {
     "game_identifier": (0x0134, 9, "ROM"),
-    "slot_name": (0x0000, 64, "ROM"),  # TODO: Inject using patcher and put addr here
+    "slot_name": (0xFFFC0, 64, "ROM"),
 }
 
 RAM_ADDRS = {
     "game_state": (0xC2EE, 1, "System Bus"),
     "received_item_index": (0xC6A0, 2, "System Bus"),
     "received_item": (0xCBFB, 1, "System Bus"),
-    "location_flags": (0xC600, 0x500, "System Bus"),  # TODO: Find and set the real address
-    "game_clear_byte": (0x0000, 1, "System Bus"),  # TODO: Find and set the real address
+    "location_flags": (0xC600, 0x500, "System Bus"),
+
+    "current_map_group": (0xCC49, 1, "System Bus"),
+    "current_map_id": (0xCC4C, 1, "System Bus"),
 }
 
 class OracleOfSeasonsClient(BizHawkClient):
@@ -32,9 +34,9 @@ class OracleOfSeasonsClient(BizHawkClient):
 
     def __init__(self) -> None:
         super().__init__()
-        self.local_checked_locations = set()
         self.item_id_to_name = build_item_id_to_name_dict()
         self.location_name_to_id = build_location_name_to_id_dict()
+        self.local_checked_locations = set()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -56,8 +58,8 @@ class OracleOfSeasonsClient(BizHawkClient):
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
-        # slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [ROM_ADDRS["slot_name"]]))[0]
-        # ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
+        slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [ROM_ADDRS["slot_name"]]))[0]
+        ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
         pass
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
@@ -72,7 +74,8 @@ class OracleOfSeasonsClient(BizHawkClient):
                 RAM_ADDRS["received_item_index"],  # Number of received items
                 RAM_ADDRS["received_item"],  # Received item still pending?
                 RAM_ADDRS["location_flags"],  # Location flags
-                RAM_ADDRS["game_clear_byte"],  # Has goal been completed?
+                RAM_ADDRS["current_map_group"],
+                RAM_ADDRS["current_map_id"],  # Current map & id to check for goal completion
             ])
             if read_result is None:
                 return
@@ -84,7 +87,7 @@ class OracleOfSeasonsClient(BizHawkClient):
             num_received_items = int.from_bytes(read_result[1], "little")
             received_item_is_empty = (read_result[2][0] == 0)
             flag_bytes = read_result[3]
-            game_clear = (read_result[4] == 1)  # TODO: Might be a different value
+            game_clear = (read_result[4][0] == 0x07 and read_result[5][0] == 0x90)
 
             # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
             # fill it with the next item
@@ -105,26 +108,33 @@ class OracleOfSeasonsClient(BizHawkClient):
                 ])
 
             # Read location flags from RAM
-            local_checked_locations = set()
             for name, location in LOCATIONS_DATA.items():
                 if "local" in location and location["local"] is True:
                     continue
                 if "randomized" in location and location["randomized"] is False:
                     continue
-                byte_offset = location["flag_byte"] - RAM_ADDRS["location_flags"][0]
-                bit_mask = location["bit_mask"] if "bit_mask" in location else 0x20
-                if flag_bytes[byte_offset] & bit_mask == bit_mask:
-                    location_id = self.location_name_to_id[name]
-                    local_checked_locations.add(location_id)
+
+                bytes_to_test = location["flag_byte"]
+                if not hasattr(bytes_to_test, "__len__"):
+                    bytes_to_test = [bytes_to_test]
+
+                for byte_addr in bytes_to_test:
+                    byte_offset = byte_addr - RAM_ADDRS["location_flags"][0]
+                    bit_mask = location["bit_mask"] if "bit_mask" in location else 0x20
+                    if flag_bytes[byte_offset] & bit_mask == bit_mask:
+                        location_id = self.location_name_to_id[name]
+                        self.local_checked_locations.add(location_id)
+                        break
+
+            for loc in ctx.locations_checked:
+                self.local_checked_locations.add(loc)
 
             # Send locations
-            if local_checked_locations != ctx.locations_checked:
-                self.local_checked_locations = local_checked_locations
-                if local_checked_locations is not None:
-                    await ctx.send_msgs([{
-                        "cmd": "LocationChecks",
-                        "locations": list(local_checked_locations)
-                    }])
+            if self.local_checked_locations != ctx.locations_checked:
+                await ctx.send_msgs([{
+                    "cmd": "LocationChecks",
+                    "locations": list(self.local_checked_locations)
+                }])
 
             # Send game clear
             if not ctx.finished_game and game_clear:

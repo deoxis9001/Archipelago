@@ -1,9 +1,9 @@
 from BaseClasses import MultiWorld
-from worlds.tloz_oos.data.logic.dungeons import (make_d0_logic, make_d1_logic, make_d2_logic, make_d3_logic,
-                                                 make_d4_logic, make_d5_logic, make_d6_logic, make_d7_logic,
-                                                 make_d8_logic)
-from worlds.tloz_oos.data.logic.holodrum import make_holodrum_logic
-from worlds.tloz_oos.data.logic.subrosia import make_subrosia_logic
+from worlds.tloz_oos.data.logic.DungeonsLogic import (make_d0_logic, make_d1_logic, make_d2_logic, make_d3_logic,
+                                                      make_d4_logic, make_d5_logic, make_d6_logic, make_d7_logic,
+                                                      make_d8_logic)
+from worlds.tloz_oos.data.logic.OverworldLogic import make_holodrum_logic
+from worlds.tloz_oos.data.logic.SubrosiaLogic import make_subrosia_logic
 
 
 def create_connections(multiworld: MultiWorld, player: int):

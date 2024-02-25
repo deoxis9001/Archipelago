@@ -113,11 +113,6 @@ def make_subrosia_logic(player: int):
         ["subrosia east junction", "subrosia village chest", False, lambda state: any([
             oos_has_magnet_gloves(state, player),
             oos_can_jump_4_wide_pit(state, player),
-            all([
-                # TODO: Test if it's indeed possible
-                oos_option_medium_logic(state, player),
-                oos_can_jump_3_wide_pit(state, player)
-            ])
         ])],
 
         ["subrosia furnace sector", "great furnace", False, lambda state: all([

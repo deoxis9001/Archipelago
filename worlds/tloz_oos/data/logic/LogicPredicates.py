@@ -427,7 +427,7 @@ def oos_can_use_seeds(state: CollectionState, player: int):
     return oos_has_slingshot(state, player) or oos_has_satchel(state, player)
 
 
-def oos_can_use_ember_seeds(state: CollectionState, player: int, accept_mystery_seeds: bool = False):
+def oos_can_use_ember_seeds(state: CollectionState, player: int, accept_mystery_seeds: bool):
     return all([
         oos_can_use_seeds(state, player),
         any([

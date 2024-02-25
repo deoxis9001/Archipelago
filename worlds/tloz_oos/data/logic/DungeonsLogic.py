@@ -26,7 +26,7 @@ def make_d1_logic(player: int):
             ])
         ])],
 
-        ["enter d1", "d1 floormaster room", False, lambda state: oos_can_use_ember_seeds(state, player)],
+        ["enter d1", "d1 floormaster room", False, lambda state: oos_can_use_ember_seeds(state, player, True)],
 
         ["d1 floormaster room", "d1 boss", False, lambda state: all([
             oos_has_boss_key(state, player, 1),
@@ -40,7 +40,7 @@ def make_d1_logic(player: int):
         ])],
 
         ["d1 stalfos chest", "d1 goriya chest", False, lambda state: any([
-            oos_can_use_ember_seeds(state, player),
+            oos_can_use_ember_seeds(state, player, True),
             oos_can_kill_normal_enemy(state, player, True)
         ])],
 
@@ -79,7 +79,7 @@ def make_d2_logic(player: int):
         ["enter d2", "d2 torch room", False, None],
         ["d2 torch room", "d2 left from entrance", False, None],
         ["d2 torch room", "d2 rope drop", False, lambda state: oos_can_kill_normal_enemy(state, player)],
-        ["d2 torch room", "d2 arrow room", False, lambda state: oos_can_use_ember_seeds(state, player)],
+        ["d2 torch room", "d2 arrow room", False, lambda state: oos_can_use_ember_seeds(state, player, True)],
 
         ["d2 arrow room", "d2 torch room", False, None],  # Backwards path
         ["d2 arrow room", "d2 rupee room", False, lambda state: oos_has_bombs(state, player)],
@@ -252,7 +252,7 @@ def make_d4_logic(player: int):
         ["d4 stalfos stairs", "d4 terrace", False, None],
 
         ["d4 stalfos stairs", "d4 final minecart", False, lambda state: all([
-            oos_can_use_ember_seeds(state, player),
+            oos_can_use_ember_seeds(state, player, False),
             oos_can_kill_armored_enemy(state, player)
         ])],
 
@@ -286,13 +286,13 @@ def make_d4_logic(player: int):
             any([
                 all([
                     oos_has_slingshot(state, player),
-                    oos_can_use_ember_seeds(state, player)
+                    oos_can_use_ember_seeds(state, player, True)
                 ]),
                 oos_can_jump_3_wide_pit(state, player),
                 all([  # throw seeds using satchel during a jump
                     oos_option_hard_logic(state, player),
                     oos_has_feather(state, player),
-                    oos_can_use_ember_seeds(state, player)
+                    oos_can_use_ember_seeds(state, player, True)
                 ])
             ])
         ])],
@@ -471,7 +471,7 @@ def make_d6_logic(player: int):
                 oos_has_slingshot(state, player),
                 oos_option_medium_logic(state, player)
             ]),
-            oos_can_use_ember_seeds(state, player)
+            oos_can_use_ember_seeds(state, player, True)
         ])],
 
         ["d6 torch stairs", "d6 escape room", False, lambda state: oos_has_feather(state, player)],
@@ -548,7 +548,7 @@ def make_d7_logic(player: int):
         ["enter d7", "enter poe A", False, lambda state: all([
             oos_has_small_keys(state, player, 7, 1),
             oos_has_slingshot(state, player),
-            oos_can_use_ember_seeds(state, player)
+            oos_can_use_ember_seeds(state, player, True)
         ])],
 
         ["enter poe A", "d7 pot room", False, lambda state: all([
@@ -556,7 +556,7 @@ def make_d7_logic(player: int):
                 # Kill poe sister
                 oos_can_kill_armored_enemy(state, player),
                 oos_has_rod(state, player),
-                oos_can_use_ember_seeds(state, player)
+                oos_can_use_ember_seeds(state, player, False)
             ]),
             oos_has_bracelet(state, player)
         ])],
@@ -590,7 +590,7 @@ def make_d7_logic(player: int):
         # 3 keys
         ["d7 pot room", "enter poe B", False, lambda state: all([
             oos_has_small_keys(state, player, 7, 3),
-            oos_can_use_ember_seeds(state, player),
+            oos_can_use_ember_seeds(state, player, False),
             any([
                 oos_can_use_pegasus_seeds(state, player),
                 oos_has_hyper_slingshot(state, player),
@@ -694,7 +694,7 @@ def make_d8_logic(player: int):
                     oos_option_medium_logic(state, player),
                     oos_has_feather(state, player),
                     any([
-                        oos_can_use_ember_seeds(state, player),
+                        oos_can_use_ember_seeds(state, player, False),
                         oos_can_use_scent_seeds(state, player),
                         oos_can_use_mystery_seeds(state, player),
                     ])
@@ -709,7 +709,7 @@ def make_d8_logic(player: int):
                 all([
                     oos_option_hard_logic(state, player),
                     any([
-                        oos_can_use_ember_seeds(state, player),
+                        oos_can_use_ember_seeds(state, player, False),
                         oos_can_use_scent_seeds(state, player),
                         oos_can_use_mystery_seeds(state, player),
                     ])
@@ -754,7 +754,7 @@ def make_d8_logic(player: int):
                 all([
                     oos_option_hard_logic(state, player),
                     any([
-                        oos_can_use_ember_seeds(state, player),
+                        oos_can_use_ember_seeds(state, player, False),
                         oos_can_use_scent_seeds(state, player),
                         oos_can_use_mystery_seeds(state, player),
                     ])
@@ -770,7 +770,7 @@ def make_d8_logic(player: int):
             # Frypolar can be killed many ways, but we need HSS + ember seeds in the room
             # right after anyway...
             oos_has_hyper_slingshot(state, player),
-            oos_can_use_ember_seeds(state, player)
+            oos_can_use_ember_seeds(state, player, False)
         ])],
 
         ["d8 ice puzzle room", "d8 pols voice chest", False, lambda state: any([

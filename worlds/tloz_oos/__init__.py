@@ -144,6 +144,13 @@ class OracleOfSeasonsWorld(World):
             self.random.shuffle(shuffled_rupees)
             self.old_man_rupee_values = dict(zip(self.old_man_rupee_values, shuffled_rupees))
 
+    def create_location(self, region_name: str, location_name: str, local: bool):
+        region = self.multiworld.get_region(region_name, self.player)
+        location = Location(self.player, location_name, self.location_name_to_id[location_name], region)
+        region.locations.append(location)
+        if local:
+            location.item_rule = lambda item: item.player == self.player
+
     def create_regions(self):
         # Create regions
         for region_name in REGIONS:
@@ -152,12 +159,11 @@ class OracleOfSeasonsWorld(World):
 
         # Create locations
         for location_name, location_data in LOCATIONS_DATA.items():
-            region = self.multiworld.get_region(location_data['region_id'], self.player)
-            location = Location(self.player, location_name, self.location_name_to_id[location_name], region)
-            region.locations.append(location)
+            if "conditional" in location_data and location_data["conditional"] is True:
+                continue
 
-            if "local" in location_data and location_data["local"] is True:
-                location.item_rule = lambda item: item.player == self.player
+            is_local = "local" in location_data and location_data["local"] is True
+            self.create_location(location_data['region_id'], location_name, is_local)
 
         self.create_events()
 

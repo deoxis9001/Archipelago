@@ -1053,6 +1053,54 @@ LOCATIONS_DATA = {
 #    },
     # Maku seed is 0xC85D
 
+    "old man in horon": {
+        "region_id": "old man in horon",
+        "flag_byte": 0xCA05,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
+    "old man near d1": {
+        "region_id": "old man near d1",
+        "flag_byte": 0xCA03,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
+    "old man near blaino": {
+        "region_id": "old man near blaino",
+        "flag_byte": 0xCA02,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
+    "old man in goron mountain": {
+        "region_id": "old man in goron mountain",
+        "flag_byte": 0xCA01,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
+    "old man near western coast house": {
+        "region_id": "old man near western coast house",
+        "flag_byte": 0xCA04,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
+    "old man near holly's house": {
+        "region_id": "old man near holly's house",
+        "flag_byte": 0xCA07,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
+    "old man near mrs. ruul": {
+        "region_id": "old man near mrs. ruul",
+        "flag_byte": 0xCA08,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
+    "old man near d6": {
+        "region_id": "old man near d6",
+        "flag_byte": 0xCA06,
+        "bit_mask": 0x40,
+        "conditional": True
+    },
 
     "horon village tree": {
         "region_id": "horon village tree",

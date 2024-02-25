@@ -21,7 +21,7 @@ class OracleOfSeasonsWeb(WebWorld):
     theme = "grass"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Oracles Randomizer software on your computer.",
+        "A guide to setting up Oracle of Seasons for Archipelago on your computer.",
         "English",
         "oos_setup_en.md",
         "oos_setup/en",
@@ -31,8 +31,9 @@ class OracleOfSeasonsWeb(WebWorld):
 
 class OracleOfSeasonsWorld(World):
     """
-    The Legend of Zelda: Oracles of Seasons
-    TODO
+    The Legend of Zelda: Oracles of Seasons is one of the rare Capcom entries to the series.
+    The seasons in the world of Holodrum have been a mess since Onox captured Din, the oracle of seasons.
+    Gather the Essences of Nature, confront Onox and rescue Din to give nature some rest in Holodrum.
     """
     game = "The Legend of Zelda: Oracle of Seasons"
     options_dataclass = OracleOfSeasonsOptions

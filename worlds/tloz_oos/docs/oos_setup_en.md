@@ -1,4 +1,4 @@
-# Landstalker Setup Guide
+# The Legend of Zelda: Oracle of Seasons Setup Guide
 
 ## Required Software
 

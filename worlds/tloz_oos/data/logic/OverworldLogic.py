@@ -224,7 +224,7 @@ def make_holodrum_logic(player: int):
         ["d1 stump", "malon trade", False, lambda state: state.has("Cuccodex", player)],
         ["d1 stump", "d1 island", True, lambda state: oos_can_break_bush(state, player, True)],
         ["d1 stump", "old man near d1", False, lambda state: oos_can_use_ember_seeds(state, player)],
-                                                 #
+
         ["d1 island", "d1 entrance", True, lambda state: state.has("Gnarled Key", player)],
 
         ["d1 stump", "eyeglass lake (default)", True, lambda state: all([

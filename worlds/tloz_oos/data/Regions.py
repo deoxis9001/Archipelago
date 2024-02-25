@@ -64,6 +64,7 @@ REGIONS = [
     "spool swamp portal",
     "spool swamp cave",
     "spool swamp heart piece",
+    "spool swamp digging spot",
     "ghastly stump",
     "north horon",
     "d1 stump",

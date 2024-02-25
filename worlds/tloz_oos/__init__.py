@@ -188,7 +188,6 @@ class OracleOfSeasonsWorld(World):
         self.create_event("temple remains upper stump", "_reached_remains_stump")
         self.create_event("d1 stump", "_reached_eyeglass_stump")
         self.create_event("d5 stump", "_reached_eyeglass_stump")
-        self.create_event("d2 stump", "_reached_d2_stump")
         self.create_event("sunken city dimitri", "_saved_dimitri_in_sunken_city")
         self.create_event("ghastly stump", "_reached_ghastly_stump")
         self.create_event("coast stump", "_reached_coast_stump")
@@ -204,6 +203,12 @@ class OracleOfSeasonsWorld(World):
         self.create_event("d6 rupee room", "_reached_d6_rupee_room")
 
         self.create_event("onox beaten", "_beaten_onox")
+
+        # Only create a progression event for D2 stump if it's actually reachable
+        if any([self.options.animal_companion.value == "Ricky",
+                self.default_seasons["WOODS_OF_WINTER"] == "summer",
+                not self.options.shuffle_dungeons == "shuffle"]):
+            self.create_event("d2 stump", "_reached_d2_stump")
 
         for region_name in self.old_man_rupee_values:
             self.create_event(region_name, "rupees from " + region_name)

@@ -80,10 +80,6 @@ def oos_has_autumn(state: CollectionState, player: int):
     return state.has(SEASON_ITEMS["autumn"], player)
 
 
-def oos_has_flute(state: CollectionState, player: int):
-    return state.has("Flute", player)
-
-
 def oos_has_magnet_gloves(state: CollectionState, player: int):
     return state.has("Magnet Gloves", player)
 
@@ -274,16 +270,24 @@ def oos_has_bombs(state: CollectionState, player: int):
     ])
 
 
+def oos_has_flute(state: CollectionState, player: int):
+    return any([
+        oos_can_summon_ricky(state, player),
+        oos_can_summon_moosh(state, player),
+        oos_can_summon_dimitri(state, player)
+    ])
+
+
 def oos_can_summon_ricky(state: CollectionState, player: int):
-    return oos_is_companion_ricky(state, player) and oos_has_flute(state, player)
+    return state.has("Ricky's Flute", player)
 
 
 def oos_can_summon_moosh(state: CollectionState, player: int):
-    return oos_is_companion_moosh(state, player) and oos_has_flute(state, player)
+    return state.has("Moosh's Flute", player)
 
 
 def oos_can_summon_dimitri(state: CollectionState, player: int):
-    return oos_is_companion_dimitri(state, player) and oos_has_flute(state, player)
+    return state.has("Dimitri's Flute", player)
 
 
 # Jump-related predicates ###########################################

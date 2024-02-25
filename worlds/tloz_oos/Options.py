@@ -101,6 +101,23 @@ class OracleOfSeasonsPortalShuffle(Choice):
     default = 0
 
 
+class OracleOfSeasonsOldMenShuffle(Choice):
+    """
+    Determine how the Old Men that can be found under specific bushes are handled by the randomizer
+    - Vanilla: Each Old Man gives/takes the amount of rupees it usually does in the base game
+    - Shuffled Values: The rupee values given/taken are shuffled among Old Men
+    """
+    # - Turn Into Locations: Each Old Man becomes a randomized check, and the total amount of rupees they usually give
+    #   in vanilla is shuffled into the item pool
+    diplay_name = "Shuffle Old Men"
+
+    option_vanilla = 0
+    option_shuffle_values = 1
+#    option_turn_into_locations = 2
+
+    default = 0
+
+
 class OracleOfSeasonsLostWoodsItemSequence(Choice):
     """
     This option defines how the "secret sequence" (both directions and seasons) leading to the Noble Sword pedestal
@@ -183,6 +200,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     animal_companion: OracleOfSeasonsAnimalCompanion
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle
+    shuffle_old_men: OracleOfSeasonsOldMenShuffle
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     ring_quality: OracleOfSeasonsRingQuality
     fools_ore: OracleOfSeasonsFoolsOre

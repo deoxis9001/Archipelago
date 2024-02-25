@@ -139,6 +139,11 @@ class OracleOfSeasonsWorld(World):
                 self.random.choice(SEASONS), "left"
             ]
 
+        if self.options.shuffle_old_men == "shuffle_values":
+            shuffled_rupees = list(self.old_man_rupee_values.values())
+            self.random.shuffle(shuffled_rupees)
+            self.old_man_rupee_values = dict(zip(self.old_man_rupee_values, shuffled_rupees))
+
     def create_regions(self):
         # Create regions
         for region_name in REGIONS:
@@ -309,6 +314,7 @@ class OracleOfSeasonsWorld(World):
     def generate_output(self, output_directory: str):
         yamlObj = {
             "settings": {
+                "game": "seasons",
                 "companion": self.options.animal_companion.value,
                 "warp_to_start": self.options.warp_to_start.current_key,
                 "required_essences": self.options.required_essences.value,
@@ -318,11 +324,15 @@ class OracleOfSeasonsWorld(World):
                 "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},
+            "old man rupee values": {},
             "locations": {}
         }
 
         for region_name, season in self.default_seasons.items():
             yamlObj["default seasons"][REGIONS_CONVERSION_TABLE[region_name]] = season
+
+        for region_name, value in self.old_man_rupee_values.items():
+            yamlObj["old man rupee values"][region_name] = value
 
         if self.options.shuffle_dungeons != "vanilla":
             yamlObj["dungeon entrances"] = {}

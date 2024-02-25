@@ -207,7 +207,7 @@ def make_holodrum_logic(player: int):
         ["d2 stump", "central woods of winter", False, None],
 
         ["d2 stump", "d2 roof", True, lambda state: oos_has_bracelet(state, player)],
-        ["d2 roof", "d2 alt entrances", True, lambda state: oos_option_shuffled_dungeons(state, player)],
+        ["d2 roof", "d2 alt entrances", True, lambda state: not oos_option_shuffled_dungeons(state, player)],
 
         # EYEGLASS LAKE SECTOR#########################################################################################
 

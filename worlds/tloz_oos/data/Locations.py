@@ -305,8 +305,8 @@ LOCATIONS_DATA = {
     "subrosia market, 5th item": {
         "region_id": "subrosia market, 5th item",
         "vanilla_item": "Member's Card",
-        "local": True
-        # TODO: There is no flag for this one, as the base game only relies on member's card being bought
+        "flag_byte": 0xC694,
+        "bit_mask": 0x01
     },
     "great furnace": {
         "region_id": "great furnace",
@@ -317,8 +317,7 @@ LOCATIONS_DATA = {
         "region_id": "subrosian smithy ore",
         "vanilla_item": "Iron Shield",
         "flag_byte": 0xC897,
-        "local": True,
-        # TODO C897 gets updated on both, looks like it only relies on hard ore (set 0x80 manually?)
+        "bit_mask": 0x40
     },
     # "subrosian smithy bell": {
     #     "region_id": "subrosian smithy bell",
@@ -326,7 +325,6 @@ LOCATIONS_DATA = {
     #     "randomized": False,
     #     "flag_byte": 0xC897,
     #     "local": True
-    #     # TODO C897 gets updated on both, looks like it only relies on hard ore (set 0x40 manually?)
     # },
 
     "d0 key chest": {

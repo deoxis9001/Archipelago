@@ -453,61 +453,56 @@ def make_holodrum_logic(player: int):
 
         # NATZU REGION #############################################################################################
 
-        ["sunken city", "north horon", False, lambda state: all([
-            any([
-                all([
-                    oos_is_companion_ricky(state, player),
-                    oos_has_flute(state, player)
-                ]),
-                all([
-                    oos_is_companion_dimitri(state, player),
-                    oos_has_feather(state, player),
-                    any([
-                        oos_has_flippers(state, player),
-                        oos_has_flute(state, player)
-                    ])
-                ]),
-                all([
-                    oos_is_companion_moosh(state, player),
-                    any([
-                        oos_has_flute(state, player),
-                        all([
-                            oos_can_break_bush(state, player, True),
-                            oos_can_jump_3_wide_liquid(state, player)
-                            # Not a liquid, but it's a diagonal jump so technically the same
-                        ])
-                    ])
-                ])
-            ])
+        ["north horon", "natzu west", True, lambda state: any([
+            oos_can_jump_1_wide_pit(state, player, True),
+            oos_can_swim(state, player, True)
         ])],
 
-        ["sunken city", "moblin keep bridge", False, lambda state: oos_is_companion_ricky(state, player)],
+        ["natzu west", "natzu west (ricky)", True, lambda state: oos_is_companion_ricky(state, player)],
+        ["natzu west", "natzu west (moosh)", True, lambda state: oos_is_companion_moosh(state, player)],
+        ["natzu west", "natzu west (dimitri)", True, lambda state: oos_is_companion_dimitri(state, player)],
 
-        ["north horon", "moblin keep bridge", False, lambda state: all([
+        ["natzu east (ricky)", "sunken city", True, lambda state: oos_is_companion_ricky(state, player)],
+        ["natzu east (moosh)", "sunken city", True, lambda state: all([
+            oos_is_companion_moosh(state, player),
             any([
-                oos_has_flute(state, player),
-                all([
-                    oos_is_companion_moosh(state, player),
-                    any([
-                        all([
-                            oos_option_hard_logic(state, player),
-                            oos_has_feather(state, player)
-                        ]),
-                        oos_can_jump_3_wide_pit(state, player)
-                    ]),
-                    any([
-                        oos_has_magic_boomerang(state, player),
-                        oos_has_cape(state, player),
-                        oos_can_warp(state, player),
-                        all([
-                            oos_option_hard_logic(state, player),
-                            oos_has_sword(state, player)
-                        ])
-                    ])
-                ])
+                oos_can_summon_moosh(state, player),
+                oos_can_jump_3_wide_liquid(state, player)  # Not a liquid, but it's a diagonal jump so that's the same
             ])
         ])],
+        ["natzu east (dimitri)", "sunken city", True, lambda state: all([
+            oos_is_companion_dimitri(state, player),
+            oos_can_jump_1_wide_pit(state, player, False)
+        ])],
+        ["natzu east (dimitri)", "natzu region, across water", False, lambda state: \
+            oos_can_jump_5_wide_liquid(state, player)],
 
+        ["natzu west (ricky)", "natzu east (ricky)", True, lambda state: oos_can_summon_ricky(state, player)],
+        ["natzu west (moosh)", "natzu east (moosh)", True, lambda state: any([
+            oos_can_summon_moosh(state, player),
+            all([
+                oos_option_medium_logic(state, player),
+                oos_can_break_bush(state, player, True),
+                oos_can_jump_3_wide_pit(state, player)
+            ])
+        ])],
+        ["natzu west (dimitri)", "natzu east (dimitri)", True, lambda state: oos_can_swim(state, player, True)],
+
+        ["natzu east (ricky)", "moblin keep bridge", False, None],
+        ["natzu east (moosh)", "moblin keep bridge", False, lambda state: any([
+            oos_can_summon_moosh(state, player),
+            all([
+                oos_can_break_bush(state, player),
+                oos_can_jump_3_wide_pit(state, player)
+            ])
+        ])],
+        ["natzu east (dimitri)", "moblin keep bridge", False, lambda state: any([
+            oos_can_summon_dimitri(state, player),
+            all([
+                oos_option_hard_logic(state, player),
+                state.has("Swimmer's Ring", player)
+            ])
+        ])],
         ["moblin keep bridge", "moblin keep", False, lambda state: all([
             any([
                 oos_has_flippers(state, player),
@@ -516,49 +511,12 @@ def make_holodrum_logic(player: int):
             oos_has_bracelet(state, player)
         ])],
 
-        ["north horon", "sunken city", False, lambda state: all([
-            any([
-                all([
-                    oos_is_companion_ricky(state, player),
-                    oos_has_flute(state, player)
-                ]),
-                all([
-                    oos_is_companion_dimitri(state, player),
-                    any([
-                        all([
-                            any([
-                                oos_has_flippers(state, player),
-                                oos_has_flute(state, player)
-                            ]),
-                            oos_has_feather(state, player)
-                        ]),
-                        all([
-                            oos_has_flute(state, player),
-                            oos_has_flippers(state, player),
-                            oos_can_warp(state, player)
-                        ]),
-                    ])
-                ]),
-                all([
-                    oos_is_companion_moosh(state, player),
-                    any([
-                        oos_has_flute(state, player),
-                        all([
-                            oos_can_break_bush(state, player, True),
-                            oos_can_jump_3_wide_liquid(state, player)
-                            # Not a liquid, but it's a diagonal jump so technically the same
-                        ])
-                    ])
-                ])
-            ])
-        ])],
+        ["natzu east (ricky)", "natzu river bank", True, lambda state: oos_can_summon_ricky(state, player)],
+        ["natzu east (moosh)", "natzu river bank", True, lambda state: oos_is_companion_moosh(state, player)],
+        ["natzu east (dimitri)", "natzu river bank", True, lambda state: oos_is_companion_dimitri(state, player)],
+        ["natzu river bank", "goron mountain entrance", True, lambda state: oos_can_swim(state, player, True)],
 
         # SUNKEN CITY ############################################################################################
-
-        ["sunken city", "natzu region, across water", False, lambda state: all([
-            oos_is_companion_dimitri(state, player),
-            oos_can_jump_5_wide_liquid(state, player)
-        ])],
 
         ["sunken city", "sunken city tree", False, lambda state: all([
             any([

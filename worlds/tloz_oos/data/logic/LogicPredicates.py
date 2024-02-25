@@ -167,7 +167,7 @@ def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):
         any([
             world.options.lost_woods_item_sequence == "vanilla",
             all([
-                oos_can_use_ember_seeds(state, player),
+                oos_can_use_ember_seeds(state, player, False),
                 state.has("Phonograph", player)
             ])
         ]),
@@ -506,7 +506,7 @@ def oos_can_break_bush(state: CollectionState, player: int, can_summon_companion
             oos_option_medium_logic(state, player),
             any([
                 oos_has_bombs(state, player),
-                oos_can_use_ember_seeds(state, player),
+                oos_can_use_ember_seeds(state, player, False),
                 oos_can_use_gale_seeds_offensively(state, player),
             ])
         ]),
@@ -538,7 +538,7 @@ def oos_can_break_flowers(state: CollectionState, player: int, can_summon_compan
         oos_has_sword(state, player),
         oos_has_magic_boomerang(state, player),
         oos_has_bombs(state, player),
-        oos_can_use_ember_seeds(state, player),
+        oos_can_use_ember_seeds(state, player, False),
         (oos_has_slingshot(state, player) and oos_has_gale_seeds(state, player)),
         (can_summon_companion and oos_has_flute(state, player))
     ])
@@ -720,7 +720,7 @@ def oos_can_kill_d2_far_moblin(state: CollectionState, player: int):
         all([
             oos_option_hard_logic(state, player),
             any([
-                oos_can_use_ember_seeds(state, player),
+                oos_can_use_ember_seeds(state, player, False),
                 oos_can_punch(state, player)
             ])
         ])

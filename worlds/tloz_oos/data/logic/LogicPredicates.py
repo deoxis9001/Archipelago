@@ -415,14 +415,15 @@ def oos_can_use_seeds(state: CollectionState, player: int):
     return oos_has_slingshot(state, player) or oos_has_satchel(state, player)
 
 
-def oos_can_use_ember_seeds(state: CollectionState, player: int):
+def oos_can_use_ember_seeds(state: CollectionState, player: int, accept_mystery_seeds: bool = False):
     return all([
         oos_can_use_seeds(state, player),
         any([
             oos_has_ember_seeds(state, player),
             all([
                 # Medium logic expects the player to know they can use mystery seeds
-                # to randomly get the ember effect
+                # to randomly get the ember effect in some cases
+                accept_mystery_seeds,
                 oos_option_medium_logic(state, player),
                 oos_has_mystery_seeds(state, player),
             ])

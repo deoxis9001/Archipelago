@@ -105,12 +105,12 @@ class OracleOfSeasonsWorld(World):
             for region in self.default_seasons:
                 self.default_seasons[region] = single_season
 
-        if self.options.shuffle_dungeons == "shuffled":
+        if self.options.shuffle_dungeons == "shuffle":
             shuffled_entrances = list(self.dungeon_entrances.values())
             self.random.shuffle(shuffled_entrances)
             self.dungeon_entrances = dict(zip(self.dungeon_entrances, shuffled_entrances))
 
-        if self.options.shuffle_portals == "shuffled":
+        if self.options.shuffle_portals == "shuffle":
             def shuffle_portals():
                 shuffled_portals = list(self.portal_connections.values())
                 self.random.shuffle(shuffled_portals)
@@ -158,7 +158,7 @@ class OracleOfSeasonsWorld(World):
             self.create_event(f"d{i+1} boss", ESSENCES[i])
         self.create_event("maku seed", "Maku Seed")
 
-        self.create_event("maple trade", "_met_maple")
+        self.create_event("maple trade", "Ghastly Doll")
         self.create_event("spool stump", "_reached_spool_stump")
         self.create_event("bomb temple remains", "_triggered_volcano")
         self.create_event("temple remains lower stump", "_reached_remains_stump")

@@ -78,12 +78,12 @@ class OracleOfSeasonsAnimalCompanion(Choice):
 class OracleOfSeasonsDungeonShuffle(Choice):
     """
     - Vanilla: each dungeon entrance leads to its intended dungeon
-    - Shuffled: each dungeon entrance leads to a random dungeon picked at generation time
+    - Shuffle: each dungeon entrance leads to a random dungeon picked at generation time
     """
     display_name = "Shuffle Dungeons"
 
     option_vanilla = 0
-    option_shuffled = 1
+    option_shuffle = 1
 
     default = 0
 
@@ -91,12 +91,12 @@ class OracleOfSeasonsDungeonShuffle(Choice):
 class OracleOfSeasonsPortalShuffle(Choice):
     """
     - Vanilla: pairs of portals are the same as in the original game
-    - Shuffled: each portal in Holodrum is connected to a random portal in Subrosia picked at generation time
+    - Shuffle: each portal in Holodrum is connected to a random portal in Subrosia picked at generation time
     """
     display_name = "Shuffle Subrosia Portals"
 
     option_vanilla = 0
-    option_shuffled = 1
+    option_shuffle = 1
 
     default = 0
 

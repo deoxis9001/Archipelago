@@ -165,6 +165,7 @@ REGIONS = [
     "subrosia market, 5th item",
     "tower of spring",
     "subrosian wilds chest",
+    "subrosian wilds digging spot",
     "subrosia, open cave",
     "subrosia, locked cave",
     "subrosia village chest",

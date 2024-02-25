@@ -267,7 +267,7 @@ LOCATIONS_DATA = {
     },
     "subrosian wilds digging spot": {
         "region_id": "subrosian wilds digging spot",
-        "vanilla_item": "Rupees (100)",
+        "vanilla_item": "Rupees (50)",
         "flag_byte": 0xC840
     },
     "subrosia village chest": {

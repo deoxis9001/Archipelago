@@ -51,12 +51,12 @@ def make_holodrum_logic(player: int):
         # WESTERN COAST ##############################################################################################
 
         ["horon village", "black beast's chest", False, lambda state: all([
-            oos_can_use_mystery_seeds(state, player),
-            oos_can_kill_armored_enemy(state, player),
             all([
                 oos_has_slingshot(state, player),
-                oos_can_use_ember_seeds(state, player),
-            ])
+                oos_can_use_ember_seeds(state, player, True),
+            ]),
+            oos_can_use_mystery_seeds(state, player),
+            oos_can_kill_armored_enemy(state, player),
         ])],
 
         ["horon village", "d0 entrance", False, None],
@@ -313,8 +313,7 @@ def make_holodrum_logic(player: int):
 
         ["north horon", "temple remains lower stump", True, lambda state: oos_can_jump_3_wide_pit(state, player)],
 
-        ["ghastly stump", "mrs. ruul trade", False, lambda state: state.has("_met_maple", player)],
-            # TODO: state.has("Ghastly Doll", player)],     once Maple item is randomized
+        ["ghastly stump", "mrs. ruul trade", False, lambda state: state.has("Ghastly Doll", player)],
 
         ["north horon", "ghastly stump", True, lambda state: any([
             oos_can_jump_1_wide_pit(state, player, True),
@@ -820,21 +819,3 @@ def make_holodrum_logic(player: int):
             ])
         ])]
     ]
-
-    # "goron mountain old man": lambda state: all(["goron mountain", "ember seeds"],
-    #
-    # "western coast old man": lambda state: all(["western coast after ship", "ember seeds"],
-    #
-    # "holodrum plain east old man": lambda state: all(["north horon", "ember seeds", {
-    #     "OR": lambda state: all([oos_can_summon_ricky(state, ), oos_get_default_season(state, player, "NORTH_HORON") == "summer",
-    #            ["ghastly stump", oos_has_summer(state, player), any([oos_has_feather(state, player), oos_has_flute(state, player), [oos_can_break_bush(state, ), oos_has_flippers(state, player)]])]], player)],
-    #
-    # "horon village old man": lambda state: all(["horon village", "ember seeds"],
-    #
-    # "north horon old man": lambda state: all(["d1 stump", "ember seeds"],
-    #
-    # "tarm ruins old man": lambda state: all(["d6 entrance", "ember seeds"],
-    #
-    # "woods of winter old man": lambda state: all(["moblin road", "ember seeds"],
-    #
-    # "holodrum plain west old man": lambda state: all(["ghastly stump", "ember seeds"],

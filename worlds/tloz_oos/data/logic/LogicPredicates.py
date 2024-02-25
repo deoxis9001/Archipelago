@@ -195,10 +195,18 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
     rupees += state.count("Rupees (50)", player) * 50
     rupees += state.count("Rupees (100)", player) * 100
 
+    # Secret rooms inside D2 and D6 containing loads of rupees
     if state.has("_reached_d2_rupee_room", player):
         rupees += 150
     if state.has("_reached_d6_rupee_room", player):
         rupees += 90
+
+    # Old men giving and taking rupees
+    world = state.multiworld.worlds[player]
+    for region_name, value in world.old_man_rupee_values.items():
+        event_name = "rupees from " + region_name
+        if state.has(event_name, player):
+            rupees += value
 
     # TODO: Count spendings by subtracting the price of all shop locations currently containing a progression item?
 

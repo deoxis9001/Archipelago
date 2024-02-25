@@ -323,4 +323,12 @@ REGIONS = [
     "d8 NW crystal",
     "d8 SW crystal",
     "d8 boss",
+    "old man in horon",
+    "old man near d1",
+    "old man near blaino",
+    "old man in goron mountain",
+    "old man near western coast house",
+    "old man near holly's house",
+    "old man near mrs. ruul",
+    "old man near d6"
 ]

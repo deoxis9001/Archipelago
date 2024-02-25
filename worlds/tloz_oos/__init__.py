@@ -85,6 +85,17 @@ class OracleOfSeasonsWorld(World):
         "summer", "left"
     ]
 
+    old_man_rupee_values = {
+        "old man in horon": 100,
+        "old man near d1": 100,
+        "old man near blaino": 200,
+        "old man in goron mountain": 300,
+        "old man near western coast house": 300,
+        "old man near holly's house": -50,
+        "old man near mrs. ruul": -100,
+        "old man near d6": -200
+    }
+
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
         self.pre_fill_items = []
@@ -181,6 +192,9 @@ class OracleOfSeasonsWorld(World):
         self.create_event("d6 rupee room", "_reached_d6_rupee_room")
 
         self.create_event("onox beaten", "_beaten_onox")
+
+        for region_name in self.old_man_rupee_values:
+            self.create_event(region_name, "rupees from " + region_name)
 
     def set_rules(self):
         create_connections(self.multiworld, self.player)

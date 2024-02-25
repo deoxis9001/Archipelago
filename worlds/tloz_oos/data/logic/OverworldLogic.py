@@ -10,6 +10,7 @@ def make_holodrum_logic(player: int):
         ["horon village", "mayor's house secret room", False, lambda state: oos_has_bombs(state, player)],
         ["horon village", "horon heart piece", False, lambda state: oos_can_use_ember_seeds(state, player)],
         ["horon village", "dr. left reward", False, lambda state: oos_can_use_ember_seeds(state, player)],
+        ["horon village", "old man in horon", False, lambda state: oos_can_use_ember_seeds(state, player)],
         ["horon village", "old man trade", False, lambda state: state.has("Fish", player)],
         ["horon village", "tick tock trade", False, lambda state: state.has("Wooden Bird", player)],
         ["horon village", "maku tree", False, lambda state: oos_has_sword(state, player)],
@@ -68,6 +69,9 @@ def make_holodrum_logic(player: int):
                 oos_option_hard_logic(state, player)
             ])
         ])],
+
+        ["western coast after ship",  "old man near western coast house", False, lambda state: \
+            oos_can_use_ember_seeds(state, player)],
 
         ["western coast after ship", "graveyard (winter)", False, lambda state: all([
             oos_can_jump_3_wide_pit(state, player),
@@ -171,6 +175,8 @@ def make_holodrum_logic(player: int):
         ["moblin road", "holly's house", False, lambda state: \
             oos_season_in_woods_of_winter(state, player, "winter")],
 
+        ["moblin road", "old man near holly's house", False, lambda state: oos_can_use_ember_seeds(state, player)],
+
         ["moblin road", "woods of winter heart piece", False, lambda state: any([
             oos_can_swim(state, player, True),
             oos_has_bracelet(state, player),
@@ -217,6 +223,8 @@ def make_holodrum_logic(player: int):
         ["d1 stump", "north horon", True, lambda state: oos_has_bracelet(state, player)],
         ["d1 stump", "malon trade", False, lambda state: state.has("Cuccodex", player)],
         ["d1 stump", "d1 island", True, lambda state: oos_can_break_bush(state, player, True)],
+        ["d1 stump", "old man near d1", False, lambda state: oos_can_use_ember_seeds(state, player)],
+                                                 #
         ["d1 island", "d1 entrance", True, lambda state: state.has("Gnarled Key", player)],
 
         ["d1 stump", "eyeglass lake (default)", True, lambda state: all([
@@ -310,10 +318,18 @@ def make_holodrum_logic(player: int):
             oos_can_break_mushroom(state, player, True),
             oos_has_flippers(state, player)
         ])],
+        ["north horon", "old man near blaino", False, lambda state: all([
+            any([
+                oos_season_in_north_horon(state, player, "summer"),
+                oos_can_summon_ricky(state, player)
+            ]),
+            oos_can_use_ember_seeds(state, player)
+        ])],
 
         ["north horon", "temple remains lower stump", True, lambda state: oos_can_jump_3_wide_pit(state, player)],
 
         ["ghastly stump", "mrs. ruul trade", False, lambda state: state.has("Ghastly Doll", player)],
+        ["ghastly stump", "old man near mrs. ruul", False, lambda state: oos_can_use_ember_seeds(state, player)],
 
         ["north horon", "ghastly stump", True, lambda state: any([
             oos_can_jump_1_wide_pit(state, player, True),
@@ -671,6 +687,7 @@ def make_holodrum_logic(player: int):
             oos_has_bombs(state, player),
             oos_can_jump_3_wide_liquid(state, player)
         ])],
+        ["goron mountain", "old man in goron mountain", False, lambda state: oos_can_use_ember_seeds(state, player)],
 
         ["goron mountain entrance", "goron mountain", True, lambda state: any([
             oos_has_flippers(state, player),
@@ -720,6 +737,7 @@ def make_holodrum_logic(player: int):
             oos_season_in_tarm_ruins(state, player, "spring"),
             oos_can_break_flowers(state, player, False)
         ])],
+        ["d6 entrance", "old man near d6", False, lambda state: oos_can_use_ember_seeds(state, player)],
 
         # SAMASA DESERT ######################################################################################
 

@@ -362,6 +362,6 @@ class OracleOfSeasonsWorld(World):
             item_name = loc.item.name if loc.item.player == loc.player else "Archipelago Item"
             yamlObj["locations"][loc.name] = item_name
 
-        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.yml"
+        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apseasons"
         with open(os.path.join(output_directory, filename), 'w') as f:
             yaml.dump(yamlObj, f)

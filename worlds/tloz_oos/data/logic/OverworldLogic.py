@@ -379,6 +379,14 @@ def make_holodrum_logic(player: int):
             ])
         ])],
 
+        ["spool swamp north", "spool swamp digging spot", False, lambda state: all([
+            any([
+                oos_season_in_spool_swamp(state, player, "summer"),
+                oos_can_summon_ricky(state, player)
+            ]),
+            oos_has_shovel(state, player)
+        ])],
+
         ["floodgate keeper's house", "spool stump", False, lambda state: all([
             any([
                 oos_can_use_pegasus_seeds(state, player),

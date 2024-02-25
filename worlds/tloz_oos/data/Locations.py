@@ -38,6 +38,11 @@ LOCATIONS_DATA = {
         "vanilla_item": "Ricky's Gloves",
         "flag_byte": 0xC8B4
     },
+    "spool swamp digging spot": {
+        "region_id": "spool swamp digging spot",
+        "vanilla_item": "Rupees (50)",  # Random ring in vanilla, but this doesn't exist in rando
+        "flag_byte": 0xC782
+    },
     "floodgate keeper's house": {
         "region_id": "floodgate keeper's house",
         "vanilla_item": "Floodgate Key",
@@ -267,7 +272,7 @@ LOCATIONS_DATA = {
     },
     "subrosian wilds digging spot": {
         "region_id": "subrosian wilds digging spot",
-        "vanilla_item": "Rupees (50)",
+        "vanilla_item": "Rupees (50)",  # Random ring in vanilla, but this doesn't exist in rando
         "flag_byte": 0xC840
     },
     "subrosia village chest": {

@@ -38,6 +38,11 @@ LOCATIONS_DATA = {
         "vanilla_item": "Ricky's Gloves",
         "flag_byte": 0xC8B4
     },
+    "underwater item below natzu bridge": {
+        "region_id": "underwater item below natzu bridge",
+        "vanilla_item": "Gasha Seed",
+        "flag_byte": 0xC766
+    },
     "spool swamp digging spot": {
         "region_id": "spool swamp digging spot",
         "vanilla_item": "Rupees (50)",  # Random ring in vanilla, but this doesn't exist in rando
@@ -338,6 +343,12 @@ LOCATIONS_DATA = {
         "vanilla_item": "Progressive Sword",
         "dungeon": 0,
         "flag_byte": 0xC906
+    },
+    "d0 hidden 2d section": {
+        "region_id": "d0 hidden 2d section",
+        "vanilla_item": "Gasha Seed",
+        "dungeon": 0,
+        "flag_byte": 0xC901
     },
     "d0 rupee chest": {
         "region_id": "d0 rupee chest",

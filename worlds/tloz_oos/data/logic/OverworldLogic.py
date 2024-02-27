@@ -325,6 +325,7 @@ def make_holodrum_logic(player: int):
             ]),
             oos_can_use_ember_seeds(state, player, False)
         ])],
+        ["north horon", "underwater item below natzu bridge", False, lambda state: oos_can_swim(state, player, False)],
 
         ["north horon", "temple remains lower stump", True, lambda state: oos_can_jump_3_wide_pit(state, player)],
 

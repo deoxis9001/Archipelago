@@ -8,6 +8,7 @@ def make_d0_logic(player: int):
         # 0 keys
         ["enter d0", "d0 key chest", False, None],
         ["enter d0", "d0 rupee chest", False, lambda state: oos_can_break_bush(state, player, True)],
+        ["enter d0", "d0 hidden 2d section", False, lambda state: oos_can_kill_normal_enemy(state, player)],
 
         # 1 key
         ["enter d0", "d0 sword chest", False, lambda state: oos_has_small_keys(state, player, 0, 1)],

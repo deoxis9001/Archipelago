@@ -1,6 +1,6 @@
 from BaseClasses import ItemClassification
 
-BASE_ITEM_ID = 1000000  # TODO: Change
+BASE_ITEM_ID = 27022001000
 
 ITEMS_DATA = {
     #   "No Item": {

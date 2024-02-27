@@ -1,5 +1,5 @@
 
-BASE_LOCATION_ID = 1000000  # TODO: Change
+BASE_LOCATION_ID = 27022001000
 
 LOCATIONS_DATA = {
     "eyeglass lake, across bridge": {

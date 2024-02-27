@@ -112,7 +112,7 @@ class OracleOfSeasonsOldMenShuffle(Choice):
     diplay_name = "Shuffle Old Men"
 
     option_vanilla = 0
-    option_shuffle_values = 1
+    option_shuffled_values = 1
 #    option_turn_into_locations = 2
 
     default = 0
@@ -151,9 +151,9 @@ class OracleOfSeasonsFoolsOre(Choice):
     """
     In the vanilla game, the Fool's Ore is the item "given" by the strange brothers in "exchange" for your feather.
     The way the vanilla game is done means you never get to use it, but it's by far the strongest weapon in the game
-    (dealing 4 times more damage than a L-2 sword!)
+    (dealing 4 times more damage than an L-2 sword!)
     - Vanilla: Fool's Ore appears in the item pool with its stats unchanged
-    - Balanced: Fool's Ore appears in the item pool but its stats are lowered to become comparable to a L-2 sword
+    - Balanced: Fool's Ore appears in the item pool but its stats are lowered to become comparable to an L-2 sword
     - Excluded: Fool's Ore doesn't appear in the item pool at all. Problem solved!
     """
     display_name = "Fool's Ore"

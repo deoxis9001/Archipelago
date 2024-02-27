@@ -746,7 +746,7 @@ def make_d8_logic(player: int):
         ["d8 spinner", "d8 magnet ball room", False, None],
         ["d8 spinner", "d8 armos chest", False, lambda state: oos_has_magnet_gloves(state, player)],
         ["d8 armos chest", "d8 spinner chest", False, None],
-        ["d8 spike room", "frypolar entrance", False, lambda state: oos_has_magnet_gloves(state, player)],
+        ["d8 spinner chest", "frypolar entrance", False, lambda state: oos_has_magnet_gloves(state, player)],
         ["frypolar entrance", "frypolar owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
         ["frypolar entrance", "d8 darknut chest", False, lambda state: all([
             any([

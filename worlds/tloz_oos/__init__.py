@@ -140,7 +140,7 @@ class OracleOfSeasonsWorld(World):
                 self.random.choice(SEASONS), "left"
             ]
 
-        if self.options.shuffle_old_men == "shuffle_values":
+        if self.options.shuffle_old_men == "shuffled_values":
             shuffled_rupees = list(self.old_man_rupee_values.values())
             self.random.shuffle(shuffled_rupees)
             self.old_man_rupee_values = dict(zip(self.old_man_rupee_values, shuffled_rupees))
@@ -362,6 +362,6 @@ class OracleOfSeasonsWorld(World):
             item_name = loc.item.name if loc.item.player == loc.player else "Archipelago Item"
             yamlObj["locations"][loc.name] = item_name
 
-        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apseasons"
+        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.patcherdata"
         with open(os.path.join(output_directory, filename), 'w') as f:
             yaml.dump(yamlObj, f)

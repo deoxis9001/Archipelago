@@ -63,9 +63,8 @@ class OracleOfSeasonsClient(BizHawkClient):
         pass
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        # if ctx.slot_data is not None:
-        #    if ctx.slot_data["goal"] == Goal.option_beat_onox:
-        #        self.goal_flag = BEAT_ONOX_FLAG
+        if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
+            return
 
         try:
             # Handle giving the player items
@@ -108,6 +107,7 @@ class OracleOfSeasonsClient(BizHawkClient):
                 ])
 
             # Read location flags from RAM
+            local_checked_locations = set(ctx.locations_checked)
             for name, location in LOCATIONS_DATA.items():
                 if "local" in location and location["local"] is True:
                     continue
@@ -123,14 +123,12 @@ class OracleOfSeasonsClient(BizHawkClient):
                     bit_mask = location["bit_mask"] if "bit_mask" in location else 0x20
                     if flag_bytes[byte_offset] & bit_mask == bit_mask:
                         location_id = self.location_name_to_id[name]
-                        self.local_checked_locations.add(location_id)
+                        local_checked_locations.add(location_id)
                         break
 
-            for loc in ctx.locations_checked:
-                self.local_checked_locations.add(loc)
-
             # Send locations
-            if self.local_checked_locations != ctx.locations_checked:
+            if self.local_checked_locations != local_checked_locations:
+                self.local_checked_locations = local_checked_locations
                 await ctx.send_msgs([{
                     "cmd": "LocationChecks",
                     "locations": list(self.local_checked_locations)

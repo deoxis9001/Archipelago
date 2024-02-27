@@ -55,7 +55,8 @@ class OracleOfSeasonsWorld(World):
         "WESTERN_COAST": "winter",
         "SPOOL_SWAMP": "autumn",
         "TEMPLE_REMAINS": "winter",
-        "TARM_RUINS": "autumn",
+        "LOST_WOODS": "autumn",
+        "TARM_RUINS": "spring"
     }
 
     dungeon_entrances = {

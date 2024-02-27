@@ -54,6 +54,7 @@ REGIONS_CONVERSION_TABLE = {
     "WESTERN_COAST": "western coast",
     "SPOOL_SWAMP": "spool swamp",
     "TEMPLE_REMAINS": "temple remains",
+    "LOST_WOODS": "lost woods",
     "TARM_RUINS": "tarm ruins",
 }
 

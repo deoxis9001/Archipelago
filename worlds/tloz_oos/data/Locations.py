@@ -72,7 +72,7 @@ LOCATIONS_DATA = {
         "region_id": "master diver's reward",
         "vanilla_item": "Flippers",
         "flag_byte": 0xCABD,
-        "bit_mask": 0x40
+        "bit_mask": 0x80
     },
     "chest in master diver's cave": {
         "region_id": "chest in master diver's cave",

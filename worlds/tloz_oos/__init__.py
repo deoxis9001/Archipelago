@@ -35,7 +35,7 @@ class OracleOfSeasonsWorld(World):
     The seasons in the world of Holodrum have been a mess since Onox captured Din, the oracle of seasons.
     Gather the Essences of Nature, confront Onox and rescue Din to give nature some rest in Holodrum.
     """
-    game = "The Legend of Zelda: Oracle of Seasons"
+    game = "The Legend of Zelda - Oracle of Seasons"
     options_dataclass = OracleOfSeasonsOptions
     options: OracleOfSeasonsOptions
     required_client_version = (0, 4, 4)

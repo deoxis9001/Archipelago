@@ -435,14 +435,27 @@ def make_holodrum_logic(player: int):
         ["spool swamp south (summer)", "spool swamp south", False, None],
         ["spool swamp south (autumn)", "spool swamp south", False, None],
 
-        ["spool swamp south (spring)", "spool swamp south gasha spot", True, lambda state: \
+        ["spool swamp south (spring)", "spool swamp south gasha spot", False, lambda state: \
             oos_can_break_flowers(state, player, True)
          ],
-        ["spool swamp south (winter)", "spool swamp south gasha spot", True, lambda state: \
+        ["spool swamp south (winter)", "spool swamp south gasha spot", False, lambda state: \
             oos_can_remove_snow(state, player, True)
          ],
-        ["spool swamp south (summer)", "spool swamp south gasha spot", True, None],
-        ["spool swamp south (autumn)", "spool swamp south gasha spot", True, None],
+        ["spool swamp south (summer)", "spool swamp south gasha spot", False, None],
+        ["spool swamp south (autumn)", "spool swamp south gasha spot", False, None],
+
+        ["spool swamp south gasha spot", "spool swamp south (spring)", False, lambda state: all([
+            oos_season_in_spool_swamp(state, player, "spring"),
+            oos_can_break_flowers(state, player, True)
+        ])],
+        ["spool swamp south gasha spot", "spool swamp south (winter)", False, lambda state: all([
+            oos_season_in_spool_swamp(state, player, "winter"),
+            oos_can_remove_snow(state, player, True)
+        ])],
+        ["spool swamp south gasha spot", "spool swamp south (summer)", False, lambda state: \
+            oos_season_in_spool_swamp(state, player, "summer")],
+        ["spool swamp south gasha spot", "spool swamp south (autumn)", False, lambda state: \
+            oos_season_in_spool_swamp(state, player, "autumn")],
 
         ["spool swamp south (winter)", "spool swamp cave", False, lambda state: all([
             oos_can_remove_snow(state, player, True),

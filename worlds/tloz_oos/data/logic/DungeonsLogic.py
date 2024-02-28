@@ -134,7 +134,7 @@ def make_d3_logic(player: int):
         ])],
 
         ["d3 center", "d3 water room", False, lambda state: oos_has_feather(state, player)],
-        ["d3 center", "d3 mimic stairs", False, None],
+        ["d3 center", "d3 mimic stairs", False, lambda state: oos_has_bracelet(state, player)],
         ["d3 center", "trampoline owl", False, lambda state: all([
             oos_has_feather(state, player),
             oos_can_use_mystery_seeds(state, player)

@@ -118,6 +118,18 @@ class OracleOfSeasonsOldMenShuffle(Choice):
     default = 0
 
 
+class OraclesOfSeasonsGoldenBeastsRequirement(Range):
+    """
+    The amount of golden beasts that need to be beaten for the golden old man to give his item.
+    Golden beasts are 4 unique enemies that appear at specific spots on specific seasons, and beating all four of them
+    requires all seasons and having access to most of the overworld.
+    """
+    display_name = "Golden Beasts Requirement"
+    range_start = 0
+    range_end = 4
+    default = 1
+
+
 class OracleOfSeasonsLostWoodsItemSequence(Choice):
     """
     This option defines how the "secret sequence" (both directions and seasons) leading to the Noble Sword pedestal
@@ -201,6 +213,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
+    golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     ring_quality: OracleOfSeasonsRingQuality
     fools_ore: OracleOfSeasonsFoolsOre

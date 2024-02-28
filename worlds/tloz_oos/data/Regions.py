@@ -341,5 +341,10 @@ REGIONS = [
     "old man near western coast house",
     "old man near holly's house",
     "old man near mrs. ruul",
-    "old man near d6"
+    "old man near d6",
+    "golden beasts old man",
+    "golden darknut",
+    "golden lynel",
+    "golden moblin",
+    "golden octorok"
 ]

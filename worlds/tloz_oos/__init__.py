@@ -187,6 +187,8 @@ class OracleOfSeasonsWorld(World):
             self.create_event(f"d{i+1} boss", ESSENCES[i])
         self.create_event("maku seed", "Maku Seed")
 
+        self.create_event("onox beaten", "_beaten_onox")
+
         self.create_event("maple trade", "Ghastly Doll")
         self.create_event("spool stump", "_reached_spool_stump")
         self.create_event("bomb temple remains", "_triggered_volcano")
@@ -207,8 +209,10 @@ class OracleOfSeasonsWorld(World):
         self.create_event("d8 NE crystal", "_dropped_d8_NE_crystal")
         self.create_event("d2 rupee room", "_reached_d2_rupee_room")
         self.create_event("d6 rupee room", "_reached_d6_rupee_room")
-
-        self.create_event("onox beaten", "_beaten_onox")
+        self.create_event("golden darknut", "_beat_golden_darknut")
+        self.create_event("golden lynel", "_beat_golden_lynel")
+        self.create_event("golden moblin", "_beat_golden_moblin")
+        self.create_event("golden octorok", "_beat_golden_octorok")
 
         # Only create a progression event for D2 stump if it's actually reachable
         if any([self.options.animal_companion.value == "Ricky",
@@ -339,6 +343,7 @@ class OracleOfSeasonsWorld(World):
                 "fools_ore_damage": 3 if self.options.fools_ore == "balanced" else 12,
                 "heart_beep_interval": self.options.heart_beep_interval.current_key,
                 "lost_woods_item_sequence": ' '.join(self.lost_woods_item_sequence),
+                "golden_beasts_requirement": self.options.golden_beasts_requirement.value,
                 "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},

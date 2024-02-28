@@ -178,6 +178,12 @@ def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):
     ])
 
 
+def oos_can_beat_golden_beasts(state: CollectionState, player: int):
+    GOLDEN_BEAST_EVENTS = ["_beat_golden_darknut", "_beat_golden_lynel", "_beat_golden_moblin", "_beat_golden_octorok"]
+    beast_count = [state.has(beast, player) for beast in GOLDEN_BEAST_EVENTS].count(True)
+    return beast_count >= state.multiworld.worlds[player].options.golden_beasts_requirement.value
+
+
 # Various item predicates ###########################################
 
 def oos_has_rupees(state: CollectionState, player: int, amount: int):
@@ -835,6 +841,12 @@ def oos_season_in_central_woods_of_winter(state: CollectionState, player: int, s
 
 def oos_season_in_mt_cucco(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "SUNKEN_CITY") == season:
+        return True
+    return oos_has_season(state, player, season)
+
+
+def oos_season_in_lost_woods(state: CollectionState, player: int, season: str):
+    if oos_get_default_season(state, player, "LOST_WOODS") == season:
         return True
     return oos_has_season(state, player, season)
 

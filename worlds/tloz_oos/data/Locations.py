@@ -1134,5 +1134,11 @@ LOCATIONS_DATA = {
     "tarm ruins tree": {
         "region_id": "tarm ruins tree",
         "local": True
+    },
+
+    "golden beasts old man": {
+        "region_id": "golden beasts old man",
+        "vanilla_item": "Red Ring",
+        "flag_byte": 0xCA11,
     }
 }

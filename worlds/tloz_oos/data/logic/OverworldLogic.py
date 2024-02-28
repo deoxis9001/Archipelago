@@ -226,6 +226,7 @@ def make_holodrum_logic(player: int):
         ["d1 stump", "old man near d1", False, lambda state: oos_can_use_ember_seeds(state, player, False)],
 
         ["d1 island", "d1 entrance", True, lambda state: state.has("Gnarled Key", player)],
+        ["d1 island", "golden beasts old man", False, lambda state: oos_season_in_eyeglass_lake(state, player, "summer")],
 
         ["d1 stump", "eyeglass lake (default)", True, lambda state: all([
             any([
@@ -814,5 +815,22 @@ def make_holodrum_logic(player: int):
                 oos_option_hard_logic(state, player),
                 oos_has_rod(state, player)
             ])
-        ])]
+        ])],
+
+        # GOLDEN BEASTS #############################################################################################
+
+        ["d0 entrance", "golden darknut", False, lambda state: all([
+            oos_season_in_western_coast(state, player, "spring"),
+            oos_can_kill_normal_enemy(state, player),
+        ])],
+        ["tarm ruins", "golden lynel", False, lambda state: all([
+            oos_season_in_lost_woods(state, player, "summer"),
+            oos_season_in_lost_woods(state, player, "winter"),
+            oos_can_kill_normal_enemy(state, player),
+        ])],
+        ["d2 entrance", "golden moblin", False, lambda state: all([
+            oos_season_in_central_woods_of_winter(state, player, "autumn"),
+            oos_can_kill_normal_enemy(state, player),
+        ])],
+        ["spool swamp south (summer)", "golden octorok", False, lambda state: oos_can_kill_normal_enemy(state, player)],
     ]

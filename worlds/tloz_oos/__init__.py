@@ -376,3 +376,18 @@ class OracleOfSeasonsWorld(World):
         filename = f"{self.multiworld.get_out_file_name_base(self.player)}.patcherdata"
         with open(os.path.join(output_directory, filename), 'w') as f:
             yaml.dump(yamlObj, f)
+
+    def write_spoiler(self, spoiler_handle):
+        spoiler_handle.write(f"\n\nDefault Seasons ({self.multiworld.player_name[self.player]}):\n")
+        for region_name, season in self.default_seasons.items():
+            spoiler_handle.write(f"\t- {REGIONS_CONVERSION_TABLE[region_name]} --> {season}\n")
+
+        if self.options.shuffle_dungeons != "vanilla":
+            spoiler_handle.write(f"\nDungeon Entrances ({self.multiworld.player_name[self.player]}):\n")
+            for entrance, dungeon in self.dungeon_entrances.items():
+                spoiler_handle.write(f"\t- {entrance} --> {dungeon.replace('enter ', '')}\n")
+
+        if self.options.shuffle_portals != "vanilla":
+            spoiler_handle.write(f"\nSubrosia Portals ({self.multiworld.player_name[self.player]}):\n")
+            for portal_holo, portal_sub in self.portal_connections.items():
+                spoiler_handle.write(f"\t- {PORTALS_CONVERSION_TABLE[portal_holo]} --> {PORTALS_CONVERSION_TABLE[portal_sub]}\n")

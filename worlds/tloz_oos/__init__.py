@@ -46,6 +46,7 @@ class OracleOfSeasonsWorld(World):
     item_name_to_id = build_item_name_to_id_dict()
 
     pre_fill_items: List[Item]
+    dungeon_items: List[Item]
     default_seed: str
     default_seasons: Dict[str, str]
     dungeon_entrances: Dict[str, str]
@@ -56,6 +57,7 @@ class OracleOfSeasonsWorld(World):
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
         self.pre_fill_items = []
+        self.dungeon_items = []
         self.default_seed = SEED_ITEMS[0]
         self.default_seasons = {
             "EYEGLASS_LAKE": "winter",
@@ -245,7 +247,7 @@ class OracleOfSeasonsWorld(World):
             if "Ring" in item_name:
                 ring_count += 1
             elif any([(string in item_name) for string in DUNGEON_ITEMS]):
-                self.pre_fill_items.append(self.create_item(item_name))
+                self.dungeon_items.append(self.create_item(item_name))
             else:
                 self.multiworld.itempool.append(self.create_item(item_name))
 
@@ -293,7 +295,7 @@ class OracleOfSeasonsWorld(World):
         for i in range(0, 9):
             dungeon_location_names = [name for name, data in LOCATIONS_DATA.items() if "dungeon" in data and data["dungeon"] == i]
             dungeon_locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.name in dungeon_location_names]
-            dungeon_items = [item for item in self.pre_fill_items if item.name.endswith(f"({DUNGEON_NAMES[i]})")]
+            dungeon_items = [item for item in self.dungeon_items if item.name.endswith(f"({DUNGEON_NAMES[i]})")]
             for item in dungeon_items:
                 collection_state.remove(item)
 

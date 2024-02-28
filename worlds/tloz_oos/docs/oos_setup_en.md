@@ -26,7 +26,7 @@
 
 Edit the following template for your settings:
 ```yaml
-"The Legend of Zelda: Oracle of Seasons":
+"The Legend of Zelda - Oracle of Seasons":
   progression_balancing: 50
   accessibility: items
 
@@ -98,6 +98,6 @@ Edit the following template for your settings:
   heart_beep_interval: default
 
 description: 'YAML Template for Oracle of Seasons'
-game: "The Legend of Zelda: Oracle of Seasons"
+game: "The Legend of Zelda - Oracle of Seasons"
 name: Player
 ```

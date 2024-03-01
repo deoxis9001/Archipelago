@@ -118,8 +118,15 @@ class OracleOfSeasonsWorld(World):
         if self.options.default_seasons == "randomized":
             for region in self.default_seasons:
                 self.default_seasons[region] = self.random.choice(SEASONS)
-        elif self.options.default_seasons == "singularity":
-            single_season = self.random.choice(SEASONS)
+        elif self.options.default_seasons.current_key.endswith("singularity"):
+            singularities = {
+                "random_singularity": self.random.choice(SEASONS),
+                "spring_singularity": "spring",
+                "summer_singularity": "summer",
+                "winter_singularity": "winter",
+                "autumn_singularity": "autumn",
+            }
+            single_season = singularities[self.options.default_seasons.current_key]
             for region in self.default_seasons:
                 self.default_seasons[region] = single_season
 

@@ -48,13 +48,18 @@ class OracleOfSeasonsDefaultSeasons(Choice):
     This options gives several ways of manipulating those default seasons.
     - Vanilla: default seasons for each region are the ones from the original game
     - Randomized: each region has its own random default season picked at generation time
-    - Singularity: only one season is randomly picked and put in every region in the game
+    - Random Singularity: a single season is randomly picked and put as default season in every region in the game
+    - Specific Singularity: the given season is put as default season in every region in the game
     """
     display_name = "Default Seasons"
 
     option_vanilla = 0
     option_randomized = 1
-    option_singularity = 2
+    option_random_singularity = 2
+    option_spring_singularity = 3
+    option_summer_singularity = 4
+    option_winter_singularity = 5
+    option_autumn_singularity = 6
 
     default = 1
 

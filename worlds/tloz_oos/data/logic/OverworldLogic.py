@@ -664,7 +664,11 @@ def make_holodrum_logic(player: int):
 
         ["goron blocked cave entrance", "goron's gift", False, lambda state: oos_has_bombs(state, player)],
 
-        ["goron mountain", "biggoron trade", False, lambda state: state.has("Lava Soup", player)],
+        ["goron mountain", "biggoron trade", False, lambda state: all([
+            oos_can_jump_1_wide_liquid(state, player, False),
+            state.has("Lava Soup", player),
+        ])],
+
         ["goron mountain", "chest in goron mountain", False, lambda state: all([
             oos_has_bombs(state, player),
             oos_can_jump_3_wide_liquid(state, player)

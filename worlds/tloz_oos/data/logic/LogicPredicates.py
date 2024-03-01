@@ -422,6 +422,7 @@ def oos_can_jump_5_wide_pit(state: CollectionState, player: int):
 
 def oos_can_jump_6_wide_pit(state: CollectionState, player: int):
     return all([
+        oos_option_medium_logic(state, player),
         oos_has_cape(state, player),
         oos_can_use_pegasus_seeds(state, player),
     ])
@@ -736,7 +737,10 @@ def oos_can_kill_d2_far_moblin(state: CollectionState, player: int):
 def oos_can_flip_spiked_beetle(state: CollectionState, player: int):
     return any([
         oos_has_shield(state, player),
-        oos_has_shovel(state, player)
+        all([
+            oos_option_medium_logic(state, player),
+            oos_has_shovel(state, player)
+        ])
     ])
 
 
@@ -751,16 +755,8 @@ def oos_can_kill_spiked_beetle(state: CollectionState, player: int):
                 oos_can_kill_normal_using_slingshot(state, player)
             ])
         ]),
-        all([  # Instant kill using Gale Seeds
-            oos_has_gale_seeds(state, player),
-            any([
-                oos_has_slingshot(state, player),
-                all([
-                    oos_option_medium_logic(state, player),
-                    oos_has_satchel(state, player)
-                ])
-            ])
-        ])
+        # Instant kill using Gale Seeds
+        oos_can_use_gale_seeds_offensively(state, player)
     ])
 
 

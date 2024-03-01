@@ -10,11 +10,11 @@ ITEMS_DATA = {
     #    'subid': 0x00
     #    },
     "Wooden Shield": {
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'id': 0x01
     },
     "Iron Shield": {
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'id': 0x01,
         'subid': 0x01
     },

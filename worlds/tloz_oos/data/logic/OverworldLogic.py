@@ -234,10 +234,14 @@ def make_holodrum_logic(player: int):
                 oos_season_in_eyeglass_lake(state, player, "autumn"),
             ]),
             oos_can_jump_1_wide_pit(state, player, True),
-            oos_can_swim(state, player, False),
-            all([
-                oos_can_summon_dimitri(state, player),
-                oos_has_bracelet(state, player)
+            any([
+                oos_can_swim(state, player, False),
+                all([
+                    # To be able to use Dimitri, we need the bracelet to throw him above the pit
+                    oos_option_medium_logic(state, player),
+                    oos_can_summon_dimitri(state, player),
+                    oos_has_bracelet(state, player)
+                ])
             ])
         ])],
         ["d1 stump", "eyeglass lake (dry)", True, lambda state: all([

@@ -4,7 +4,7 @@ from typing import List, Dict
 
 import yaml
 
-from BaseClasses import Tutorial, Item, Region, Location
+from BaseClasses import Tutorial, Item, Region, Location, LocationProgressType
 from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import WebWorld, World
 from .Data import build_location_name_to_id_dict, build_item_name_to_id_dict
@@ -16,6 +16,7 @@ from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVER
     SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS
 from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
+from .data.logic.LogicPredicates import oos_can_reach_d2_stump
 
 
 class OracleOfSeasonsWeb(WebWorld):
@@ -180,6 +181,7 @@ class OracleOfSeasonsWorld(World):
             self.create_location(location_data['region_id'], location_name, is_local)
 
         self.create_events()
+        self.exclude_problematic_locations()
 
     def create_event(self, region_name, event_item_name):
         region = self.multiworld.get_region(region_name, self.player)
@@ -218,17 +220,27 @@ class OracleOfSeasonsWorld(World):
         self.create_event("d6 rupee room", "_reached_d6_rupee_room")
         self.create_event("golden darknut", "_beat_golden_darknut")
         self.create_event("golden lynel", "_beat_golden_lynel")
-        self.create_event("golden moblin", "_beat_golden_moblin")
         self.create_event("golden octorok", "_beat_golden_octorok")
 
-        # Only create a progression event for D2 stump if it's actually reachable
-        if any([self.options.animal_companion.value == "Ricky",
-                self.default_seasons["WOODS_OF_WINTER"] == "summer",
-                not self.options.shuffle_dungeons == "shuffle"]):
+        # Only create progression events related to D2 stump if it's actually reachable
+        if oos_can_reach_d2_stump(self):
             self.create_event("d2 stump", "_reached_d2_stump")
+        if oos_can_reach_d2_stump(self) or self.default_seasons["WOODS_OF_WINTER"] == "autumn":
+            self.create_event("golden moblin", "_beat_golden_moblin")
 
         for region_name in self.old_man_rupee_values:
             self.create_event(region_name, "rupees from " + region_name)
+
+    def exclude_problematic_locations(self):
+        # Some locations become unreachable with specific options, exclude them to prevent any harm from happening
+        if not oos_can_reach_d2_stump(self):
+            locations_to_exclude = ["chest on top of D2"]
+            if self.default_seasons["WOODS_OF_WINTER"] != "autumn":
+                locations_to_exclude.append("cave outside D2")
+                if self.options.golden_beasts_requirement == 4:
+                    locations_to_exclude.append("golden beasts old man")
+            for name in locations_to_exclude:
+                self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.EXCLUDED
 
     def set_rules(self):
         create_connections(self.multiworld, self.player)

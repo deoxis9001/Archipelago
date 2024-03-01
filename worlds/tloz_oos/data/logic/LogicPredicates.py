@@ -1,6 +1,20 @@
 from BaseClasses import CollectionState
 from worlds.tloz_oos.data.Constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES
 
+# Static predicates ############################################################
+
+# These predicates don't require a state but a world instead, and are used before item fill
+# to determine if some changes need to be operated (e.g. a location won't ever be reachable because
+# of selected options, exclude it)
+
+
+def oos_can_reach_d2_stump(world):
+    return any([
+        world.options.shuffle_dungeons != "shuffle",
+        world.options.animal_companion == "ricky",
+        world.default_seasons["WOODS_OF_WINTER"] == "summer"
+    ])
+
 
 # Items predicates ############################################################
 

@@ -501,7 +501,7 @@ def make_d6_logic(player: int):
         ["enter vire", "d6 pre-boss room", False, lambda state: all([
             any([
                 # Kill Vire
-                oos_has_sword(state, player),
+                oos_has_sword(state, player, False),
                 oos_has_fools_ore(state, player),
                 # state.has("expert's ring", player)
             ]),
@@ -616,9 +616,8 @@ def make_d7_logic(player: int):
             ]),
             oos_has_magnet_gloves(state, player),
             all([
-                oos_has_sword(state, player),
+                oos_has_sword(state, player, False),
                 state.has("Energy Ring", player),
-                # TODO: regular beams?
             ])
         ])],
         ["d7 past darknut bridge", "d7 darknut bridge trampolines", False, lambda state: any([

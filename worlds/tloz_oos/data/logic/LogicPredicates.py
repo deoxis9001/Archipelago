@@ -4,8 +4,11 @@ from worlds.tloz_oos.data.Constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES
 
 # Items predicates ############################################################
 
-def oos_has_sword(state: CollectionState, player: int):
-    return state.has("Progressive Sword", player)
+def oos_has_sword(state: CollectionState, player: int, accept_biggoron: bool = True):
+    return any([
+        state.has("Progressive Sword", player),
+        accept_biggoron and state.has("Biggoron's Sword", player)
+    ])
 
 
 def oos_has_noble_sword(state: CollectionState, player: int):
@@ -241,7 +244,7 @@ def oos_can_trigger_far_switch(state: CollectionState, player: int):
         oos_has_slingshot(state, player),
         all([
             oos_option_hard_logic(state, player),
-            oos_has_sword(state, player),
+            oos_has_sword(state, player, False),
             state.has("Energy Ring", player)
         ])
         # TODO: Regular beams?

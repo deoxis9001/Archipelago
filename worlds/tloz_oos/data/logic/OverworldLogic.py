@@ -13,7 +13,7 @@ def make_holodrum_logic(player: int):
         ["horon village", "old man in horon", False, lambda state: oos_can_use_ember_seeds(state, player, False)],
         ["horon village", "old man trade", False, lambda state: state.has("Fish", player)],
         ["horon village", "tick tock trade", False, lambda state: state.has("Wooden Bird", player)],
-        ["horon village", "maku tree", False, lambda state: oos_has_sword(state, player)],
+        ["horon village", "maku tree", False, lambda state: oos_has_sword(state, player, False)],
         ["horon village", "horon village SE chest", False, lambda state: oos_has_bombs(state, player)],
         ["horon village", "horon village SW chest", False, lambda state: oos_can_break_mushroom(state, player, True)],
 
@@ -572,7 +572,7 @@ def make_holodrum_logic(player: int):
         ])],
 
         ["sunken city dimitri", "master diver's challenge", False, lambda state: all([
-            oos_has_sword(state, player),
+            oos_has_sword(state, player, False),
             any([
                 oos_has_feather(state, player),
                 oos_has_flippers(state, player)
@@ -817,7 +817,7 @@ def make_holodrum_logic(player: int):
         ["d9 entrance", "onox beaten", False, lambda state: all([
             oos_can_kill_armored_enemy(state, player),
             oos_has_bombs(state, player),
-            oos_has_sword(state, player),
+            oos_has_sword(state, player, False),
             oos_has_feather(state, player),
             any([
                 oos_option_hard_logic(state, player),

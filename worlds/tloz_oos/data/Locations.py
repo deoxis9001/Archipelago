@@ -976,7 +976,7 @@ LOCATIONS_DATA = {
     },
     "goron's gift": {
         "region_id": "goron's gift",
-        "vanilla_item": "Rupees (50)",  # Ring Box doesn't really exist anymore
+        "vanilla_item": "Biggoron's Sword",  # Ring Box doesn't really exist anymore
         "flag_byte": 0xCAC5
     },
 

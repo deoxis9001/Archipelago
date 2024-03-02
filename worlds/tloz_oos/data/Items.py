@@ -55,7 +55,7 @@ ITEMS_DATA = {
         'id': 0x08
     },
     "Biggoron's Sword": {
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression,
         'id': 0x0c
     },
     #   "Bombchus (10)": {

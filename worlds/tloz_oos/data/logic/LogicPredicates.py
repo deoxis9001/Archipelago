@@ -502,7 +502,10 @@ def oos_can_use_gale_seeds_offensively(state: CollectionState, player: int):
                 oos_has_slingshot(state, player)
             ]),
             all([
-                oos_option_hard_logic(state, player),
+                any([
+                    oos_option_hard_logic(state, player),
+                    oos_has_feather(state, player)
+                ]),
                 oos_has_satchel(state, player)
             ]),
         ])
@@ -630,7 +633,14 @@ def oos_can_kill_normal_using_satchel(state: CollectionState, player: int):
                 oos_option_medium_logic(state, player),
                 any([
                     oos_has_scent_seeds(state, player),
-                    oos_has_gale_seeds(state, player),
+                    all([
+                        oos_has_gale_seeds(state, player),
+                        oos_has_mystery_seeds(state, player),
+                        any([
+                            oos_option_hard_logic(state, player),
+                            oos_has_feather(state, player)
+                        ])
+                    ]),
                 ])
             ])
         ])
@@ -645,6 +655,7 @@ def oos_can_kill_normal_using_slingshot(state: CollectionState, player: int):
             oos_has_scent_seeds(state, player),
             all([
                 oos_option_medium_logic(state, player),
+                oos_has_mystery_seeds(state, player),
                 oos_has_gale_seeds(state, player),
             ])
         ])

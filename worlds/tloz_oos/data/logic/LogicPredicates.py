@@ -553,7 +553,8 @@ def oos_can_break_mushroom(state: CollectionState, player: int, can_use_companio
 def oos_can_break_pot(state: CollectionState, player: int):
     return any([
         oos_has_bracelet(state, player),
-        oos_has_noble_sword(state, player)
+        oos_has_noble_sword(state, player),
+        state.has("Biggoron's Sword", player)
     ])
 
 

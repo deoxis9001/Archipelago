@@ -1042,12 +1042,6 @@ LOCATIONS_DATA = {
         "flag_byte": 0xC7DA
     },
 
-    #    "subrosian wilds digging spot": {
-#        "region_id": "subrosian wilds digging spot",
-#        "vanilla_item": "seed ring",
-#        "randomized": False,
-#        "flag_byte": 0xC840
-#    },
 #    "subrosian buried bomb flower": {
 #        "region_id": "subrosian buried bomb flower",
 #        "vanilla_item": "bomb flower",

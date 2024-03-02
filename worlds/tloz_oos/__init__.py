@@ -13,7 +13,7 @@ from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
 from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS
+    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS
 from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
 from .data.logic.LogicPredicates import oos_can_reach_d2_stump
@@ -45,6 +45,7 @@ class OracleOfSeasonsWorld(World):
 
     location_name_to_id = build_location_name_to_id_dict()
     item_name_to_id = build_item_name_to_id_dict()
+    location_name_groups = LOCATION_GROUPS
 
     pre_fill_items: List[Item]
     dungeon_items: List[Item]

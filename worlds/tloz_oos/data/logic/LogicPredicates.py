@@ -174,8 +174,12 @@ def oos_has_essences(state: CollectionState, player: int, target_count: int):
     return essence_count >= target_count
 
 
-def oos_has_needed_essences(state: CollectionState, player: int):
-    return oos_has_essences(state, player, state.multiworld.worlds[player].options.required_essences)
+def oos_has_essences_for_maku_seed(state: CollectionState, player: int):
+    return oos_has_essences(state, player, state.multiworld.worlds[player].options.required_essences.value)
+
+
+def oos_has_essences_for_treehouse(state: CollectionState, player: int):
+    return oos_has_essences(state, player, state.multiworld.worlds[player].options.treehouse_old_man_requirement.value)
 
 
 def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):

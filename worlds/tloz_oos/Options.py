@@ -123,6 +123,16 @@ class OracleOfSeasonsOldMenShuffle(Choice):
     default = 0
 
 
+class OraclesOfSeasonsTreehouseOldManRequirement(Range):
+    """
+    The amount of essences that you need to bring to the treehouse old man for him to give his item.
+    """
+    display_name = "Treehouse Old Man Requirement"
+    range_start = 0
+    range_end = 8
+    default = 5
+
+
 class OraclesOfSeasonsGoldenBeastsRequirement(Range):
     """
     The amount of golden beasts that need to be beaten for the golden old man to give his item.
@@ -218,6 +228,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
+    treehouse_old_man_requirement: OraclesOfSeasonsTreehouseOldManRequirement
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     ring_quality: OracleOfSeasonsRingQuality

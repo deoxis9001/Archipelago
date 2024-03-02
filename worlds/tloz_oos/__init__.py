@@ -364,6 +364,7 @@ class OracleOfSeasonsWorld(World):
                 "heart_beep_interval": self.options.heart_beep_interval.current_key,
                 "lost_woods_item_sequence": ' '.join(self.lost_woods_item_sequence),
                 "golden_beasts_requirement": self.options.golden_beasts_requirement.value,
+                "treehouse_old_man_requirement": self.options.treehouse_old_man_requirement.value,
                 "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},

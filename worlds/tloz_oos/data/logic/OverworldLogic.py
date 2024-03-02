@@ -369,7 +369,7 @@ def make_holodrum_logic(player: int):
 
         ["d1 island", "old man in treehouse", False, lambda state: all([
             oos_can_swim(state, player, True),
-            oos_has_essences(state, player, 5)
+            oos_has_essences_for_treehouse(state, player)
         ])],
         ["d1 island", "cave south of mrs. ruul", False, lambda state: oos_can_swim(state, player, False)],
 
@@ -811,7 +811,7 @@ def make_holodrum_logic(player: int):
 
         # ONOX CASTLE #############################################################################################
 
-        ["maku tree", "maku seed", False, lambda state: oos_has_needed_essences(state, player)],
+        ["maku tree", "maku seed", False, lambda state: oos_has_essences_for_maku_seed(state, player)],
 
         ["north horon", "d9 entrance", False, lambda state: state.has("Maku Seed", player)],
         ["d9 entrance", "onox beaten", False, lambda state: all([

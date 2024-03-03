@@ -30,7 +30,7 @@ def oos_has_noble_sword(state: CollectionState, player: int):
 
 
 def oos_has_shield(state: CollectionState, player: int):
-    return state.has("Wooden Shield", player) or state.has("Iron Shield", player)
+    return state.has("Progressive Shield", player)
 
 
 def oos_has_fools_ore(state: CollectionState, player: int):

@@ -305,7 +305,7 @@ class OracleOfSeasonsWorld(World):
         self.multiworld.get_location("shop, 20 rupees", self.player).place_locked_item(bomb_item)
         self.pre_fill_items.append(bomb_item)
 
-        shield_item = self.create_item("Wooden Shield")
+        shield_item = self.create_item("Progressive Shield")
         self.multiworld.get_location("shop, 30 rupees", self.player).place_locked_item(shield_item)
         self.pre_fill_items.append(shield_item)
 

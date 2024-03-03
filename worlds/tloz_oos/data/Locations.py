@@ -207,7 +207,7 @@ LOCATIONS_DATA = {
     },
     "shop, 30 rupees": {
         "region_id": "shop, 30 rupees",
-        "vanilla_item": "Wooden Shield",
+        "vanilla_item": "Progressive Shield",
         "randomized": False
     },
     "shop, 150 rupees": {
@@ -320,7 +320,7 @@ LOCATIONS_DATA = {
     },
     "subrosian smithy ore": {
         "region_id": "subrosian smithy ore",
-        "vanilla_item": "Iron Shield",
+        "vanilla_item": "Progressive Shield",
         "flag_byte": 0xC897,
         "bit_mask": 0x40
     },

@@ -77,7 +77,7 @@ class OracleOfSeasonsAnimalCompanion(Choice):
     option_dimitri = "Dimitri"
     option_moosh = "Moosh"
 
-    default = "Ricky"
+    default = "random"
 
 
 class OracleOfSeasonsDungeonShuffle(Choice):

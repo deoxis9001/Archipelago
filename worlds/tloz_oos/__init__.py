@@ -13,7 +13,7 @@ from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
 from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS
+    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS
 from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
 from .data.logic.LogicPredicates import oos_can_reach_d2_stump
@@ -45,6 +45,7 @@ class OracleOfSeasonsWorld(World):
 
     location_name_to_id = build_location_name_to_id_dict()
     item_name_to_id = build_item_name_to_id_dict()
+    item_name_groups = ITEM_GROUPS
     location_name_groups = LOCATION_GROUPS
 
     pre_fill_items: List[Item]
@@ -108,6 +109,8 @@ class OracleOfSeasonsWorld(World):
             "old man near mrs. ruul": -100,
             "old man near d6": -200
         }
+
+        self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Dungeon Items"]
 
     def fill_slot_data(self) -> dict:
         options = ["goal", "logic_difficulty"]

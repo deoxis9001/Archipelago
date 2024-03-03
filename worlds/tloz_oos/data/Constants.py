@@ -94,6 +94,47 @@ DUNGEON_ITEMS = [
     "Dungeon Map"
 ]
 
+ITEM_GROUPS = {
+    "Dungeon Items": [
+        "Small Key (Hero's Cave)",
+        "Small Key (Gnarled Root Dungeon)",
+        "Small Key (Snake's Remains)",
+        "Small Key (Poison Moth's Lair)",
+        "Small Key (Dancing Dragon Dungeon)",
+        "Small Key (Unicorn's Cave)",
+        "Small Key (Ancient Ruins)",
+        "Small Key (Explorer's Crypt)",
+        "Small Key (Sword & Shield Maze)",
+
+        "Boss Key (Gnarled Root Dungeon)",
+        "Boss Key (Snake's Remains)",
+        "Boss Key (Poison Moth's Lair)",
+        "Boss Key (Dancing Dragon Dungeon)",
+        "Boss Key (Unicorn's Cave)",
+        "Boss Key (Ancient Ruins)",
+        "Boss Key (Explorer's Crypt)",
+        "Boss Key (Sword & Shield Maze)",
+
+        "Compass (Gnarled Root Dungeon)",
+        "Compass (Snake's Remains)",
+        "Compass (Poison Moth's Lair)",
+        "Compass (Dancing Dragon Dungeon)",
+        "Compass (Unicorn's Cave)",
+        "Compass (Ancient Ruins)",
+        "Compass (Explorer's Crypt)",
+        "Compass (Sword & Shield Maze)",
+
+        "Dungeon Map (Gnarled Root Dungeon)",
+        "Dungeon Map (Snake's Remains)",
+        "Dungeon Map (Poison Moth's Lair)",
+        "Dungeon Map (Dancing Dragon Dungeon)",
+        "Dungeon Map (Unicorn's Cave)",
+        "Dungeon Map (Ancient Ruins)",
+        "Dungeon Map (Explorer's Crypt)",
+        "Dungeon Map (Sword & Shield Maze)"
+    ],
+}
+
 LOCATION_GROUPS = {
     "D0": [
         "d0 key chest",

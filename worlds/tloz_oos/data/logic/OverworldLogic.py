@@ -735,7 +735,7 @@ def make_holodrum_logic(player: int):
 
         # TEMPLE REMAINS ####################################################################################
 
-        ["temple remains lower stump", "temple remains upper stump", True, lambda state: any([
+        ["temple remains lower stump", "temple remains upper stump", False, lambda state: any([
             all([  # Winter rule
                 oos_season_in_temple_remains(state, player, "winter"),
                 oos_can_remove_snow(state, player, False),
@@ -758,10 +758,25 @@ def make_holodrum_logic(player: int):
                 oos_can_break_bush(state, player)
             ])
         ])],
-
-        # Additional backwards rule for winter because it creates a jumpable ledge that makes it trivial to go down
-        ["temple remains upper stump", "temple remains lower stump", False, lambda state: \
-            oos_season_in_temple_remains(state, player, "winter")],
+        ["temple remains upper stump", "temple remains lower stump", False, lambda state: any([
+            # Winter rule
+            oos_season_in_temple_remains(state, player, "winter"),
+            all([  # Summer rule
+                oos_season_in_temple_remains(state, player, "summer"),
+                oos_can_break_bush(state, player, False),
+                oos_can_jump_6_wide_pit(state, player)
+            ]),
+            all([  # Spring rule
+                oos_season_in_temple_remains(state, player, "spring"),
+                oos_can_break_flowers(state, player, False),
+                oos_can_break_bush(state, player, False),
+                oos_can_jump_6_wide_pit(state, player)
+            ]),
+            all([  # Autumn rule
+                oos_season_in_temple_remains(state, player, "autumn"),
+                oos_can_break_bush(state, player)
+            ])
+        ])],
 
         ["temple remains upper stump", "temple remains lower portal", False, lambda state: all([
             oos_season_in_temple_remains(state, player, "winter"),

@@ -510,6 +510,9 @@ def oos_can_use_gale_seeds_offensively(state: CollectionState, player: int):
 
 
 def oos_can_warp(state: CollectionState, player: int):
+    # Never expect points of no return / risky checks for casual logic
+    if not oos_option_medium_logic(state, player):
+        return False
     return oos_can_warp_using_gale_seeds(state, player) or oos_option_allow_warp_to_start(state, player)
 
 

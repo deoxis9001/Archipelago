@@ -8,7 +8,10 @@ def make_d0_logic(player: int):
         # 0 keys
         ["enter d0", "d0 key chest", False, None],
         ["enter d0", "d0 rupee chest", False, lambda state: oos_can_break_bush(state, player, True)],
-        ["enter d0", "d0 hidden 2d section", False, lambda state: oos_can_kill_normal_enemy(state, player)],
+        ["enter d0", "d0 hidden 2d section", False, lambda state: any([
+            oos_can_kill_normal_enemy(state, player),
+            oos_has_boomerang(state, player),  # Keese can be killed using boomerang as well
+        ])],
 
         # 1 key
         ["enter d0", "d0 sword chest", False, lambda state: oos_has_small_keys(state, player, 0, 1)],
@@ -192,8 +195,12 @@ def make_d4_logic(player: int):
         ["enter d4", "d4 water ring room", False, lambda state: all([
             oos_has_small_keys(state, player, 4, 1),
             any([
-                oos_has_flippers(state, player),
-                oos_has_cape(state, player)
+                oos_has_cape(state, player),
+                all([
+                    # Feather is required to jump above spike lines
+                    oos_has_feather(state, player),
+                    oos_has_flippers(state, player)
+                ])
             ]),
             oos_has_bombs(state, player),
             any([

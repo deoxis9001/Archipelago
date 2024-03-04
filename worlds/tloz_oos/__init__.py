@@ -13,7 +13,7 @@ from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
 from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS
+    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS, VERSION
 from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
 from .data.logic.LogicPredicates import oos_can_reach_d2_stump
@@ -360,6 +360,7 @@ class OracleOfSeasonsWorld(World):
         yamlObj = {
             "settings": {
                 "game": "seasons",
+                "version": VERSION,
                 "companion": self.options.animal_companion.value,
                 "warp_to_start": self.options.warp_to_start.current_key,
                 "required_essences": self.options.required_essences.value,

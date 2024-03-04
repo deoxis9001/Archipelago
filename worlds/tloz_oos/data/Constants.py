@@ -1,3 +1,5 @@
+VERSION = "0.9e"
+
 COMPANIONS = [
     "Ricky",
     "Moosh",

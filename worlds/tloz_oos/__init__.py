@@ -71,7 +71,8 @@ class OracleOfSeasonsWorld(World):
             "SPOOL_SWAMP": "autumn",
             "TEMPLE_REMAINS": "winter",
             "LOST_WOODS": "autumn",
-            "TARM_RUINS": "spring"
+            "TARM_RUINS": "spring",
+            "HORON_VILLAGE": "spring"
         }
         self.dungeon_entrances = {
             "d1 entrance": "enter d1",
@@ -380,6 +381,8 @@ class OracleOfSeasonsWorld(World):
 
         for region_name, season in self.default_seasons.items():
             yamlObj["default seasons"][REGIONS_CONVERSION_TABLE[region_name]] = season
+        if self.options.horon_village_season == "chaotic":
+            yamlObj["default seasons"][REGIONS_CONVERSION_TABLE["HORON_VILLAGE"]] = "chaotic"
 
         for region_name, value in self.old_man_rupee_values.items():
             yamlObj["old man rupee values"][region_name] = value

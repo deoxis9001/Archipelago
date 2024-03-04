@@ -64,6 +64,25 @@ class OracleOfSeasonsDefaultSeasons(Choice):
     default = 1
 
 
+class OracleOfSeasonsHoronSeason(Choice):
+    """
+    In the vanilla game, Horon Village default season is chaotic: every time you enter it, it sets a random season.
+    This nullifies every condition where a season is required inside Horon Village, since you can leave and re-enter
+    again and again until you get the season that suits you.
+    - Chaotic: vanilla behavior, which makes logic less interesting inside Horon Village and sometimes expects from
+      you to leave and re-enter town a dozen times until you get the right season
+    - Normalized: Horon Village behaves like any other region in the game (it has a default season that can be changed
+      using Rod of Seasons)
+    Setting this option to "Normalized" makes it follow the global behavior defined in "Default Seasons" option
+    """
+    display_name = "Horon Village Default Season"
+
+    option_chaotic = 0
+    option_normalized = 1
+
+    default = 1
+
+
 class OracleOfSeasonsAnimalCompanion(Choice):
     """
     Determines which animal companion you can summon using the Flute, as well as the layout of the Natzu region.
@@ -114,7 +133,7 @@ class OracleOfSeasonsOldMenShuffle(Choice):
     """
     # - Turn Into Locations: Each Old Man becomes a randomized check, and the total amount of rupees they usually give
     #   in vanilla is shuffled into the item pool
-    diplay_name = "Shuffle Old Men"
+    display_name = "Shuffle Old Men"
 
     option_vanilla = 0
     option_shuffled_values = 1
@@ -128,6 +147,7 @@ class OraclesOfSeasonsTreehouseOldManRequirement(Range):
     The amount of essences that you need to bring to the treehouse old man for him to give his item.
     """
     display_name = "Treehouse Old Man Requirement"
+
     range_start = 0
     range_end = 8
     default = 5
@@ -140,6 +160,7 @@ class OraclesOfSeasonsGoldenBeastsRequirement(Range):
     requires all seasons and having access to most of the overworld.
     """
     display_name = "Golden Beasts Requirement"
+
     range_start = 0
     range_end = 4
     default = 1
@@ -224,6 +245,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     logic_difficulty: OracleOfSeasonsLogicDifficulty
     required_essences: OracleOfSeasonsRequiredEssences
     default_seasons: OracleOfSeasonsDefaultSeasons
+    horon_village_season: OracleOfSeasonsHoronSeason
     animal_companion: OracleOfSeasonsAnimalCompanion
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle

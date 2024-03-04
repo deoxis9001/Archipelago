@@ -14,8 +14,18 @@ def make_holodrum_logic(player: int):
         ["horon village", "old man trade", False, lambda state: state.has("Fish", player)],
         ["horon village", "tick tock trade", False, lambda state: state.has("Wooden Bird", player)],
         ["horon village", "maku tree", False, lambda state: oos_has_sword(state, player, False)],
-        ["horon village", "horon village SE chest", False, lambda state: oos_has_bombs(state, player)],
-        ["horon village", "horon village SW chest", False, lambda state: oos_can_break_mushroom(state, player, True)],
+        ["horon village", "horon village SE chest", False, lambda state: all([
+            oos_has_bombs(state, player),
+            any([
+                oos_can_swim(state, player, False),
+                oos_season_in_horon_village(state, player, "winter"),
+                oos_can_jump_2_wide_liquid(state, player)
+            ])
+        ])],
+        ["horon village", "horon village SW chest", False, lambda state: all([
+            oos_season_in_horon_village(state, player, "autumn"),
+            oos_can_break_mushroom(state, player, True)
+        ])],
 
         ["horon village", "maple trade", False, lambda state: all([
             oos_can_kill_normal_enemy(state, player),
@@ -820,9 +830,8 @@ def make_holodrum_logic(player: int):
             oos_can_jump_1_wide_liquid(state, player, False)
         ])],
 
-        # TODO: when default season issue when coming from upper portal will be fixed, we can add the following rule:
-        # ["temple remains upper portal", "temple remains lower portal", False, lambda state: \
-        #     oos_get_default_season(state, player, "TEMPLE_REMAINS") == "winter"],
+        ["temple remains upper portal", "temple remains lower portal", False, lambda state: \
+            oos_get_default_season(state, player, "TEMPLE_REMAINS") == "winter"],
 
 
         # ONOX CASTLE #############################################################################################

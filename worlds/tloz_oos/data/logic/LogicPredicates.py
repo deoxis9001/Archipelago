@@ -876,3 +876,11 @@ def oos_season_in_tarm_ruins(state: CollectionState, player: int, season: str):
     if oos_get_default_season(state, player, "TARM_RUINS") == season:
         return True
     return oos_has_season(state, player, season)
+
+
+def oos_season_in_horon_village(state: CollectionState, player: int, season: str):
+    if state.multiworld.worlds[player].options.horon_village_season == "chaotic":
+        return True
+    if oos_get_default_season(state, player, "HORON_VILLAGE") == season:
+        return True
+    return oos_has_season(state, player, season)

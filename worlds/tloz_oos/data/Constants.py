@@ -58,6 +58,7 @@ REGIONS_CONVERSION_TABLE = {
     "TEMPLE_REMAINS": "temple remains",
     "LOST_WOODS": "lost woods",
     "TARM_RUINS": "tarm ruins",
+    "HORON_VILLAGE": "horon village"
 }
 
 PORTALS_CONVERSION_TABLE = {

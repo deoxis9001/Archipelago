@@ -44,7 +44,7 @@ DUNGEON_NAMES = [
     "Unicorn's Cave",
     "Ancient Ruins",
     "Explorer's Crypt",
-    "Sword & Shield Maze"
+    "Sword & Shield Dungeon"
 ]
 
 REGIONS_CONVERSION_TABLE = {
@@ -106,7 +106,7 @@ ITEM_GROUPS = {
         "Small Key (Unicorn's Cave)",
         "Small Key (Ancient Ruins)",
         "Small Key (Explorer's Crypt)",
-        "Small Key (Sword & Shield Maze)",
+        "Small Key (Sword & Shield Dungeon)",
 
         "Boss Key (Gnarled Root Dungeon)",
         "Boss Key (Snake's Remains)",
@@ -115,7 +115,7 @@ ITEM_GROUPS = {
         "Boss Key (Unicorn's Cave)",
         "Boss Key (Ancient Ruins)",
         "Boss Key (Explorer's Crypt)",
-        "Boss Key (Sword & Shield Maze)",
+        "Boss Key (Sword & Shield Dungeon)",
 
         "Compass (Gnarled Root Dungeon)",
         "Compass (Snake's Remains)",
@@ -124,7 +124,7 @@ ITEM_GROUPS = {
         "Compass (Unicorn's Cave)",
         "Compass (Ancient Ruins)",
         "Compass (Explorer's Crypt)",
-        "Compass (Sword & Shield Maze)",
+        "Compass (Sword & Shield Dungeon)",
 
         "Dungeon Map (Gnarled Root Dungeon)",
         "Dungeon Map (Snake's Remains)",
@@ -133,7 +133,7 @@ ITEM_GROUPS = {
         "Dungeon Map (Unicorn's Cave)",
         "Dungeon Map (Ancient Ruins)",
         "Dungeon Map (Explorer's Crypt)",
-        "Dungeon Map (Sword & Shield Maze)"
+        "Dungeon Map (Sword & Shield Dungeon)"
     ],
 }
 

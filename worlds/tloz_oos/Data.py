@@ -28,3 +28,10 @@ def build_item_id_to_name_dict() -> Dict[int, str]:
         item_id_to_name[current_index] = item_name
         current_index += 1
     return item_id_to_name
+
+
+def find_patcher_name_for_location(pretty_name: str):
+    for loc_name, data in LOCATIONS_DATA.items():
+        if loc_name == pretty_name:
+            return data["patcher_name"]
+    raise "Could not find patcher name for unknown location '" + pretty_name + "'"

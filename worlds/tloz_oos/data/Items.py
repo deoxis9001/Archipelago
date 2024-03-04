@@ -214,7 +214,7 @@ ITEMS_DATA = {
         'id': 0x30,
         'subid': 0x07
     },
-    "Small Key (Sword & Shield Maze)": {
+    "Small Key (Sword & Shield Dungeon)": {
         'classification': ItemClassification.progression,
         'id': 0x30,
         'subid': 0x07
@@ -254,7 +254,7 @@ ITEMS_DATA = {
         'id': 0x31,
         'subid': 0x07
     },
-    "Boss Key (Sword & Shield Maze)": {
+    "Boss Key (Sword & Shield Dungeon)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
         'subid': 0x08
@@ -294,7 +294,7 @@ ITEMS_DATA = {
         'id': 0x32,
         'subid': 0x07
     },
-    "Compass (Sword & Shield Maze)": {
+    "Compass (Sword & Shield Dungeon)": {
         'classification': ItemClassification.useful,
         'id': 0x32,
         'subid': 0x08
@@ -334,7 +334,7 @@ ITEMS_DATA = {
         'id': 0x33,
         'subid': 0x07
     },
-    "Dungeon Map (Sword & Shield Maze)": {
+    "Dungeon Map (Sword & Shield Dungeon)": {
         'classification': ItemClassification.useful,
         'id': 0x33,
         'subid': 0x08

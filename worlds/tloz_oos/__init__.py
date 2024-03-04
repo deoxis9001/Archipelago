@@ -1,13 +1,12 @@
 import os
 import logging
-from typing import List, Dict
 
 import yaml
 
-from BaseClasses import Tutorial, Item, Region, Location, LocationProgressType
+from BaseClasses import Tutorial, Region, Location, LocationProgressType
 from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import WebWorld, World
-from .Data import build_location_name_to_id_dict, build_item_name_to_id_dict
+from .Data import *
 from worlds.tloz_oos.data.Items import *
 from .Logic import create_connections
 from .Options import *
@@ -34,7 +33,7 @@ class OracleOfSeasonsWeb(WebWorld):
 class OracleOfSeasonsWorld(World):
     """
     The Legend of Zelda: Oracles of Seasons is one of the rare Capcom entries to the series.
-    The seasons in the world of Holodrum have been a mess since Onox captured Din, the oracle of seasons.
+    The seasons in the world of Holodrum have been a mess since Onox captured Din, the Oracle of Seasons.
     Gather the Essences of Nature, confront Onox and rescue Din to give nature some rest in Holodrum.
     """
     game = "The Legend of Zelda - Oracle of Seasons"
@@ -238,11 +237,11 @@ class OracleOfSeasonsWorld(World):
     def exclude_problematic_locations(self):
         # Some locations become unreachable with specific options, exclude them to prevent any harm from happening
         if not oos_can_reach_d2_stump(self):
-            locations_to_exclude = ["chest on top of D2"]
+            locations_to_exclude = ["Woods of Winter: chest on D2 roof"]
             if self.default_seasons["WOODS_OF_WINTER"] != "autumn":
-                locations_to_exclude.append("cave outside D2")
+                locations_to_exclude.append("Woods of Winter: autumn cave outside D2")
                 if self.options.golden_beasts_requirement == 4:
-                    locations_to_exclude.append("golden beasts old man")
+                    locations_to_exclude.append("North Horon: golden beasts Old Man")
             for name in locations_to_exclude:
                 self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.EXCLUDED
 
@@ -259,6 +258,8 @@ class OracleOfSeasonsWorld(World):
         ring_count = 0
         for loc_data in LOCATIONS_DATA.values():
             if "randomized" in loc_data and loc_data["randomized"] is False:
+                continue
+            if "conditional" in loc_data and loc_data["conditional"] is True:
                 continue
             if "vanilla_item" not in loc_data:
                 continue
@@ -302,11 +303,11 @@ class OracleOfSeasonsWorld(World):
     def pre_fill_fixed_items(self):
         # Fill some shop items with their fixed contents
         bomb_item = self.create_item("Bombs (10)")
-        self.multiworld.get_location("shop, 20 rupees", self.player).place_locked_item(bomb_item)
+        self.multiworld.get_location("Horon Village: shop item #1", self.player).place_locked_item(bomb_item)
         self.pre_fill_items.append(bomb_item)
 
         shield_item = self.create_item("Progressive Shield")
-        self.multiworld.get_location("shop, 30 rupees", self.player).place_locked_item(shield_item)
+        self.multiworld.get_location("Horon Village: shop item #2", self.player).place_locked_item(shield_item)
         self.pre_fill_items.append(shield_item)
 
         # TODO: Force fixed Subrosian shop items
@@ -344,10 +345,11 @@ class OracleOfSeasonsWorld(World):
             self.pre_fill_items.append(seed_item)
 
         # Fill Horon tree with default seed
-        place_seed(self.default_seed, "horon village tree")
+        place_seed(self.default_seed, "Horon Village: seed tree")
 
         # Fill all other trees randomly
-        trees = ["woods of winter tree", "north horon tree", "spool swamp tree", "sunken city tree", "tarm ruins tree"]
+        trees = ["Woods of Winter: seed tree", "North Horon: seed tree", "Spool Swamp: seed tree",
+                 "Sunken City: seed tree", "Tarm Ruins: seed tree"]
         seeds = [s for s in SEED_ITEMS]
         self.random.shuffle(seeds)
         while seeds and trees:
@@ -396,7 +398,8 @@ class OracleOfSeasonsWorld(World):
             if loc.address is None:
                 continue
             item_name = loc.item.name if loc.item.player == loc.player else "Archipelago Item"
-            yamlObj["locations"][loc.name] = item_name
+            loc_patcher_name = find_patcher_name_for_location(loc.name)
+            yamlObj["locations"][loc_patcher_name] = item_name
 
         filename = f"{self.multiworld.get_out_file_name_base(self.player)}.patcherdata"
         with open(os.path.join(output_directory, filename), 'w') as f:

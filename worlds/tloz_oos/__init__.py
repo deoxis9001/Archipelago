@@ -288,7 +288,7 @@ class OracleOfSeasonsWorld(World):
         if self.options.ring_quality == "only_useful":
             ring_names = [name for name in ring_names if ITEMS_DATA[name]["classification"] == ItemClassification.useful]
 
-        self.multiworld.random.shuffle(ring_names)
+        self.random.shuffle(ring_names)
         del ring_names[amount:]
         for ring_name in ring_names:
             self.multiworld.itempool.append(self.create_item(ring_name))

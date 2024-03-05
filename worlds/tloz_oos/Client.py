@@ -91,20 +91,11 @@ class OracleOfSeasonsClient(BizHawkClient):
             # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
             # fill it with the next item
             if num_received_items < len(ctx.items_received) and received_item_is_empty:
-                received_item = list(RAM_ADDRS["received_item"])
                 next_item_name = self.item_id_to_name[ctx.items_received[num_received_items].item]
-                received_item[1] = [
+                await bizhawk.write(ctx.bizhawk_ctx, [(0xCBFB, [
                     ITEMS_DATA[next_item_name]["id"],
                     ITEMS_DATA[next_item_name]["subid"] if "subid" in ITEMS_DATA[next_item_name] else 0
-                ]
-
-                received_item_index = list(RAM_ADDRS["received_item_index"])
-                received_item_index[1] = (num_received_items + 1).to_bytes(2, "little")
-
-                await bizhawk.write(ctx.bizhawk_ctx, [
-                    tuple(received_item),
-                    tuple(received_item_index)
-                ])
+                ], "System Bus")])
 
             # Read location flags from RAM
             local_checked_locations = set(ctx.locations_checked)

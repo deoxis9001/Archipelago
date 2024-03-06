@@ -238,11 +238,11 @@ class OracleOfSeasonsWorld(World):
     def exclude_problematic_locations(self):
         # Some locations become unreachable with specific options, exclude them to prevent any harm from happening
         if not oos_can_reach_d2_stump(self):
-            locations_to_exclude = ["Woods of Winter: chest on D2 roof"]
+            locations_to_exclude = ["Woods of Winter: Chest on D2 Roof"]
             if self.default_seasons["WOODS_OF_WINTER"] != "autumn":
-                locations_to_exclude.append("Woods of Winter: autumn cave outside D2")
+                locations_to_exclude.append("Woods of Winter: Chest in Autumn Cave Near D2")
                 if self.options.golden_beasts_requirement == 4:
-                    locations_to_exclude.append("North Horon: golden beasts Old Man")
+                    locations_to_exclude.append("North Horon: Golden Beasts Old Man")
             for name in locations_to_exclude:
                 self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.EXCLUDED
 
@@ -297,21 +297,8 @@ class OracleOfSeasonsWorld(World):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
-        self.pre_fill_fixed_items()
         self.pre_fill_seeds()
         self.pre_fill_dungeon_items()
-
-    def pre_fill_fixed_items(self):
-        # Fill some shop items with their fixed contents
-        bomb_item = self.create_item("Bombs (10)")
-        self.multiworld.get_location("Horon Village: shop item #1", self.player).place_locked_item(bomb_item)
-        self.pre_fill_items.append(bomb_item)
-
-        shield_item = self.create_item("Progressive Shield")
-        self.multiworld.get_location("Horon Village: shop item #2", self.player).place_locked_item(shield_item)
-        self.pre_fill_items.append(shield_item)
-
-        # TODO: Force fixed Subrosian shop items
 
     def pre_fill_dungeon_items(self):
         # If keysanity is off, dungeon items can only be put inside local dungeon locations,
@@ -346,11 +333,11 @@ class OracleOfSeasonsWorld(World):
             self.pre_fill_items.append(seed_item)
 
         # Fill Horon tree with default seed
-        place_seed(self.default_seed, "Horon Village: seed tree")
+        place_seed(self.default_seed, "Horon Village: Seed Tree")
 
         # Fill all other trees randomly
-        trees = ["Woods of Winter: seed tree", "North Horon: seed tree", "Spool Swamp: seed tree",
-                 "Sunken City: seed tree", "Tarm Ruins: seed tree"]
+        trees = ["Woods of Winter: Seed Tree", "Holodrum Plain: Seed Tree", "Spool Swamp: Seed Tree",
+                 "Sunken City: Seed Tree", "Tarm Ruins: Seed Tree"]
         seeds = [s for s in SEED_ITEMS]
         self.random.shuffle(seeds)
         while seeds and trees:

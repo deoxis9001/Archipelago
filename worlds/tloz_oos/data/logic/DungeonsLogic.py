@@ -10,7 +10,11 @@ def make_d0_logic(player: int):
         ["enter d0", "d0 rupee chest", False, lambda state: oos_can_break_bush(state, player, True)],
         ["enter d0", "d0 hidden 2d section", False, lambda state: any([
             oos_can_kill_normal_enemy(state, player),
-            oos_has_boomerang(state, player),  # Keese can be killed using boomerang as well
+            all([
+                # Keese can be killed using boomerang as well, but that's kind of obscure so not in casual logic
+                oos_option_medium_logic(state, player),
+                oos_has_boomerang(state, player),
+            ])
         ])],
 
         # 1 key

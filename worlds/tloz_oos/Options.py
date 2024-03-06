@@ -222,6 +222,13 @@ class OracleOfSeasonsWarpToStart(DefaultOnToggle):
     display_name = "Warp to Start"
 
 
+class OracleOfSeasonsQuickFlute(DefaultOnToggle):
+    """
+    When enabled, playing the flute will immobilize you during a very small amount of time compared to vanilla game.
+    """
+    display_name = "Quick Flute"
+
+
 class OracleOfSeasonsHeartBeepInterval(Choice):
     """
     - Default: play the beeping sound at the usual frequency when low on health
@@ -256,5 +263,6 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     ring_quality: OracleOfSeasonsRingQuality
     fools_ore: OracleOfSeasonsFoolsOre
     warp_to_start: OracleOfSeasonsWarpToStart
+    quick_flute: OracleOfSeasonsQuickFlute
     heart_beep_interval: OracleOfSeasonsHeartBeepInterval
     death_link: DeathLink

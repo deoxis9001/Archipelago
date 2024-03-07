@@ -186,18 +186,9 @@ class OracleOfSeasonsWorld(World):
         self.randomize_shop_prices()
 
     def randomize_shop_prices(self):
-        prices_bag = []
-        prices_bag.extend([400] * 1)
-        prices_bag.extend([300] * 4)
-        prices_bag.extend([200] * 20)
-        prices_bag.extend([100] * 40)
-        prices_bag.extend([80] * 15)
-        prices_bag.extend([60] * 10)
-        prices_bag.extend([30] * 5)
-        self.random.shuffle(prices_bag)
-
+        global_prices_factor = self.options.shop_prices_factor.value / 100.0
         for key, divider in self.shop_prices.items():
-            floating_price = int(prices_bag.pop() / divider)
+            floating_price = self.random.normalvariate(130, 50) * global_prices_factor / divider
             for value in VALID_RUPEE_VALUES:
                 if value >= floating_price:
                     self.shop_prices[key] = value
@@ -408,6 +399,7 @@ class OracleOfSeasonsWorld(World):
                 "golden_beasts_requirement": self.options.golden_beasts_requirement.value,
                 "treehouse_old_man_requirement": self.options.treehouse_old_man_requirement.value,
                 "quick_flute": self.options.quick_flute.current_key,
+                "open_advance_shop": self.options.advance_shop.current_key,
                 "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},

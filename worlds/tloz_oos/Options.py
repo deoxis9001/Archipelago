@@ -195,6 +195,19 @@ class OracleOfSeasonsRingQuality(Choice):
     default = 1
 
 
+class OracleOfSeasonsPricesFactor(Range):
+    """
+    A factor (expressed as percentage) that will be applied to all prices inside all shops in the game.
+    - Setting it at 10% will make all items almost free
+    - Setting it at 300% will make all items horrendously expensive, use at your own risk!
+    """
+    display_name = "Prices Factor (%)"
+
+    range_start = 10
+    range_end = 300
+    default = 100
+
+
 class OracleOfSeasonsAdvanceShop(Toggle):
     """
     In the vanilla game, there is a house northwest of Horon Village hosting the secret "Advance Shop" that can only
@@ -271,6 +284,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     ring_quality: OracleOfSeasonsRingQuality
+    shop_prices_factor: OracleOfSeasonsPricesFactor
     advance_shop: OracleOfSeasonsAdvanceShop
     fools_ore: OracleOfSeasonsFoolsOre
     warp_to_start: OracleOfSeasonsWarpToStart

@@ -133,7 +133,11 @@ class OracleOfSeasonsWorld(World):
         self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Dungeon Items"]
 
     def fill_slot_data(self) -> dict:
-        options = ["goal", "logic_difficulty"]
+        # Put options that are useful to the tracker inside slot data
+        options = ["goal", "logic_difficulty", "required_essences", "horon_village_season", "animal_companion",
+                   "shuffle_dungeons", "shuffle_portals", "shuffle_old_men", "treehouse_old_man_requirement",
+                   "golden_beasts_requirement", "lost_woods_item_sequence", "advance_shop", "warp_to_start"]
+
         slot_data = self.options.as_dict(*options)
         return slot_data
 

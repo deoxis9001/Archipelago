@@ -12,7 +12,7 @@ from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
 from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS, VERSION
+    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS, VERSION, VALID_RUPEE_VALUES
 from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
 from .data.logic.LogicPredicates import oos_can_reach_d2_stump
@@ -55,6 +55,7 @@ class OracleOfSeasonsWorld(World):
     portal_connections: Dict[str, str]
     lost_woods_item_sequence: List[str]
     old_man_rupee_values: Dict[str, int]
+    shop_prices: Dict[str, int]
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -110,6 +111,25 @@ class OracleOfSeasonsWorld(World):
             "old man near d6": -200
         }
 
+        self.shop_prices = {
+            "horon shop 1": 1,
+            "horon shop 2": 1,
+            "horon shop 3": 1,
+            "member shop 1": 1,
+            "member shop 2": 1,
+            "member shop 3": 1,
+            "advance shop 1": 1,
+            "advance shop 2": 1,
+            "advance shop 3": 1,
+            "syrup shop 1": 1,
+            "syrup shop 2": 1,
+            "syrup shop 3": 1,
+            "subrosian market 2": 2,
+            "subrosian market 3": 2,
+            "subrosian market 4": 2,
+            "subrosian market 5": 2,
+        }
+
         self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Dungeon Items"]
 
     def fill_slot_data(self) -> dict:
@@ -163,6 +183,34 @@ class OracleOfSeasonsWorld(World):
             self.random.shuffle(shuffled_rupees)
             self.old_man_rupee_values = dict(zip(self.old_man_rupee_values, shuffled_rupees))
 
+        self.randomize_shop_prices()
+
+    def randomize_shop_prices(self):
+        prices_bag = []
+        prices_bag.extend([400] * 1)
+        prices_bag.extend([300] * 4)
+        prices_bag.extend([200] * 20)
+        prices_bag.extend([100] * 40)
+        prices_bag.extend([80] * 15)
+        prices_bag.extend([60] * 10)
+        prices_bag.extend([30] * 5)
+        self.random.shuffle(prices_bag)
+
+        for key, divider in self.shop_prices.items():
+            floating_price = int(prices_bag.pop() / divider)
+            for value in VALID_RUPEE_VALUES:
+                if value >= floating_price:
+                    self.shop_prices[key] = value
+                    break
+
+    def location_is_active(self, location_name):
+        locdata = LOCATIONS_DATA[location_name]
+        if "conditional" not in locdata or locdata["conditional"] is False:
+            return True
+        if locdata["region_id"] == "advance shop":
+            return self.options.advance_shop.value
+        return False
+
     def create_location(self, region_name: str, location_name: str, local: bool):
         region = self.multiworld.get_region(region_name, self.player)
         location = Location(self.player, location_name, self.location_name_to_id[location_name], region)
@@ -178,7 +226,7 @@ class OracleOfSeasonsWorld(World):
 
         # Create locations
         for location_name, location_data in LOCATIONS_DATA.items():
-            if "conditional" in location_data and location_data["conditional"] is True:
+            if not self.location_is_active(location_name):
                 continue
 
             is_local = "local" in location_data and location_data["local"] is True
@@ -257,10 +305,10 @@ class OracleOfSeasonsWorld(World):
 
     def create_items(self):
         ring_count = 0
-        for loc_data in LOCATIONS_DATA.values():
+        for loc_name, loc_data in LOCATIONS_DATA.items():
             if "randomized" in loc_data and loc_data["randomized"] is False:
                 continue
-            if "conditional" in loc_data and loc_data["conditional"] is True:
+            if not self.location_is_active(loc_name):
                 continue
             if "vanilla_item" not in loc_data:
                 continue
@@ -364,7 +412,8 @@ class OracleOfSeasonsWorld(World):
              },
             "default seasons": {},
             "old man rupee values": {},
-            "locations": {}
+            "locations": {},
+            "shop prices": self.shop_prices
         }
 
         for region_name, season in self.default_seasons.items():

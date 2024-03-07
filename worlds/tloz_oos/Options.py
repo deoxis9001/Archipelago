@@ -195,6 +195,16 @@ class OracleOfSeasonsRingQuality(Choice):
     default = 1
 
 
+class OracleOfSeasonsAdvanceShop(Toggle):
+    """
+    In the vanilla game, there is a house northwest of Horon Village hosting the secret "Advance Shop" that can only
+    be accessed if the game is being played on a Game Boy Advance console.
+    If enabled, this option makes this shop always open, adding 3 shop locations to the game (and some rupees to the
+    item pool to compensate for the extra purchases that might be required)
+    """
+    display_name = "Open Advance Shop"
+
+
 class OracleOfSeasonsFoolsOre(Choice):
     """
     In the vanilla game, the Fool's Ore is the item "given" by the strange brothers in "exchange" for your feather.
@@ -261,6 +271,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     ring_quality: OracleOfSeasonsRingQuality
+    advance_shop: OracleOfSeasonsAdvanceShop
     fools_ore: OracleOfSeasonsFoolsOre
     warp_to_start: OracleOfSeasonsWarpToStart
     quick_flute: OracleOfSeasonsQuickFlute

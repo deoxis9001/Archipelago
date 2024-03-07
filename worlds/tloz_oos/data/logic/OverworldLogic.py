@@ -49,14 +49,11 @@ def make_holodrum_logic(player: int):
 
         ["horon village", "horon village tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
 
-        ["horon village", "shop, 20 rupees", False, lambda state: oos_has_rupees(state, player, 30)],
-        ["horon village", "shop, 30 rupees", False, lambda state: oos_has_rupees(state, player, 45)],
-        ["horon village", "shop, 150 rupees", False, lambda state: oos_has_rupees(state, player, 225)],
-
-        # TODO: Split Member's shop rupee requirements
+        ["horon village", "horon shop", False, lambda state: oos_can_farm_rupees(state, player)],
+        ["horon village", "advance shop", False, lambda state: oos_can_farm_rupees(state, player)],
         ["horon village", "member's shop", False, lambda state: all([
             state.has("Member's Card", player),
-            oos_has_rupees(state, player, 1010),
+            oos_can_farm_rupees(state, player)
         ])],
 
         # WESTERN COAST ##############################################################################################
@@ -327,7 +324,7 @@ def make_holodrum_logic(player: int):
         # NORTH HORON / HOLODRUM PLAIN ###############################################################################
 
         ["north horon", "north horon tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
-        ["north horon", "blaino prize", False, lambda state: oos_has_rupees(state, player, 10)],
+        ["north horon", "blaino prize", False, lambda state: oos_can_farm_rupees(state, player)],
         ["north horon", "cave north of D1", False, lambda state: all([
             oos_season_in_north_horon(state, player, "autumn"),
             oos_can_break_mushroom(state, player, True),
@@ -581,6 +578,7 @@ def make_holodrum_logic(player: int):
             ]),
             state.has("Mushroom", player)
         ])],
+        ["syrup trade", "syrup shop", False, lambda state: oos_can_farm_rupees(state, player)],
 
         ["sunken city dimitri", "master diver's challenge", False, lambda state: all([
             oos_has_sword(state, player, False),

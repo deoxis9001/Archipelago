@@ -190,6 +190,28 @@ LOCATIONS_DATA = {
         "vanilla_item": "Gasha Seed",
         "flag_byte": 0xCAB5
     },
+    "Sunken City: Syrup Shop #1": {
+        "patcher_name": "syrup shop 1",
+        "region_id": "syrup shop",
+        "vanilla_item": "Potion",
+        "flag_byte": 0xC63F,
+        "bit_mask": 0x20,
+    },
+    "Sunken City: Syrup Shop #2": {
+        "patcher_name": "syrup shop 2",
+        "region_id": "syrup shop",
+        "vanilla_item": "Gasha Seed",
+        "flag_byte": 0xC63F,
+        "bit_mask": 0x40,
+    },
+    "Sunken City: Syrup Shop #3": {
+        "patcher_name": "syrup shop 3",
+        "region_id": "syrup shop",
+        "vanilla_item": "Bombs (10)",
+        "flag_byte": 0xC63F,
+        "bit_mask": 0x80,
+    },
+
     "Eyeglass Lake: Chest in Dried Lake East Cave": {
         "patcher_name": "dry eyeglass lake, east cave",
         "region_id": "dry eyeglass lake, east cave",
@@ -241,19 +263,23 @@ LOCATIONS_DATA = {
     },
     "Horon Village: Shop #1": {
         "patcher_name": "shop, 20 rupees",
-        "region_id": "shop, 20 rupees",
-        "vanilla_item": "Bombs (10)"
+        "region_id": "horon shop",
+        "vanilla_item": "Bombs (10)",
+        "flag_byte": 0xC640,
+        "bit_mask": 0x20,
     },
     "Horon Village: Shop #2": {
         "patcher_name": "shop, 30 rupees",
-        "region_id": "shop, 30 rupees",
-        "vanilla_item": "Progressive Shield"
+        "region_id": "horon shop",
+        "vanilla_item": "Progressive Shield",
+        "flag_byte": 0xC640,
+        "bit_mask": 0x40,
     },
     "Horon Village: Shop #3": {
         "patcher_name": "shop, 150 rupees",
-        "region_id": "shop, 150 rupees",
+        "region_id": "horon shop",
         "vanilla_item": "Flute",
-        "flag_byte": 0xC693,
+        "flag_byte": 0xC640,
         "bit_mask": 0x80
     },
     "Horon Village: Member's Shop #1": {
@@ -277,7 +303,30 @@ LOCATIONS_DATA = {
         "flag_byte": 0xC63F,
         "bit_mask": 0x08,
     },
-
+    "Horon Village: Advance Shop #1": {
+        "patcher_name": "advance shop 1",
+        "region_id": "advance shop",
+        "vanilla_item": "Rupees (100)",
+        "flag_byte": 0xC640,
+        "bit_mask": 0x01,
+        "conditional": True
+    },
+    "Horon Village: Advance Shop #2": {
+        "patcher_name": "advance shop 2",
+        "region_id": "advance shop",
+        "vanilla_item": "Rupees (100)",
+        "flag_byte": 0xC640,
+        "bit_mask": 0x02,
+        "conditional": True
+    },
+    "Horon Village: Advance Shop #3": {
+        "patcher_name": "advance shop 3",
+        "region_id": "advance shop",
+        "vanilla_item": "Rupees (100)",
+        "flag_byte": 0xC640,
+        "bit_mask": 0x04,
+        "conditional": True
+    },
     "Subrosia: Tower of Winter": {
         "patcher_name": "tower of winter",
         "region_id": "tower of winter",
@@ -352,38 +401,38 @@ LOCATIONS_DATA = {
     },
     "Subrosia: Market #1": {
         "patcher_name": "subrosia market, 1st item",
-        "region_id": "subrosia market, 1st item",
+        "region_id": "subrosia market star ore",
         "vanilla_item": "Ribbon",
         "flag_byte": 0xC642,
         "bit_mask": 0x01,
     },
     "Subrosia: Market #2": {
         "patcher_name": "subrosia market, 2nd item",
-        "region_id": "subrosia market, 2nd item",
+        "region_id": "subrosia market ore chunks",
         "vanilla_item": "Rare Peach Stone",
         "flag_byte": 0xC642,
         "bit_mask": 0x02,
     },
     "Subrosia: Market #3": {
         "patcher_name": "subrosia market, 3rd item",
-        "region_id": "subrosia market, 3rd item",
-        "vanilla_item": "Bomb Bag Upgrade",
-        "conditional": True,  # Not yet implemented
-        # "flag_byte": 0xC...,
+        "region_id": "subrosia market ore chunks",
+        "vanilla_item": "Progressive Shield",
+        "flag_byte": 0xC642,
+        "bit_mask": 0x04,
     },
     "Subrosia: Market #4": {
         "patcher_name": "subrosia market, 4th item",
-        "region_id": "subrosia market, 4th item",
-        "vanilla_item": "Progressive Shield",
-        "conditional": True,  # Not yet implemented
-        # "flag_byte": 0xC...,
+        "region_id": "subrosia market ore chunks",
+        "vanilla_item": "Bombs (10)",
+        "flag_byte": 0xC642,
+        "bit_mask": 0x08,
     },
     "Subrosia: Market #5": {
         "patcher_name": "subrosia market, 5th item",
-        "region_id": "subrosia market, 5th item",
+        "region_id": "subrosia market ore chunks",
         "vanilla_item": "Member's Card",
-        "flag_byte": 0xC694,
-        "bit_mask": 0x01
+        "flag_byte": 0xC642,
+        "bit_mask": 0x10,
     },
     "Subrosia: Item Smelted in Great Furnace": {
         "patcher_name": "great furnace",

@@ -231,28 +231,42 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
         if state.has(event_name, player):
             rupees += value
 
-    # TODO: Count spendings by subtracting the price of all shop locations currently containing a progression item?
-
     return rupees >= amount
 
 
 def oos_can_farm_rupees(state: CollectionState, player: int):
-    # Farming rupees is not *that* hard by itself, but it's just really boring most of the time if you don't know how
-    # to optimize it efficiently doing RNG manips and such, so we let it in the hard logic domain for now
-    return oos_option_hard_logic(state, player) and oos_has_shovel(state, player)
+    # Having Ember Seeds and a weapon or a shovel is enough to guarantee that we can reach
+    # a significant amount of rupees
+    return all([
+        oos_can_use_ember_seeds(state, player, False),
+        (oos_has_sword(state, player) or oos_has_shovel(state, player))
+    ])
 
 
-def oos_can_date_rosa(state: CollectionState, player: int):
-    return state.has("_reached_rosa", player) and state.has("Ribbon", player)
+def oos_has_ore(state: CollectionState, player: int, amount: int):
+    if oos_can_farm_ore(state, player):
+        return True
+    return False
 
 
 def oos_can_farm_ore(state: CollectionState, player: int):
     return any([
         oos_has_shovel(state, player),
-        oos_has_sword(state, player),
-        oos_has_magic_boomerang(state, player),
-        state.has("_reached_subrosian_dance_hall", player)
+        all([
+            oos_option_hard_logic(state, player),
+            state.has("_reached_subrosian_dance_hall", player)
+        ])
     ])
+    # any([
+    #     oos_has_shovel(state, player),
+    #     oos_has_sword(state, player),
+    #     oos_has_magic_boomerang(state, player),
+    #     state.has("_reached_subrosian_dance_hall", player)
+    # ])
+
+
+def oos_can_date_rosa(state: CollectionState, player: int):
+    return state.has("_reached_rosa", player) and state.has("Ribbon", player)
 
 
 def oos_can_trigger_far_switch(state: CollectionState, player: int):

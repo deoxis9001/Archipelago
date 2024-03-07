@@ -97,6 +97,10 @@ DUNGEON_ITEMS = [
     "Dungeon Map"
 ]
 
+VALID_RUPEE_VALUES = [
+    0, 1, 2, 5, 10, 20, 25, 30, 40, 50, 60, 70, 80, 100, 200, 300, 400, 500, 900, 999
+]
+
 ITEM_GROUPS = {
     "Dungeon Items": [
         "Small Key (Hero's Cave)",

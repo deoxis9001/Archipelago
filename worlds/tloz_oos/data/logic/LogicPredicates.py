@@ -1,6 +1,7 @@
 from BaseClasses import CollectionState
 from worlds.tloz_oos.data.Constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES
 
+
 # Static predicates ############################################################
 
 # These predicates don't require a state but a world instead, and are used before item fill
@@ -508,16 +509,17 @@ def oos_can_warp_using_gale_seeds(state: CollectionState, player: int):
 
 
 def oos_can_use_gale_seeds_offensively(state: CollectionState, player: int):
-    return all([
-        oos_has_gale_seeds(state, player),
-        any([
-            all([
-                oos_option_medium_logic(state, player),
-                oos_has_slingshot(state, player)
-            ]),
-            all([
+    # If we don't have gale seeds or aren't at least in medium logic, don't even try
+    if not oos_has_gale_seeds(state, player) or not oos_option_medium_logic(state, player):
+        return False
+
+    return any([
+        oos_has_slingshot(state, player),
+        all([
+            oos_has_satchel(state, player),
+            any([
                 oos_option_hard_logic(state, player),
-                oos_has_satchel(state, player)
+                oos_has_feather(state, player)
             ]),
         ])
     ])
@@ -639,17 +641,29 @@ def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available
 
 
 def oos_can_kill_normal_using_satchel(state: CollectionState, player: int):
-    return all([
-        oos_has_satchel(state, player),
-        any([
-            oos_has_ember_seeds(state, player),
-            all([
-                oos_option_medium_logic(state, player),
-                any([
-                    oos_has_scent_seeds(state, player),
+    # Killing using satchel without satchel is known to be pretty tricky
+    if not oos_has_satchel(state, player):
+        return False
+
+    return any([
+        # Casual logic => only ember
+        oos_has_ember_seeds(state, player),
+        all([
+            # Medium logic => allow scent or gale+feather
+            oos_option_medium_logic(state, player),
+            any([
+                oos_has_scent_seeds(state, player),
+                oos_has_mystery_seeds(state, player),
+                all([
                     oos_has_gale_seeds(state, player),
+                    oos_has_feather(state, player)
                 ])
             ])
+        ]),
+        all([
+            # Hard logic => allow gale without feather
+            oos_option_hard_logic(state, player),
+            oos_has_gale_seeds(state, player)
         ])
     ])
 
@@ -662,7 +676,10 @@ def oos_can_kill_normal_using_slingshot(state: CollectionState, player: int):
             oos_has_scent_seeds(state, player),
             all([
                 oos_option_medium_logic(state, player),
-                oos_has_gale_seeds(state, player),
+                any([
+                    oos_has_mystery_seeds(state, player),
+                    oos_has_gale_seeds(state, player),
+                ])
             ])
         ])
     ])

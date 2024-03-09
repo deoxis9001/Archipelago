@@ -219,12 +219,12 @@ class OracleOfSeasonsPricesFactor(Range):
     """
     A factor (expressed as percentage) that will be applied to all prices inside all shops in the game.
     - Setting it at 10% will make all items almost free
-    - Setting it at 300% will make all items horrendously expensive, use at your own risk!
+    - Setting it at 500% will make all items horrendously expensive, use at your own risk!
     """
     display_name = "Prices Factor (%)"
 
     range_start = 10
-    range_end = 300
+    range_end = 500
     default = 100
 
 
@@ -291,7 +291,8 @@ class OracleOfSeasonsHeartBeepInterval(Choice):
 
 class OracleOfSeasonsCharacterSprite(Choice):
     """
-    The sprite to use as a character during this seed
+    The sprite to use as a character during this seed.
+    (Sprites extracted from ardnaxelarak's rando)
     """
     display_name = "Character Sprite"
 

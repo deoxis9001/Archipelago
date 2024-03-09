@@ -1062,7 +1062,7 @@ LOCATIONS_DATA = {
         "dungeon": 8,
         "flag_byte": 0xCA75
     },
-    "Sword & Shield Dungeon (1F): U-shaped Spiky Freezer Chest": {
+    "Sword & Shield Dungeon (1F): U-Shaped Spiky Freezer Chest": {
         "patcher_name": "d8 spike room",
         "region_id": "d8 spike room",
         "vanilla_item": "Compass (Sword & Shield Dungeon)",
@@ -1296,7 +1296,6 @@ LOCATIONS_DATA = {
     },
 
     "Subrosia: Buried Bomb Flower": {
-        "patcher_name": "subrosian buried bomb flower",
         "region_id": "subrosian buried bomb flower",
         "vanilla_item": "Bomb Flower",
         "randomized": False,

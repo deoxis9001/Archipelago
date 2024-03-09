@@ -154,7 +154,10 @@ def make_holodrum_logic(player: int):
 
         ["sunken city", "moblin road", False, lambda state: all([
             oos_has_flippers(state, player),
-            oos_season_in_sunken_city(state, player, "winter"),
+            any([
+                oos_get_default_season(state, player, "SUNKEN_CITY") != "winter",
+                oos_can_remove_season(state, player, "winter")
+            ]),
             any([
                 oos_can_warp(state, player),
                 all([

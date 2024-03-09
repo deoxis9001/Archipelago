@@ -192,7 +192,7 @@ class OracleOfSeasonsWorld(World):
     def randomize_shop_prices(self):
         global_prices_factor = self.options.shop_prices_factor.value / 100.0
         for key, divider in self.shop_prices.items():
-            floating_price = self.random.normalvariate(130, 50) * global_prices_factor / divider
+            floating_price = self.random.normalvariate(110, 40) * global_prices_factor / divider
             for value in VALID_RUPEE_VALUES:
                 if value >= floating_price:
                     self.shop_prices[key] = value

@@ -233,7 +233,10 @@ def make_holodrum_logic(player: int):
         ["d1 stump", "old man near d1", False, lambda state: oos_can_use_ember_seeds(state, player, False)],
 
         ["d1 island", "d1 entrance", True, lambda state: state.has("Gnarled Key", player)],
-        ["d1 island", "golden beasts old man", False, lambda state: oos_season_in_eyeglass_lake(state, player, "summer")],
+        ["d1 island", "golden beasts old man", False, lambda state: all([
+            oos_season_in_eyeglass_lake(state, player, "summer"),
+            oos_can_beat_required_golden_beasts(state, player)
+        ])],
 
         ["d1 stump", "eyeglass lake (default)", True, lambda state: all([
             any([

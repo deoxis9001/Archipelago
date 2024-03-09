@@ -200,7 +200,7 @@ def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):
     ])
 
 
-def oos_can_beat_golden_beasts(state: CollectionState, player: int):
+def oos_can_beat_required_golden_beasts(state: CollectionState, player: int):
     GOLDEN_BEAST_EVENTS = ["_beat_golden_darknut", "_beat_golden_lynel", "_beat_golden_moblin", "_beat_golden_octorok"]
     beast_count = [state.has(beast, player) for beast in GOLDEN_BEAST_EVENTS].count(True)
     return beast_count >= state.multiworld.worlds[player].options.golden_beasts_requirement.value

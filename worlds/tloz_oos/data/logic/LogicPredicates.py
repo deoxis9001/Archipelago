@@ -714,8 +714,13 @@ def oos_can_kill_stalfos(state: CollectionState, player: int):
 
 
 def oos_can_punch(state: CollectionState, player: int):
-    # TODO: expert's ring OR fist ring, but there's a difference?
-    return False
+    return all([
+        oos_option_hard_logic(state, player),
+        any([
+            state.has("Fist Ring", player),
+            state.has("Expert's Ring", player)
+        ])
+    ])
 
 
 def oos_can_trigger_lever(state: CollectionState, player: int):
@@ -739,8 +744,6 @@ def oos_can_trigger_lever_from_minecart(state: CollectionState, player: int):
         oos_can_use_scent_seeds(state, player),
         oos_can_use_mystery_seeds(state, player),
         oos_has_slingshot(state, player),  # any seed works using slingshot
-
-        oos_can_punch(state, player)
     ])
 
 

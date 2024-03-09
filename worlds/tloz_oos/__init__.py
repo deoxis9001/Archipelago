@@ -296,6 +296,12 @@ class OracleOfSeasonsWorld(World):
     def create_item(self, name: str) -> Item:
         ap_code = self.item_name_to_id[name]
         classification = ITEMS_DATA[name]["classification"]
+
+        # A few items become progression only in hard logic
+        progression_items_in_hard_logic = ["Expert's Ring", "Fist Ring", "Swimmer's Ring"]
+        if self.options.logic_difficulty == "hard" and name in progression_items_in_hard_logic:
+            classification = ItemClassification.progression
+
         return Item(name, classification, ap_code, self.player)
 
     def create_items(self):

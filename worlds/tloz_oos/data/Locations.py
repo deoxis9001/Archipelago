@@ -195,21 +195,23 @@ LOCATIONS_DATA = {
         "region_id": "syrup shop",
         "vanilla_item": "Potion",
         "flag_byte": 0xC63F,
-        "bit_mask": 0x20,
+        "bit_mask": 0x80,
+
     },
     "Sunken City: Syrup Shop #2": {
         "patcher_name": "syrup shop 2",
         "region_id": "syrup shop",
         "vanilla_item": "Gasha Seed",
         "flag_byte": 0xC63F,
-        "bit_mask": 0x40,
+        "bit_mask": 0x20,
+
     },
     "Sunken City: Syrup Shop #3": {
         "patcher_name": "syrup shop 3",
         "region_id": "syrup shop",
         "vanilla_item": "Bombs (10)",
         "flag_byte": 0xC63F,
-        "bit_mask": 0x80,
+        "bit_mask": 0x40,
     },
 
     "Eyeglass Lake: Chest in Dried Lake East Cave": {

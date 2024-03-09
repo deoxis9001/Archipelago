@@ -410,6 +410,8 @@ class OracleOfSeasonsWorld(World):
                 "treehouse_old_man_requirement": self.options.treehouse_old_man_requirement.value,
                 "quick_flute": self.options.quick_flute.current_key,
                 "open_advance_shop": self.options.advance_shop.current_key,
+                "character_sprite": self.options.character_sprite.current_key,
+                "character_palette": self.options.character_palette.current_key,
                 "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},

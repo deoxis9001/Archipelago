@@ -269,6 +269,34 @@ class OracleOfSeasonsHeartBeepInterval(Choice):
     default = 0
 
 
+class OracleOfSeasonsCharacterSprite(Choice):
+    """
+    The sprite to use as a character during this seed
+    """
+    display_name = "Character Sprite"
+
+    option_link = 0
+    option_subrosian = 1
+    option_goron = 2
+    option_piratian = 3
+
+    default = 0
+
+
+class OracleOfSeasonsCharacterPalette(Choice):
+    """
+    The color tint to apply to the character sprite during this seed
+    """
+    display_name = "Character Tint"
+
+    option_green = 0
+    option_blue = 1
+    option_red = 2
+    option_orange = 3
+
+    default = 0
+
+
 @dataclass
 class OracleOfSeasonsOptions(PerGameCommonOptions):
     goal: OracleOfSeasonsGoal
@@ -290,4 +318,6 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     warp_to_start: OracleOfSeasonsWarpToStart
     quick_flute: OracleOfSeasonsQuickFlute
     heart_beep_interval: OracleOfSeasonsHeartBeepInterval
+    character_sprite: OracleOfSeasonsCharacterSprite
+    character_palette: OracleOfSeasonsCharacterPalette
     death_link: DeathLink

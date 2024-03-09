@@ -103,23 +103,23 @@ def oos_has_magnet_gloves(state: CollectionState, player: int):
 
 
 def oos_has_ember_seeds(state: CollectionState, player: int):
-    return state.has("Ember Seeds", player) or state.multiworld.worlds[player].default_seed == "Ember Seeds"
+    return state.has("Ember Seeds", player) or state.multiworld.worlds[player].options.default_seed == "ember"
 
 
 def oos_has_scent_seeds(state: CollectionState, player: int):
-    return state.has("Scent Seeds", player) or state.multiworld.worlds[player].default_seed == "Scent Seeds"
+    return state.has("Scent Seeds", player) or state.multiworld.worlds[player].options.default_seed == "scent"
 
 
 def oos_has_pegasus_seeds(state: CollectionState, player: int):
-    return state.has("Pegasus Seeds", player) or state.multiworld.worlds[player].default_seed == "Pegasus Seeds"
+    return state.has("Pegasus Seeds", player) or state.multiworld.worlds[player].options.default_seed == "pegasus"
 
 
 def oos_has_mystery_seeds(state: CollectionState, player: int):
-    return state.has("Mystery Seeds", player) or state.multiworld.worlds[player].default_seed == "Mystery Seeds"
+    return state.has("Mystery Seeds", player) or state.multiworld.worlds[player].options.default_seed == "mystery"
 
 
 def oos_has_gale_seeds(state: CollectionState, player: int):
-    return state.has("Gale Seeds", player) or state.multiworld.worlds[player].default_seed == "Gale Seeds"
+    return state.has("Gale Seeds", player) or state.multiworld.worlds[player].options.default_seed == "gale"
 
 
 def oos_has_small_keys(state: CollectionState, player: int, dungeon_id: int, amount: int = 1):

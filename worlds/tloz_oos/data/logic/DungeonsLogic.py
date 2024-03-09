@@ -610,7 +610,11 @@ def make_d7_logic(player: int):
         ["enter poe B", "d7 water stairs", False, lambda state: oos_has_flippers(state, player)],
 
         ["d7 water stairs", "d7 darknut bridge trampolines", False, lambda state: any([
-            oos_has_cape(state, player),
+            all([
+                # Boomerang to activate the switch then magnet gloves to go to the trampolines
+                oos_has_magnet_gloves(state, player),
+                oos_has_magic_boomerang(state, player)
+            ]),
             all([
                 oos_option_hard_logic(state, player),
                 oos_has_feather(state, player),
@@ -618,15 +622,30 @@ def make_d7_logic(player: int):
             ]),
         ])],
         ["d7 water stairs", "d7 past darknut bridge", False, lambda state: any([
+            # Just jump to the other side directly
+            oos_can_jump_4_wide_pit(state, player),
+
             all([
                 oos_has_slingshot(state, player),
                 oos_has_scent_seeds(state, player)
             ]),
-            oos_has_magnet_gloves(state, player),
+            all([
+                # Kill one darknut then pull the others with the magnet glove
+                oos_has_magnet_gloves(state, player),
+                any([
+                    oos_can_kill_armored_enemy(state, player),
+                    oos_has_shield(state, player),  # To push the darknut, the rod not really working
+                    all([
+                        # You can kill the right darknut by just jumping in the hole then magnet glove, but it's not intuitive and requires to stall in the airs a bit
+                        oos_option_medium_logic(state, player),
+                        oos_has_feather(state, player)
+                    ])
+                ])
+            ]),
             all([
                 oos_has_sword(state, player, False),
                 state.has("Energy Ring", player),
-            ])
+            ]),
         ])],
         ["d7 past darknut bridge", "d7 darknut bridge trampolines", False, lambda state: any([
             # Reach trampolines directly

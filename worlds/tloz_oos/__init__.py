@@ -49,7 +49,6 @@ class OracleOfSeasonsWorld(World):
 
     pre_fill_items: List[Item]
     dungeon_items: List[Item]
-    default_seed: str
     default_seasons: Dict[str, str]
     dungeon_entrances: Dict[str, str]
     portal_connections: Dict[str, str]
@@ -61,7 +60,6 @@ class OracleOfSeasonsWorld(World):
         super().__init__(multiworld, player)
         self.pre_fill_items = []
         self.dungeon_items = []
-        self.default_seed = SEED_ITEMS[0]
         self.default_seasons = {
             "EYEGLASS_LAKE": "winter",
             "NORTH_HORON": "spring",
@@ -142,8 +140,6 @@ class OracleOfSeasonsWorld(World):
         return slot_data
 
     def generate_early(self):
-        self.default_seed = self.random.choice(SEED_ITEMS)
-
         if self.options.default_seasons == "randomized":
             for region in self.default_seasons:
                 self.default_seasons[region] = self.random.choice(SEASONS)
@@ -382,7 +378,7 @@ class OracleOfSeasonsWorld(World):
             self.pre_fill_items.append(seed_item)
 
         # Fill Horon tree with default seed
-        place_seed(self.default_seed, "Horon Village: Seed Tree")
+        place_seed(SEED_ITEMS[self.options.default_seed.value], "Horon Village: Seed Tree")
 
         # Fill all other trees randomly
         trees = ["Woods of Winter: Seed Tree", "Holodrum Plain: Seed Tree", "Spool Swamp: Seed Tree",

@@ -99,6 +99,26 @@ class OracleOfSeasonsAnimalCompanion(Choice):
     default = "random"
 
 
+class OracleOfSeasonsDefaultSeedType(Choice):
+    """
+    Determines which of the 5 seed types will be the "default seed type", which is given:
+    - when obtaining Seed Satchel
+    - when obtaining Slingshot
+    - by Horon Seed Tree
+    Gale Seeds being quite crucial as a movement option, it is advised to set it as default seed to avoid any
+    potential frustration having them locked far into the seed, especially as a beginner.
+    """
+    display_name = "Default Seed Type"
+
+    option_ember = 0
+    option_scent = 1
+    option_pegasus = 2
+    option_mystery = 3
+    option_gale = 4
+
+    default = 4
+
+
 class OracleOfSeasonsDungeonShuffle(Choice):
     """
     - Vanilla: each dungeon entrance leads to its intended dungeon
@@ -305,6 +325,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     default_seasons: OracleOfSeasonsDefaultSeasons
     horon_village_season: OracleOfSeasonsHoronSeason
     animal_companion: OracleOfSeasonsAnimalCompanion
+    default_seed: OracleOfSeasonsDefaultSeedType
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle

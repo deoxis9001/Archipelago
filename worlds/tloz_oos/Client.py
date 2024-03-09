@@ -105,9 +105,11 @@ class OracleOfSeasonsClient(BizHawkClient):
                 if "randomized" in location and location["randomized"] is False:
                     continue
 
-                bytes_to_test = location["flag_byte"]
-                if not hasattr(bytes_to_test, "__len__"):
-                    bytes_to_test = [bytes_to_test]
+                bytes_to_test = []
+                if "flag_byte" in location:
+                    bytes_to_test = location["flag_byte"]
+                    if not hasattr(bytes_to_test, "__len__"):
+                        bytes_to_test = [bytes_to_test]
 
                 for byte_addr in bytes_to_test:
                     byte_offset = byte_addr - RAM_ADDRS["location_flags"][0]

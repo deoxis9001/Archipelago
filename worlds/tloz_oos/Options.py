@@ -92,9 +92,9 @@ class OracleOfSeasonsAnimalCompanion(Choice):
     """
     display_name = "Animal Companion"
 
-    option_ricky = "Ricky"
-    option_dimitri = "Dimitri"
-    option_moosh = "Moosh"
+    option_ricky = 0
+    option_dimitri = 1
+    option_moosh = 2
 
     default = "random"
 

@@ -316,7 +316,7 @@ class OracleOfSeasonsWorld(World):
             elif item_name == "Rod of Seasons":  # No lone rod of seasons supported for now
                 item_name = "Fool's Ore" if self.options.fools_ore != "excluded" else "Gasha Seed"
             elif item_name == "Flute":
-                item_name = str(self.options.animal_companion.value) + "'s Flute"
+                item_name = COMPANIONS[self.options.animal_companion.value] + "'s Flute"
 
             if "Ring" in item_name:
                 ring_count += 1
@@ -396,7 +396,7 @@ class OracleOfSeasonsWorld(World):
             "settings": {
                 "game": "seasons",
                 "version": VERSION,
-                "companion": self.options.animal_companion.value,
+                "companion": COMPANIONS[self.options.animal_companion.value],
                 "warp_to_start": self.options.warp_to_start.current_key,
                 "required_essences": self.options.required_essences.value,
                 "fools_ore_damage": 3 if self.options.fools_ore == "balanced" else 12,

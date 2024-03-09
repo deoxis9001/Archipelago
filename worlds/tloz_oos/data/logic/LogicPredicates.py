@@ -149,15 +149,15 @@ def oos_option_shuffled_dungeons(state: CollectionState, player: int):
 
 
 def oos_is_companion_ricky(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.animal_companion.value == "Ricky"
+    return state.multiworld.worlds[player].options.animal_companion == "ricky"
 
 
 def oos_is_companion_moosh(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.animal_companion.value == "Moosh"
+    return state.multiworld.worlds[player].options.animal_companion == "moosh"
 
 
 def oos_is_companion_dimitri(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.animal_companion.value == "Dimitri"
+    return state.multiworld.worlds[player].options.animal_companion == "dimitri"
 
 
 def oos_get_default_season(state: CollectionState, player: int, area_name: str):

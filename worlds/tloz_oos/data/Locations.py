@@ -21,7 +21,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Rupees (20)",
         "flag_byte": 0xC7F5
     },
-    "Horon Village: Chest in Dr. Left's backyard": {
+    "Horon Village: Chest in Dr. Left's Backyard": {
         "patcher_name": "horon village SE chest",
         "region_id": "horon village SE chest",
         "vanilla_item": "Rupees (20)",
@@ -452,11 +452,10 @@ LOCATIONS_DATA = {
     "Subrosia: Smithy Rusty Bell Reforge": {
         "patcher_name": "subrosian smithy bell",
         "region_id": "subrosian smithy bell",
-        "vanilla_item": "pirate's bell",
+        "vanilla_item": "Pirate's Bell",
         "conditional": True,
-        "randomized": False,
-        "flag_byte": 0xC897,
-        "local": True
+        # "randomized": False,
+        # "flag_byte": 0xC897,
     },
 
     "Hero's Cave: Topmost Chest": {
@@ -558,7 +557,6 @@ LOCATIONS_DATA = {
         "dungeon": 1,
         "flag_byte": 0xC912
     },
-    # Essence is 0xC913
 
     "Snake's Remains: Drop in Left Rope Room": {
         "patcher_name": "d2 rope drop",
@@ -630,7 +628,6 @@ LOCATIONS_DATA = {
         "dungeon": 2,
         "flag_byte": 0xC929
     },
-    # Essence is 0xC92C
 
     "Poison Moth's Lair (B1F): Chest in Roller Room": {
         "patcher_name": "d3 roller chest",
@@ -702,7 +699,6 @@ LOCATIONS_DATA = {
         "dungeon": 3,
         "flag_byte": 0xC953
     },
-    # Essence is 0xC940
 
     "Dancing Dragon Dungeon (2F): Pots on Buttons Puzzle Drop": {
         "patcher_name": "d4 pot puzzle",
@@ -781,7 +777,6 @@ LOCATIONS_DATA = {
         "dungeon": 4,
         "flag_byte": 0xC95F
     },
-    # Essence is 0xC960
 
     "Unicorn's Cave: Right Cart Chest": {
         "patcher_name": "d5 cart chest",
@@ -860,7 +855,6 @@ LOCATIONS_DATA = {
         "dungeon": 5,
         "flag_byte": 0xC98C
     },
-    # Essence is 0xC988
 
     "Ancient Ruins (1F): Magnet Ball Puzzle Drop": {
         "patcher_name": "d6 magnet ball drop",
@@ -946,7 +940,6 @@ LOCATIONS_DATA = {
         "dungeon": 6,
         "flag_byte": 0xC9D5
     },
-    # Essence is 0xC898
 
     "Explorer's Crypt (1F): Chest in Wizzrobe Room": {
         "patcher_name": "d7 wizzrobe chest",
@@ -1032,7 +1025,6 @@ LOCATIONS_DATA = {
         "dungeon": 7,
         "flag_byte": 0xCA50
     },
-    # Essence is 0xCA4F
 
     "Sword & Shield Dungeon (1F): Eye Drop Near Entrance": {
         "patcher_name": "d8 eye drop",
@@ -1132,7 +1124,6 @@ LOCATIONS_DATA = {
         "dungeon": 8,
         "flag_byte": 0xCA64
     },
-    # Essence is 0xCA5F
 
     "Horon Village: Item Behind Small Tree": {
         "patcher_name": "horon heart piece",
@@ -1293,7 +1284,7 @@ LOCATIONS_DATA = {
         "patcher_name": "subrosian buried bomb flower",
         "region_id": "subrosian buried bomb flower",
         "vanilla_item": "Bomb Flower",
-        "conditional": True,
+        "randomized": False,
         "flag_byte": 0xC869
     },
     "Subrosia: Sign-Loving Guy Reward": {
@@ -1399,4 +1390,53 @@ LOCATIONS_DATA = {
         "region_id": "tarm ruins tree",
         "local": True
     },
+
+    "Gnarled Root Dungeon: Essence": {
+        "region_id": "d1 boss",
+        "flag_byte": 0xC913,
+        "vanilla_item": "Fertile Soil",
+        "randomized": False
+    },
+    "Snake's Remains: Essence": {
+        "region_id": "d2 boss",
+        "flag_byte": 0xC92C,
+        "vanilla_item": "Gift of Time",
+        "randomized": False
+    },
+    "Poison Moth's Lair: Essence": {
+        "region_id": "d3 boss",
+        "flag_byte": 0xC940,
+        "vanilla_item": "Bright Sun",
+        "randomized": False
+    },
+    "Dancing Dragon Dungeon: Essence": {
+        "region_id": "d4 boss",
+        "flag_byte": 0xC960,
+        "vanilla_item": "Soothing Rain",
+        "randomized": False
+    },
+    "Unicorn's Cave: Essence": {
+        "region_id": "d5 boss",
+        "flag_byte": 0xC988,
+        "vanilla_item": "Nurturing Warmth",
+        "randomized": False
+    },
+    "Ancient Ruins: Essence": {
+        "region_id": "d6 boss",
+        "flag_byte": 0xC898,
+        "vanilla_item": "Blowing Wind",
+        "randomized": False
+    },
+    "Explorer's Crypt: Essence": {
+        "region_id": "d7 boss",
+        "flag_byte": 0xCA4F,
+        "vanilla_item": "Seed of Life",
+        "randomized": False
+    },
+    "Sword & Shield Dungeon: Essence": {
+        "region_id": "d8 boss",
+        "flag_byte": 0xCA5F,
+        "vanilla_item": "Changing Seasons",
+        "randomized": False
+    }
 }

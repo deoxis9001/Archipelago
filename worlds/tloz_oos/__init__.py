@@ -12,7 +12,7 @@ from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
 from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS, ESSENCES, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS, VERSION, VALID_RUPEE_VALUES
+    SEASONS, COMPANIONS, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS, VERSION, VALID_RUPEE_VALUES
 from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
 from .data.logic.LogicPredicates import oos_can_reach_d2_stump
@@ -238,9 +238,6 @@ class OracleOfSeasonsWorld(World):
 
     def create_events(self):
         self.create_event("subrosian smithy bell", "Pirate's Bell")
-        self.create_event("bomb flower", "Bomb Flower")
-        for i in range(8):
-            self.create_event(f"d{i+1} boss", ESSENCES[i])
         self.create_event("maku seed", "Maku Seed")
 
         self.create_event("onox beaten", "_beaten_onox")
@@ -308,6 +305,9 @@ class OracleOfSeasonsWorld(World):
         ring_count = 0
         for loc_name, loc_data in LOCATIONS_DATA.items():
             if "randomized" in loc_data and loc_data["randomized"] is False:
+                item = self.create_item(loc_data['vanilla_item'])
+                location = self.multiworld.get_location(loc_name, self.player)
+                location.place_locked_item(item)
                 continue
             if not self.location_is_active(loc_name):
                 continue
@@ -443,7 +443,8 @@ class OracleOfSeasonsWorld(World):
                 continue
             item_name = loc.item.name if loc.item.player == loc.player else "Archipelago Item"
             loc_patcher_name = find_patcher_name_for_location(loc.name)
-            yamlObj["locations"][loc_patcher_name] = item_name
+            if loc_patcher_name != "":
+                yamlObj["locations"][loc_patcher_name] = item_name
 
         filename = f"{self.multiworld.get_out_file_name_base(self.player)}.patcherdata"
         with open(os.path.join(output_directory, filename), 'w') as f:

@@ -355,11 +355,6 @@ ITEMS_DATA = {
     #     "",
     #         'id': 0x37
     #     },
-    #     "Essence": {
-    #     'classification': ItemClassification.progression,
-    #     "",
-    #         'id': 0x40
-    #     },
 
     "Cuccodex": {
         'classification': ItemClassification.progression,
@@ -439,11 +434,6 @@ ITEMS_DATA = {
     #       'pretty_name': "Ricky's Gloves",
     #       'id': 0x48
     #   },
-    #   "Bomb Flower": {
-    #   'classification': ItemClassification.progression,
-    #   "",
-    #        'id': 0x49
-    #    },
     "Rusty Bell": {
         'classification': ItemClassification.progression,
         'id': 0x4a
@@ -882,4 +872,49 @@ ITEMS_DATA = {
         'subid': 0x43,
         'ring': True
     },
+
+    "Bomb Flower": {
+        'classification': ItemClassification.progression,
+        'id': 0x49
+    },
+    "Fertile Soil": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x00
+    },
+    "Gift of Time": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x01
+    },
+    "Bright Sun": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x02
+    },
+    "Soothing Rain": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x03
+    },
+    "Nurturing Warmth": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x04
+    },
+    "Blowing Wind": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x05
+    },
+    "Seed of Life": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x06
+    },
+    "Changing Seasons": {
+        'classification': ItemClassification.progression,
+        'id': 0x40,
+        'subid': 0x07
+    }
 }

@@ -635,17 +635,13 @@ def make_d7_logic(player: int):
                 any([
                     oos_can_kill_armored_enemy(state, player),
                     oos_has_shield(state, player),  # To push the darknut, the rod not really working
-                    all([
-                        # You can kill the right darknut by just jumping in the hole then magnet glove, but it's not intuitive and requires to stall in the airs a bit
-                        oos_option_medium_logic(state, player),
-                        oos_has_feather(state, player)
-                    ])
+                    oos_option_medium_logic(state, player) # Pull the right darknut by just going and stalling in the hole
                 ])
             ]),
             all([
                 oos_has_sword(state, player, False),
                 state.has("Energy Ring", player),
-            ]),
+            ])
         ])],
         ["d7 past darknut bridge", "d7 darknut bridge trampolines", False, lambda state: any([
             # Reach trampolines directly

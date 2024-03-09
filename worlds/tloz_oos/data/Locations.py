@@ -196,7 +196,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Potion",
         "flag_byte": 0xC63F,
         "bit_mask": 0x80,
-
+        "scouting_byte": 0xC89C,
     },
     "Sunken City: Syrup Shop #2": {
         "patcher_name": "syrup shop 2",
@@ -204,7 +204,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Gasha Seed",
         "flag_byte": 0xC63F,
         "bit_mask": 0x20,
-
+        "scouting_byte": 0xC89C,
     },
     "Sunken City: Syrup Shop #3": {
         "patcher_name": "syrup shop 3",
@@ -212,6 +212,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bombs (10)",
         "flag_byte": 0xC63F,
         "bit_mask": 0x40,
+        "scouting_byte": 0xC89C,
     },
 
     "Eyeglass Lake: Chest in Dried Lake East Cave": {
@@ -269,6 +270,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bombs (10)",
         "flag_byte": 0xC640,
         "bit_mask": 0x20,
+        "scouting_byte": 0xC8A6,
     },
     "Horon Village: Shop #2": {
         "patcher_name": "shop, 30 rupees",
@@ -276,13 +278,15 @@ LOCATIONS_DATA = {
         "vanilla_item": "Progressive Shield",
         "flag_byte": 0xC640,
         "bit_mask": 0x40,
+        "scouting_byte": 0xC8A6,
     },
     "Horon Village: Shop #3": {
         "patcher_name": "shop, 150 rupees",
         "region_id": "horon shop",
         "vanilla_item": "Flute",
         "flag_byte": 0xC640,
-        "bit_mask": 0x80
+        "bit_mask": 0x80,
+        "scouting_byte": 0xC8A6,
     },
     "Horon Village: Member's Shop #1": {
         "patcher_name": "member's shop 1",
@@ -290,6 +294,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Seed Satchel",
         "flag_byte": 0xC63F,
         "bit_mask": 0x01,
+        "scouting_byte": 0xC8B0,
     },
     "Horon Village: Member's Shop #2": {
         "patcher_name": "member's shop 2",
@@ -297,6 +302,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Gasha Seed",
         "flag_byte": 0xC63F,
         "bit_mask": 0x02,
+        "scouting_byte": 0xC8B0,
     },
     "Horon Village: Member's Shop #3": {
         "patcher_name": "member's shop 3",
@@ -304,6 +310,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Treasure Map",
         "flag_byte": 0xC63F,
         "bit_mask": 0x08,
+        "scouting_byte": 0xC8B0,
     },
     "Horon Village: Advance Shop #1": {
         "patcher_name": "advance shop 1",
@@ -311,7 +318,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Rupees (100)",
         "flag_byte": 0xC640,
         "bit_mask": 0x01,
-        "conditional": True
+        "conditional": True,
+        "scouting_byte": 0xC8AF,
     },
     "Horon Village: Advance Shop #2": {
         "patcher_name": "advance shop 2",
@@ -319,7 +327,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Rupees (100)",
         "flag_byte": 0xC640,
         "bit_mask": 0x02,
-        "conditional": True
+        "conditional": True,
+        "scouting_byte": 0xC8AF,
     },
     "Horon Village: Advance Shop #3": {
         "patcher_name": "advance shop 3",
@@ -327,7 +336,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Rupees (100)",
         "flag_byte": 0xC640,
         "bit_mask": 0x04,
-        "conditional": True
+        "conditional": True,
+        "scouting_byte": 0xC8AF,
     },
     "Subrosia: Tower of Winter": {
         "patcher_name": "tower of winter",
@@ -407,6 +417,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Ribbon",
         "flag_byte": 0xC642,
         "bit_mask": 0x01,
+        "scouting_byte": 0xC8A0,
     },
     "Subrosia: Market #2": {
         "patcher_name": "subrosia market, 2nd item",
@@ -414,6 +425,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Rare Peach Stone",
         "flag_byte": 0xC642,
         "bit_mask": 0x02,
+        "scouting_byte": 0xC8A0,
     },
     "Subrosia: Market #3": {
         "patcher_name": "subrosia market, 3rd item",
@@ -421,6 +433,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Progressive Shield",
         "flag_byte": 0xC642,
         "bit_mask": 0x04,
+        "scouting_byte": 0xC8A0,
     },
     "Subrosia: Market #4": {
         "patcher_name": "subrosia market, 4th item",
@@ -428,6 +441,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bombs (10)",
         "flag_byte": 0xC642,
         "bit_mask": 0x08,
+        "scouting_byte": 0xC8A0,
     },
     "Subrosia: Market #5": {
         "patcher_name": "subrosia market, 5th item",
@@ -435,6 +449,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Member's Card",
         "flag_byte": 0xC642,
         "bit_mask": 0x10,
+        "scouting_byte": 0xC8A0,
     },
     "Subrosia: Item Smelted in Great Furnace": {
         "patcher_name": "great furnace",

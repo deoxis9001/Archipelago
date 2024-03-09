@@ -29,6 +29,7 @@ class OracleOfSeasonsClient(BizHawkClient):
     system = "GBC"
     patch_suffix = ".apseasons"
     local_checked_locations: Set[int]
+    local_scouted_locations: Set[int]
     item_id_to_name: Dict[int, str]
     location_name_to_id: Dict[str, int]
 
@@ -37,6 +38,7 @@ class OracleOfSeasonsClient(BizHawkClient):
         self.item_id_to_name = build_item_id_to_name_dict()
         self.location_name_to_id = build_location_name_to_id_dict()
         self.local_checked_locations = set()
+        self.local_scouted_locations = set()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -99,6 +101,7 @@ class OracleOfSeasonsClient(BizHawkClient):
 
             # Read location flags from RAM
             local_checked_locations = set(ctx.locations_checked)
+            local_scouted_locations = set(ctx.locations_scouted)
             for name, location in LOCATIONS_DATA.items():
                 if "local" in location and location["local"] is True:
                     continue
@@ -109,6 +112,7 @@ class OracleOfSeasonsClient(BizHawkClient):
                 if not hasattr(bytes_to_test, "__len__"):
                     bytes_to_test = [bytes_to_test]
 
+                # Check all "flag_byte" to see if location has been checked
                 for byte_addr in bytes_to_test:
                     byte_offset = byte_addr - RAM_ADDRS["location_flags"][0]
                     bit_mask = location["bit_mask"] if "bit_mask" in location else 0x20
@@ -117,12 +121,30 @@ class OracleOfSeasonsClient(BizHawkClient):
                         local_checked_locations.add(location_id)
                         break
 
+                # Check "scouting_byte" to see if map has been visited for scoutable locations
+                if "scouting_byte" in location:
+                    byte_to_test = location["scouting_byte"]
+                    byte_offset = byte_to_test - RAM_ADDRS["location_flags"][0]
+                    if flag_bytes[byte_offset] & 0x10 == 0x10:
+                        # Map has been visited, scout the location if it hasn't been already
+                        location_id = self.location_name_to_id[name]
+                        local_scouted_locations.add(location_id)
+
             # Send locations
             if self.local_checked_locations != local_checked_locations:
                 self.local_checked_locations = local_checked_locations
                 await ctx.send_msgs([{
                     "cmd": "LocationChecks",
                     "locations": list(self.local_checked_locations)
+                }])
+
+            # Scout locations
+            if self.local_scouted_locations != local_scouted_locations:
+                self.local_scouted_locations = local_scouted_locations
+                await ctx.send_msgs([{
+                    "cmd": "LocationScouts",
+                    "locations": list(self.local_scouted_locations),
+                    "create_as_hint": int(2)
                 }])
 
             # Send game clear

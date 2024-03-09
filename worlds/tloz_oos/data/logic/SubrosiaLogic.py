@@ -17,23 +17,27 @@ def make_subrosia_logic(player: int):
 
         # Regions ###############################################################
 
-        ["subrosia temple sector", "subrosia market sector", True, lambda state: oos_has_feather(state, player)],
-        
-        ["subrosia market sector", "subrosia temple sector", False, lambda state: oos_can_date_rosa(state, player)],
-        ["subrosia market sector", "subrosia east junction", True, lambda state: any([
-            oos_has_magnet_gloves(state, player),
-            oos_can_jump_4_wide_pit(state, player),
-            all([
-                # As it is a "diagonal" pit, it is considered as a 4-wide in easy and as a 3-wide in medium+
-                oos_option_medium_logic(state, player),
-                oos_can_jump_3_wide_pit(state, player)
-            ])
+        ["subrosia temple sector", "subrosia market sector", False, lambda state: \
+            oos_can_jump_1_wide_liquid(state, player, False)],
+        ["subrosia market sector", "subrosia temple sector", False, lambda state: any([
+            oos_can_date_rosa(state, player),
+            oos_can_jump_1_wide_liquid(state, player, False)
         ])],
-        ["subrosia east junction", "subrosia market sector", False, lambda state: all([
+        ["subrosia market sector", "subrosia east junction", False, lambda state: any([
+            oos_has_magnet_gloves(state, player),
+            # As it is a "diagonal" pit, it is considered as a 3.5-wide pit
+            oos_can_jump_3_wide_liquid(state, player)
+        ])],
+        ["subrosia east junction", "subrosia market sector", False, lambda state: any([
             # This backwards route adds itself on top of the two-way route right above this one, adding the option
             # to remove the rock using the bracelet to turn this pit into a 2-wide jump
-            oos_has_bracelet(state, player),
-            oos_can_jump_2_wide_pit(state, player)
+            all([
+                oos_has_bracelet(state, player),
+                oos_can_jump_2_wide_pit(state, player)
+            ]),
+            oos_has_magnet_gloves(state, player),
+            # As it is a "diagonal" pit, it is considered as a 3.5-wide pit
+            oos_can_jump_3_wide_liquid(state, player)
         ])],
 
         ["subrosia temple sector", "subrosia bridge sector", True, lambda state: oos_has_feather(state, player)],

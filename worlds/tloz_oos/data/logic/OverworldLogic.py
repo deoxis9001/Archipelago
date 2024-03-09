@@ -806,6 +806,10 @@ def make_holodrum_logic(player: int):
                 oos_can_jump_2_wide_liquid(state, player)
             ]),
         ])],
+        ["temple remains lower portal", "temple remains lower stump", False, lambda state: \
+            # There is an added ledge in rando that enables jumping from the portal down to the stump, whatever
+            # the season is, but it is a risky action so we ask for the player to be able to warp back
+            oos_can_warp(state, player)],
 
         ["temple remains lower stump", "temple remains heart piece", False, lambda state: all([
             state.has("_triggered_volcano", player),
@@ -813,7 +817,7 @@ def make_holodrum_logic(player: int):
             oos_can_remove_rockslide(state, player, False),
         ])],
 
-        ["temple remains lower stump", "temple remains upper portal", True, lambda state: all([
+        ["temple remains lower stump", "temple remains upper portal", False, lambda state: all([
             state.has("_triggered_volcano", player),
             oos_season_in_temple_remains(state, player, "summer"),
             oos_can_jump_2_wide_liquid(state, player),
@@ -822,14 +826,13 @@ def make_holodrum_logic(player: int):
                 oos_can_jump_6_wide_pit(state, player)
             ])
         ])],
-
-        ["temple remains upper portal", "temple remains upper stump", False, lambda state: \
-            oos_can_jump_1_wide_pit(state, player, False)],
-
         ["temple remains upper portal", "temple remains lower stump", False, lambda state: all([
             state.has("_triggered_volcano", player),
             oos_can_jump_1_wide_liquid(state, player, False)
         ])],
+
+        ["temple remains upper portal", "temple remains upper stump", False, lambda state: \
+            oos_can_jump_1_wide_pit(state, player, False)],
 
         ["temple remains upper portal", "temple remains lower portal", False, lambda state: \
             oos_get_default_season(state, player, "TEMPLE_REMAINS") == "winter"],

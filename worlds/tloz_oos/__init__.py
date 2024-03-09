@@ -132,11 +132,23 @@ class OracleOfSeasonsWorld(World):
 
     def fill_slot_data(self) -> dict:
         # Put options that are useful to the tracker inside slot data
-        options = ["goal", "logic_difficulty", "required_essences", "horon_village_season", "animal_companion",
+        options = ["goal", "logic_difficulty", "required_essences", "horon_village_season",
                    "shuffle_dungeons", "shuffle_portals", "shuffle_old_men", "treehouse_old_man_requirement",
                    "golden_beasts_requirement", "lost_woods_item_sequence", "advance_shop", "warp_to_start"]
 
         slot_data = self.options.as_dict(*options)
+        slot_data["animal_companion"] = COMPANIONS[self.options.animal_companion.value]
+        slot_data["default_seed"] = SEED_ITEMS[self.options.default_seed.value]
+
+        slot_data["default_seasons"] = {}
+        for region_name, season in self.default_seasons.items():
+            slot_data["default_seasons"][REGIONS_CONVERSION_TABLE[region_name]] = season
+        if self.options.horon_village_season == "chaotic":
+            slot_data["default_seasons"][REGIONS_CONVERSION_TABLE["HORON_VILLAGE"]] = "chaotic"
+
+        slot_data["dungeon_entrances"] = self.dungeon_entrances
+        slot_data["portal_connections"] = self.portal_connections
+
         return slot_data
 
     def generate_early(self):

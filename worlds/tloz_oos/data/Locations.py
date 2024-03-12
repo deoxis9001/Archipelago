@@ -1380,32 +1380,38 @@ LOCATIONS_DATA = {
     "Horon Village: Seed Tree": {
         "patcher_name": "horon village tree",
         "region_id": "horon village tree",
-        "local": True
+        "local": True,
+        "flag_byte": 0xC7F8,
     },
     "Woods of Winter: Seed Tree": {
         "patcher_name": "woods of winter tree",
         "region_id": "woods of winter tree",
-        "local": True
+        "local": True,
+        "flag_byte": 0xC79E,
     },
     "Holodrum Plain: Seed Tree": {
         "patcher_name": "north horon tree",
         "region_id": "north horon tree",
-        "local": True
+        "local": True,
+        "flag_byte": 0xC767,
     },
     "Spool Swamp: Seed Tree": {
         "patcher_name": "spool swamp tree",
         "region_id": "spool swamp tree",
-        "local": True
+        "local": True,
+        "flag_byte": 0xC772,
     },
     "Sunken City: Seed Tree": {
         "patcher_name": "sunken city tree",
         "region_id": "sunken city tree",
-        "local": True
+        "local": True,
+        "flag_byte": 0xC75F,
     },
     "Tarm Ruins: Seed Tree": {
         "patcher_name": "tarm ruins tree",
         "region_id": "tarm ruins tree",
-        "local": True
+        "local": True,
+        "flag_byte": 0xC710,
     },
 
     "Gnarled Root Dungeon: Essence": {

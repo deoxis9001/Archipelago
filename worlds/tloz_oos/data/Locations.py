@@ -1452,5 +1452,23 @@ LOCATIONS_DATA = {
         "flag_byte": 0xCA5F,
         "vanilla_item": "Changing Seasons",
         "randomized": False
-    }
+    },
+    "Horon Village: Item Inside Maku Tree (3+ Essences)": {
+        "patcher_name": "maku tree, 3 essences",
+        "region_id": "maku tree, 3 essences",
+        "flag_byte": 0xC9E9,
+        "vanilla_item": "Gasha Seed"
+    },
+    "Horon Village: Item Inside Maku Tree (5+ Essences)": {
+        "patcher_name": "maku tree, 5 essences",
+        "region_id": "maku tree, 5 essences",
+        "flag_byte": 0xC9EA,
+        "vanilla_item": "Gasha Seed"
+    },
+    "Horon Village: Item Inside Maku Tree (7+ Essences)": {
+        "patcher_name": "maku tree, 7 essences",
+        "region_id": "maku tree, 7 essences",
+        "flag_byte": 0xC9EE,
+        "vanilla_item": "Gasha Seed"
+    },
 }

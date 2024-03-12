@@ -844,6 +844,9 @@ def make_holodrum_logic(player: int):
         # ONOX CASTLE #############################################################################################
 
         ["maku tree", "maku seed", False, lambda state: oos_has_essences_for_maku_seed(state, player)],
+        ["maku tree", "maku tree, 3 essences", False, lambda state: oos_has_essences(state, player, 3)],
+        ["maku tree", "maku tree, 5 essences", False, lambda state: oos_has_essences(state, player, 5)],
+        ["maku tree", "maku tree, 7 essences", False, lambda state: oos_has_essences(state, player, 7)],
 
         ["north horon", "d9 entrance", False, lambda state: state.has("Maku Seed", player)],
         ["d9 entrance", "onox beaten", False, lambda state: all([

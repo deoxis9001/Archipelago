@@ -54,6 +54,7 @@ class OracleOfSeasonsWorld(World):
     lost_woods_item_sequence: List[str]
     old_man_rupee_values: Dict[str, int]
     shop_prices: Dict[str, int]
+    samasa_gate_code: List[int]
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -107,6 +108,8 @@ class OracleOfSeasonsWorld(World):
             "old man near mrs. ruul": -100,
             "old man near d6": -200
         }
+
+        self.samasa_gate_code = [2, 2, 1, 0, 0, 3, 3, 3]
 
         self.shop_prices = {
             "horon shop 1": 1,
@@ -193,6 +196,11 @@ class OracleOfSeasonsWorld(World):
             shuffled_rupees = list(self.old_man_rupee_values.values())
             self.random.shuffle(shuffled_rupees)
             self.old_man_rupee_values = dict(zip(self.old_man_rupee_values, shuffled_rupees))
+
+        if self.options.samasa_gate_code == "randomized":
+            self.samasa_gate_code = []
+            for i in range(self.options.samasa_gate_code_length.value):
+                self.samasa_gate_code.append(self.random.randint(0, 3))
 
         self.randomize_shop_prices()
 
@@ -414,6 +422,7 @@ class OracleOfSeasonsWorld(World):
                 "fools_ore_damage": 3 if self.options.fools_ore == "balanced" else 12,
                 "heart_beep_interval": self.options.heart_beep_interval.current_key,
                 "lost_woods_item_sequence": ' '.join(self.lost_woods_item_sequence),
+                "samasa_gate_sequence": ' '.join([str(x) for x in self.samasa_gate_code]),
                 "golden_beasts_requirement": self.options.golden_beasts_requirement.value,
                 "treehouse_old_man_requirement": self.options.treehouse_old_man_requirement.value,
                 "quick_flute": self.options.quick_flute.current_key,

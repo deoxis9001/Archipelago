@@ -201,6 +201,30 @@ class OracleOfSeasonsLostWoodsItemSequence(Choice):
     default = 1
 
 
+class OracleOfSeasonsSamasaGateCode(Choice):
+    """
+    This option defines if the secret combination which opens the gate to Samasa Desert should be randomized.
+    You can then configure the length of the sequence with the next option.
+    """
+    display_name = "Samasa Desert Gate Code"
+
+    option_vanilla = 0
+    option_randomized = 1
+    default = 1
+
+
+class OracleOfSeasonsSamasaGateCodeLength(Range):
+    """
+    The length of the randomized combination for Samasa Desert gate.
+    This option has no effect if "Vanilla" is selected on previous option.
+    """
+    display_name = "Samasa Desert Gate Code Length"
+
+    range_start = 1
+    range_end = 40
+    default = 8
+
+
 class OracleOfSeasonsRingQuality(Choice):
     """
     Defines the quality of the rings that will be shuffled in your seed:
@@ -333,6 +357,8 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     treehouse_old_man_requirement: OraclesOfSeasonsTreehouseOldManRequirement
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
+    samasa_gate_code: OracleOfSeasonsSamasaGateCode
+    samasa_gate_code_length: OracleOfSeasonsSamasaGateCodeLength
     ring_quality: OracleOfSeasonsRingQuality
     shop_prices_factor: OracleOfSeasonsPricesFactor
     advance_shop: OracleOfSeasonsAdvanceShop

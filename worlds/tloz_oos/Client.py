@@ -120,7 +120,8 @@ class OracleOfSeasonsClient(BizHawkClient):
                 if "scouting_byte" in location:
                     byte_to_test = location["scouting_byte"]
                     byte_offset = byte_to_test - RAM_ADDRS["location_flags"][0]
-                    if flag_bytes[byte_offset] & 0x10 == 0x10:
+                    bit_mask = location["scouting_mask"] if "scouting_mask" in location else 0x10
+                    if flag_bytes[byte_offset] & bit_mask == bit_mask:
                         # Map has been visited, scout the location if it hasn't been already
                         location_id = self.location_name_to_id[name]
                         local_scouted_locations.add(location_id)

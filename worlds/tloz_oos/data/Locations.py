@@ -197,6 +197,7 @@ LOCATIONS_DATA = {
         "flag_byte": 0xC63F,
         "bit_mask": 0x80,
         "scouting_byte": 0xC89C,
+        "scouting_mask": 0x40
     },
     "Sunken City: Syrup Shop #2": {
         "patcher_name": "syrup shop 2",
@@ -205,6 +206,7 @@ LOCATIONS_DATA = {
         "flag_byte": 0xC63F,
         "bit_mask": 0x20,
         "scouting_byte": 0xC89C,
+        "scouting_mask": 0x40
     },
     "Sunken City: Syrup Shop #3": {
         "patcher_name": "syrup shop 3",
@@ -213,6 +215,7 @@ LOCATIONS_DATA = {
         "flag_byte": 0xC63F,
         "bit_mask": 0x40,
         "scouting_byte": 0xC89C,
+        "scouting_mask": 0x40
     },
 
     "Eyeglass Lake: Chest in Dried Lake East Cave": {

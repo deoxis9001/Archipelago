@@ -210,11 +210,7 @@ def make_holodrum_logic(player: int):
             ])
         ])],
 
-        ["central woods of winter", "d2 stump", False, lambda state: any([
-            oos_get_default_season(state, player, "WOODS_OF_WINTER") == "summer",
-            oos_can_summon_ricky(state, player)
-        ])],
-        ["d2 stump", "central woods of winter", False, None],
+        ["central woods of winter", "d2 stump", True, None],
 
         ["d2 stump", "d2 roof", True, lambda state: oos_has_bracelet(state, player)],
         ["d2 roof", "d2 alt entrances", True, lambda state: not oos_option_shuffled_dungeons(state, player)],

@@ -30,8 +30,8 @@ def oos_has_cape(state: CollectionState, player: int):
     return state.has("Progressive Feather", player, 2)
 
 
-def oos_has_satchel(state: CollectionState, player: int):
-    return state.has("Seed Satchel", player)
+def oos_has_satchel(state: CollectionState, player: int, level: int = 1):
+    return state.has("Seed Satchel", player, level)
 
 
 def oos_has_slingshot(state: CollectionState, player: int):
@@ -87,7 +87,11 @@ def oos_has_magnet_gloves(state: CollectionState, player: int):
 
 
 def oos_has_ember_seeds(state: CollectionState, player: int):
-    return state.has("Ember Seeds", player) or state.multiworld.worlds[player].options.default_seed == "ember"
+    return any([
+        state.has("Ember Seeds", player),
+        state.multiworld.worlds[player].options.default_seed == "ember",
+        (state.has("_hard_ember_seeds", player) and oos_option_hard_logic(state, player))
+    ])
 
 
 def oos_has_scent_seeds(state: CollectionState, player: int):
@@ -238,16 +242,15 @@ def oos_can_farm_ore(state: CollectionState, player: int):
     return any([
         oos_has_shovel(state, player),
         all([
+            oos_option_medium_logic(state, player),
+            oos_has_magic_boomerang(state, player),
+            oos_has_sword(state, player)
+        ]),
+        all([
             oos_option_hard_logic(state, player),
             state.has("_reached_subrosian_dance_hall", player)
         ])
     ])
-    # any([
-    #     oos_has_shovel(state, player),
-    #     oos_has_sword(state, player),
-    #     oos_has_magic_boomerang(state, player),
-    #     state.has("_reached_subrosian_dance_hall", player)
-    # ])
 
 
 def oos_can_date_rosa(state: CollectionState, player: int):
@@ -541,6 +544,14 @@ def oos_can_break_bush(state: CollectionState, player: int, can_summon_companion
                 oos_can_use_gale_seeds_offensively(state, player),
             ])
         ]),
+    ])
+
+
+def oos_can_harvest_regrowing_bush(state: CollectionState, player: int):
+    return any([
+        oos_has_sword(state, player),
+        oos_has_fools_ore(state, player),
+        oos_has_bombs(state, player)
     ])
 
 

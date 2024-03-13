@@ -776,7 +776,7 @@ ITEMS_DATA = {
         'subid': 0x33,
         'ring': True
     },
-    "Boombproof Ring": {
+    "Bombproof Ring": {
         'classification': ItemClassification.useful,
         'id': 0x2d,
         'subid': 0x34,

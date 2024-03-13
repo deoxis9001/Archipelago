@@ -278,10 +278,15 @@ class OracleOfSeasonsWorld(World):
         self.create_event("d8 NE crystal", "_dropped_d8_NE_crystal")
         self.create_event("d2 rupee room", "_reached_d2_rupee_room")
         self.create_event("d6 rupee room", "_reached_d6_rupee_room")
+
         self.create_event("golden darknut", "_beat_golden_darknut")
         self.create_event("golden lynel", "_beat_golden_lynel")
         self.create_event("golden octorok", "_beat_golden_octorok")
         self.create_event("golden moblin", "_beat_golden_moblin")
+
+        self.create_event("d4 miniboss room hard embers", "_hard_ember_seeds")
+        self.create_event("d5 armos chest", "_hard_ember_seeds")
+        self.create_event("d7 entrance hard embers", "_hard_ember_seeds")
 
         for region_name in self.old_man_rupee_values:
             self.create_event(region_name, "rupees from " + region_name)

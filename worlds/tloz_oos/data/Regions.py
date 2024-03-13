@@ -245,6 +245,7 @@ REGIONS = [
     "greater distance owl",
     "d4 stalfos stairs",
     "d4 terrace",
+    "d4 miniboss room",
     "d4 final minecart",
     "d4 torch chest",
     "d4 cracked floor room",
@@ -348,5 +349,7 @@ REGIONS = [
     "golden darknut",
     "golden lynel",
     "golden moblin",
-    "golden octorok"
+    "golden octorok",
+    "d4 miniboss room hard embers",
+    "d7 entrance hard embers",
 ]

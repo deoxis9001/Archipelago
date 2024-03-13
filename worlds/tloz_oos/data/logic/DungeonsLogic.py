@@ -221,7 +221,7 @@ def make_d4_logic(player: int):
         ])],
 
         ["enter d4", "d4 roller minecart", False, lambda state: all([
-            oos_has_flippers(state, player),  # TODO: Medium logic, cape + pegasus => 6-wide liquid?
+            oos_has_flippers(state, player),
             oos_has_small_keys(state, player, 4, 1),
             oos_has_feather(state, player)
         ])],
@@ -263,14 +263,18 @@ def make_d4_logic(player: int):
 
         ["d4 stalfos stairs", "d4 terrace", False, None],
 
-        ["d4 stalfos stairs", "d4 final minecart", False, lambda state: all([
-            oos_can_use_ember_seeds(state, player, False),
-            oos_can_kill_armored_enemy(state, player)
-        ])],
-
         ["d4 stalfos stairs", "d4 torch chest", False, lambda state: all([
             oos_has_slingshot(state, player),
             oos_has_ember_seeds(state, player)
+        ])],
+
+        ["d4 stalfos stairs", "d4 miniboss room", False, None],
+        ["d4 miniboss room", "d4 miniboss room hard embers", False, lambda state: \
+            oos_can_harvest_regrowing_bush(state, player)],
+
+        ["d4 miniboss room", "d4 final minecart", False, lambda state: all([
+            oos_can_use_ember_seeds(state, player, False),
+            oos_can_kill_armored_enemy(state, player)
         ])],
 
         # 5 keys
@@ -552,6 +556,7 @@ def make_d7_logic(player: int):
         ["enter d7", "poe curse owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
         ["enter d7", "d7 wizzrobe chest", False, lambda state: oos_can_kill_normal_enemy(state, player)],
         ["enter d7", "d7 bombed wall chest", False, lambda state: oos_has_bombs(state, player)],
+        ["enter d7", "d7 entrance hard embers", False, lambda state: oos_can_harvest_regrowing_bush(state, player)],
 
         # 1 key
         ["enter d7", "enter poe A", False, lambda state: all([
@@ -602,7 +607,7 @@ def make_d7_logic(player: int):
             oos_can_use_ember_seeds(state, player, False),
             any([
                 oos_can_use_pegasus_seeds(state, player),
-                oos_has_hyper_slingshot(state, player),
+                # Hard logic can do it without pegasus, it's very tight but doable
                 oos_option_hard_logic(state, player)
             ])
         ])],
@@ -775,10 +780,36 @@ def make_d8_logic(player: int):
         # 3 keys
         ["frypolar entrance", "d8 ice puzzle room", False, lambda state: all([
             oos_has_small_keys(state, player, 8, 3),
-            # Frypolar can be killed many ways, but we need HSS + ember seeds in the room
-            # right after anyway...
+
+            # Hard-require HSS since we need it in the room right after Frypolar to hit the eyes anyway
             oos_has_hyper_slingshot(state, player),
-            oos_can_use_ember_seeds(state, player, False)
+
+            # Requirements to kill Frypolar
+            any([
+                all([
+                    # Casual logic: mystery seeds method is considered mandatory since it's the easiest one
+                    oos_has_mystery_seeds(state, player),
+                    oos_has_bracelet(state, player)
+                ]),
+                all([
+                    # Medium logic: allow killing Frypolar with ember only, but with at least a Lv2 satchel
+                    # (the miniboss require 15 embers to die, so 20 max is a bit tight)
+                    oos_option_medium_logic(state, player),
+                    oos_can_use_ember_seeds(state, player, False),
+                    oos_has_satchel(state, player, 2),
+                ]),
+                all([
+                    # Hard logic: yolo
+                    oos_option_hard_logic(state, player),
+                    oos_can_use_ember_seeds(state, player, False)
+                ]),
+            ]),
+
+            # Requirements to pass the room after Frypolar
+            any([
+                oos_can_use_ember_seeds(state, player, True),
+                oos_can_use_scent_seeds(state, player),
+            ])
         ])],
 
         ["d8 ice puzzle room", "d8 pols voice chest", False, lambda state: any([

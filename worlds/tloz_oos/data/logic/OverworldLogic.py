@@ -582,6 +582,12 @@ def make_holodrum_logic(player: int):
         ])],
         ["syrup trade", "syrup shop", False, lambda state: oos_can_farm_rupees(state, player)],
 
+        # Use Dimitri to get the tree seeds, using dimitri to get seeds being medium difficulty
+        ["sunken city dimitri", "sunken city tree", False,lambda state: all([
+            oos_option_medium_logic(state, player),
+            oos_can_use_seeds(state, player)
+        ])],
+
         ["sunken city dimitri", "master diver's challenge", False, lambda state: all([
             oos_has_sword(state, player, False),
             any([

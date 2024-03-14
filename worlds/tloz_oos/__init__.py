@@ -323,6 +323,15 @@ class OracleOfSeasonsWorld(World):
         return Item(name, classification, ap_code, self.player)
 
     def create_items(self):
+        item_pool_adjustements = [
+            ["Gasha Seed", "Seed Satchel"],  # Add a third satchel that is usually obtained in linked games (99 seeds)
+            ["Gasha Seed", "Bombs (10)"],    # Add one more bomb compared to vanilla to reach 99 max bombs
+            ["Gasha Seed", "Rupees (50)"],   # Too many Gasha Seeds in vanilla pool, add more rupees instead
+            ["Gasha Seed", "Rupees (50)"],   # ^
+            ["Gasha Seed", "Rupees (50)"],   # ^
+            ["Gasha Seed", "Rupees (50)"],   # ^
+        ]
+
         ring_count = 0
         for loc_name, loc_data in LOCATIONS_DATA.items():
             if "randomized" in loc_data and loc_data["randomized"] is False:
@@ -342,6 +351,12 @@ class OracleOfSeasonsWorld(World):
                 item_name = "Fool's Ore" if self.options.fools_ore != "excluded" else "Gasha Seed"
             elif item_name == "Flute":
                 item_name = COMPANIONS[self.options.animal_companion.value] + "'s Flute"
+
+            for i, pair in enumerate(item_pool_adjustements):
+                if item_name == pair[0]:
+                    item_name = pair[1]
+                    del item_pool_adjustements[i]
+                    break
 
             if "Ring" in item_name:
                 ring_count += 1

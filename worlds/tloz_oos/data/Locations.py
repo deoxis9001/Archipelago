@@ -54,7 +54,7 @@ LOCATIONS_DATA = {
     "Spool Swamp: Digging Spot Near Vasu's Sign": {
         "patcher_name": "spool swamp digging spot",
         "region_id": "spool swamp digging spot",
-        "vanilla_item": "Rupees (50)",  # Random ring in vanilla, but this doesn't exist in rando
+        "vanilla_item": "Armor Ring L-1",  # Random ring in vanilla, but rings are randomized anyway
         "flag_byte": 0xC782
     },
     "Spool Swamp: Item in Floodgate Keeper's House": {
@@ -393,7 +393,7 @@ LOCATIONS_DATA = {
     "Subrosia: Wilds Digging Spot": {
         "patcher_name": "subrosian wilds digging spot",
         "region_id": "subrosian wilds digging spot",
-        "vanilla_item": "Rupees (50)",  # Random ring in vanilla, but this doesn't exist in rando
+        "vanilla_item": "Power Ring L-2",  # Random ring in vanilla, but this doesn't exist in rando
         "flag_byte": 0xC840
     },
     "Subrosia: Chest Above Magnet Cave": {

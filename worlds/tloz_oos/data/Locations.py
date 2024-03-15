@@ -1299,9 +1299,9 @@ LOCATIONS_DATA = {
     },
 
     "Subrosia: Buried Bomb Flower": {
+        "patcher_name": "bomb flower",
         "region_id": "subrosian buried bomb flower",
         "vanilla_item": "Bomb Flower",
-        "randomized": False,
         "flag_byte": 0xC869
     },
     "Subrosia: Sign-Loving Guy Reward": {

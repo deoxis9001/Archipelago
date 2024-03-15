@@ -124,5 +124,18 @@ def make_subrosia_logic(player: int):
             oos_has_feather(state, player),
             oos_has_bracelet(state, player)
         ])],
+
+        ["subrosia temple sector", "subrosia temple digging spot", False, lambda state: oos_has_shovel(state, player)],
+        ["subrosia temple sector", "subrosia bath digging spot", False, lambda state: all([
+            oos_can_jump_1_wide_pit(state, player, False),
+            any([
+                oos_can_jump_4_wide_liquid(state, player),
+                oos_has_magnet_gloves(state, player)
+            ]),
+            oos_has_shovel(state, player)
+        ])],
+        ["subrosia market sector", "subrosia market digging spot", False, lambda state: oos_has_shovel(state, player)],
+
+        ["subrosia bridge sector", "subrosia bridge digging spot", False, lambda state: oos_has_shovel(state, player)],
     ]
 

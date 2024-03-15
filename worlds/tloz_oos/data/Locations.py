@@ -1480,4 +1480,54 @@ LOCATIONS_DATA = {
         "flag_byte": 0xC9EE,
         "vanilla_item": "Gasha Seed"
     },
+
+    "Subrosia: Hot Bath Digging Spot": {
+        "patcher_name": "subrosia bath ore digging spot",
+        "region_id": "subrosia bath digging spot",
+        "vanilla_item": "Ore Chunks (50)",
+        "conditional": True,
+        "flag_byte": 0xC806,
+    },
+    "Subrosia: Market Portal Digging Spot": {
+        "patcher_name": "subrosia market portal ore digging spot",
+        "region_id": "subrosia market digging spot",
+        "vanilla_item": "Ore Chunks (50)",
+        "conditional": True,
+        "flag_byte": 0xC857,
+    },
+    "Subrosia: Hard-Working Subrosian Digging Spot": {
+        "patcher_name": "subrosia hard-working ore digging spot",
+        "region_id": "subrosia market digging spot",
+        "vanilla_item": "Ore Chunks (50)",
+        "conditional": True,
+        "flag_byte": 0xC847,
+    },
+    "Subrosia: Temple of Seasons Digging Spot": {
+        "patcher_name": "subrosia temple ore digging spot",
+        "region_id": "subrosia temple digging spot",
+        "vanilla_item": "Ore Chunks (50)",
+        "conditional": True,
+        "flag_byte": 0xC83A,
+    },
+    "Subrosia: Northern Volcanoes Digging Spot": {
+        "patcher_name": "subrosia northern volcanoes ore digging spot",
+        "region_id": "subrosia temple digging spot",
+        "vanilla_item": "Ore Chunks (50)",
+        "conditional": True,
+        "flag_byte": 0xC807,
+    },
+    "Subrosia: D8 Portal Digging Spot": {
+        "patcher_name": "subrosia d8 portal ore digging spot",
+        "region_id": "subrosia bridge digging spot",
+        "vanilla_item": "Ore Chunks (50)",
+        "conditional": True,
+        "flag_byte": 0xC820,
+    },
+    "Subrosia: Western Volcanoes Digging Spot": {
+        "patcher_name": "subrosia western volcanoes ore digging spot",
+        "region_id": "subrosia bridge digging spot",
+        "vanilla_item": "Ore Chunks (50)",
+        "conditional": True,
+        "flag_byte": 0xC842,
+    },
 }

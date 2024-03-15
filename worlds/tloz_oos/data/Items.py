@@ -350,11 +350,6 @@ ITEMS_DATA = {
     #           'classification': ItemClassification.progression,
     #         'id': 0x36
     #     },
-    #     "Ore Chunks": {
-    #     'classification': ItemClassification.filler,
-    #     "",
-    #         'id': 0x37
-    #     },
 
     "Cuccodex": {
         'classification': ItemClassification.progression,
@@ -916,5 +911,10 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'id': 0x40,
         'subid': 0x07
+    },
+
+    "Ore Chunks (50)": {
+        'classification': ItemClassification.useful,
+        'id': 0x37
     }
 }

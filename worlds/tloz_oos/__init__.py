@@ -213,12 +213,15 @@ class OracleOfSeasonsWorld(World):
                     self.shop_prices[key] = value
                     break
 
-    def location_is_active(self, location_name):
-        locdata = LOCATIONS_DATA[location_name]
-        if "conditional" not in locdata or locdata["conditional"] is False:
+    def location_is_active(self, location_data):
+        if "conditional" not in location_data or location_data["conditional"] is False:
             return True
-        if locdata["region_id"] == "advance shop":
+
+        region_id = location_data["region_id"]
+        if region_id == "advance shop":
             return self.options.advance_shop.value
+        if region_id.startswith("subrosia") and region_id.endswith("digging spot"):
+            return self.options.shuffle_golden_ore_spots != "vanilla"
         return False
 
     def create_location(self, region_name: str, location_name: str, local: bool):
@@ -236,7 +239,7 @@ class OracleOfSeasonsWorld(World):
 
         # Create locations
         for location_name, location_data in LOCATIONS_DATA.items():
-            if not self.location_is_active(location_name):
+            if not self.location_is_active(location_data):
                 continue
 
             is_local = "local" in location_data and location_data["local"] is True
@@ -339,7 +342,7 @@ class OracleOfSeasonsWorld(World):
                 location = self.multiworld.get_location(loc_name, self.player)
                 location.place_locked_item(item)
                 continue
-            if not self.location_is_active(loc_name):
+            if not self.location_is_active(loc_data):
                 continue
             if "vanilla_item" not in loc_data:
                 continue
@@ -445,6 +448,7 @@ class OracleOfSeasonsWorld(World):
                 "samasa_gate_sequence": ' '.join([str(x) for x in self.samasa_gate_code]),
                 "golden_beasts_requirement": self.options.golden_beasts_requirement.value,
                 "treehouse_old_man_requirement": self.options.treehouse_old_man_requirement.value,
+                "reveal_golden_ore_tiles": self.options.shuffle_golden_ore_spots == "shuffled_visible",
                 "quick_flute": self.options.quick_flute.current_key,
                 "open_advance_shop": self.options.advance_shop.current_key,
                 "character_sprite": self.options.character_sprite.current_key,

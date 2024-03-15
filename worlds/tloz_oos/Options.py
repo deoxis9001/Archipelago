@@ -162,6 +162,25 @@ class OracleOfSeasonsOldMenShuffle(Choice):
     default = 0
 
 
+class OracleOfSeasonsGoldenOreSpotsShuffle(Choice):
+    """
+    Subrosia contains 7 hidden digging spots containing 50 Ore Chunks, this option enables adding them to the pool
+    of locations and randomizing them like any other location (giving opportunity to find Ore Chunks randomized
+    somewhere else).
+    - Vanilla: Spots contain their golden ore chunk just like in the base game
+    - Shuffled Visible: Spots are randomized, and their tile is replaced with a recognizable "digging spot" tile (like
+    the one at the end of the hide-and-seek minigame). Pretty handy if that's your first time shuffling those.
+    - Shuffled Hidden: Spots are randomized but remain hidden as in the original game
+    """
+    display_name = "Shuffle Golden Ore Spots"
+
+    option_vanilla = 0
+    option_shuffled_visible = 1
+    option_shuffled_hidden = 2
+
+    default = 0
+
+
 class OraclesOfSeasonsTreehouseOldManRequirement(Range):
     """
     The amount of essences that you need to bring to the treehouse old man for him to give his item.
@@ -354,6 +373,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
+    shuffle_golden_ore_spots: OracleOfSeasonsGoldenOreSpotsShuffle
     treehouse_old_man_requirement: OraclesOfSeasonsTreehouseOldManRequirement
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence

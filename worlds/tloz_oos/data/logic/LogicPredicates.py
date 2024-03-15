@@ -636,8 +636,8 @@ def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available
 
 
 def oos_can_kill_normal_using_satchel(state: CollectionState, player: int):
-    # Killing using satchel without satchel is known to be pretty tricky
-    if not oos_has_satchel(state, player):
+    # Expect a 50+ seed satchel to ensure we can chain dungeon rooms to some extent if that's our only kill option
+    if not oos_has_satchel(state, player, 2):
         return False
 
     return any([
@@ -664,6 +664,10 @@ def oos_can_kill_normal_using_satchel(state: CollectionState, player: int):
 
 
 def oos_can_kill_normal_using_slingshot(state: CollectionState, player: int):
+    # Expect a 50+ seed satchel to ensure we can chain dungeon rooms to some extent if that's our only kill option
+    if not oos_has_satchel(state, player, 2):
+        return False
+
     return all([
         oos_has_slingshot(state, player),
         any([
@@ -685,13 +689,11 @@ def oos_can_kill_armored_enemy(state: CollectionState, player: int):
         oos_has_sword(state, player),
         oos_has_fools_ore(state, player),
         all([
+            oos_has_satchel(state, player, 2),  # Expect a 50+ seeds satchel to be able to chain rooms in dungeons
             oos_has_scent_seeds(state, player),
             any([
                 oos_has_slingshot(state, player),
-                all([
-                    oos_option_medium_logic(state, player),
-                    oos_has_satchel(state, player)
-                ])
+                oos_option_medium_logic(state, player)
             ])
         ]),
         oos_can_punch(state, player)

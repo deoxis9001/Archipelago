@@ -315,7 +315,7 @@ def make_d4_logic(player: int):
 
         ["enter gohma", "d4 boss", False, lambda state: any([
             all([
-                # kill with pincer
+                # Kill Gohma without breaking its pincer
                 oos_option_medium_logic(state, player),
                 any([
                     oos_has_slingshot(state, player),
@@ -326,12 +326,11 @@ def make_d4_logic(player: int):
                     oos_has_ember_seeds(state, player)
                 ])
             ]),
-            # kill after destroying pincer
             all([
-                # With a sword's laser
+                # Kill Gohma with sword beams (Gohma's minions give enough hearts to justify it)
                 oos_option_medium_logic(state, player),
                 any([
-                    oos_has_noble_sword(state, player), # Gohma's minions give enough hearts to justify it
+                    oos_has_noble_sword(state, player),
                     all([
                         oos_has_sword(state, player),
                         state.has("Energy Ring", player)
@@ -339,6 +338,7 @@ def make_d4_logic(player: int):
                 ])
             ]),
             all([
+                # Kill Gohma traditionally (break pincer, then spam seeds)
                 any([
                     oos_has_sword(state, player),
                     oos_has_fools_ore(state, player)
@@ -348,6 +348,7 @@ def make_d4_logic(player: int):
                     oos_can_use_scent_seeds(state, player),
                     all([
                         oos_option_medium_logic(state, player),
+                        oos_has_satchel(state, player, 2),  # It may require quite a bunch of mystery seeds...
                         oos_can_use_mystery_seeds(state, player)
                     ])
                 ])

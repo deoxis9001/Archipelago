@@ -1,5 +1,6 @@
 from BaseClasses import CollectionState
-from worlds.tloz_oos.data.Constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES
+from worlds.tloz_oos.data.Constants import DUNGEON_NAMES, SEASON_ITEMS, ESSENCES, JEWELS
+
 
 # Items predicates ############################################################
 
@@ -169,6 +170,12 @@ def oos_has_essences_for_maku_seed(state: CollectionState, player: int):
 
 def oos_has_essences_for_treehouse(state: CollectionState, player: int):
     return oos_has_essences(state, player, state.multiworld.worlds[player].options.treehouse_old_man_requirement.value)
+
+
+def oos_has_required_jewels(state: CollectionState, player: int):
+    target_count = state.multiworld.worlds[player].options.tarm_gate_required_jewels.value
+    count = [state.has(jewel, player) for jewel in JEWELS].count(True)
+    return count >= target_count
 
 
 def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):

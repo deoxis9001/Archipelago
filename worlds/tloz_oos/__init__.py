@@ -448,6 +448,7 @@ class OracleOfSeasonsWorld(World):
                 "samasa_gate_sequence": ' '.join([str(x) for x in self.samasa_gate_code]),
                 "golden_beasts_requirement": self.options.golden_beasts_requirement.value,
                 "treehouse_old_man_requirement": self.options.treehouse_old_man_requirement.value,
+                "tarm_gate_required_jewels": self.options.tarm_gate_required_jewels.value,
                 "reveal_golden_ore_tiles": self.options.shuffle_golden_ore_spots == "shuffled_visible",
                 "quick_flute": self.options.quick_flute.current_key,
                 "open_advance_shop": self.options.advance_shop.current_key,

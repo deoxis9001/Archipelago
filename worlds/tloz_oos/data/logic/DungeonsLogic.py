@@ -827,7 +827,7 @@ def make_d8_logic(player: int):
         ["frypolar entrance", "d8 ice puzzle room", False, lambda state: all([
             oos_has_small_keys(state, player, 8, 3),
 
-            # Hard-require HSS since we need it in the room right after Frypolar to hit the eyes anyway
+            # Hard-require HSS since we need it in the room right after Frypolar to hit the torches anyway
             oos_has_hyper_slingshot(state, player),
 
             # Requirements to kill Frypolar
@@ -852,10 +852,7 @@ def make_d8_logic(player: int):
             ]),
 
             # Requirements to pass the room after Frypolar
-            any([
-                oos_can_use_ember_seeds(state, player, True),
-                oos_can_use_scent_seeds(state, player),
-            ])
+            oos_can_use_ember_seeds(state, player, True),
         ])],
 
         ["d8 ice puzzle room", "d8 pols voice chest", False, lambda state: any([

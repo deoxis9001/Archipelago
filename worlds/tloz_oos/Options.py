@@ -192,6 +192,17 @@ class OraclesOfSeasonsTreehouseOldManRequirement(Range):
     default = 5
 
 
+class OraclesOfSeasonsTarmGateRequirement(Range):
+    """
+    The number of jewels that you need to bring to Tarm Ruins gate to be able to open it.
+    """
+    display_name = "Tarm Ruins Gate Required Jewels"
+
+    range_start = 0
+    range_end = 4
+    default = 4
+
+
 class OraclesOfSeasonsGoldenBeastsRequirement(Range):
     """
     The amount of golden beasts that need to be beaten for the golden old man to give his item.
@@ -375,6 +386,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
     shuffle_golden_ore_spots: OracleOfSeasonsGoldenOreSpotsShuffle
     treehouse_old_man_requirement: OraclesOfSeasonsTreehouseOldManRequirement
+    tarm_gate_required_jewels: OraclesOfSeasonsTarmGateRequirement
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     samasa_gate_code: OracleOfSeasonsSamasaGateCode

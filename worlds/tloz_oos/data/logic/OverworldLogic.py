@@ -703,12 +703,7 @@ def make_holodrum_logic(player: int):
 
         # TARM RUINS ###############################################################################################
 
-        ["spool swamp north", "tarm ruins", False, lambda state: all([
-            state.has("Square Jewel", player),
-            state.has("Pyramid Jewel", player),
-            state.has("Round Jewel", player),
-            state.has("X-Shaped Jewel", player)
-        ])],
+        ["spool swamp north", "tarm ruins", False, lambda state: oos_has_required_jewels(state, player)],
 
         ["tarm ruins", "lost woods stump", False, lambda state: all([
             oos_has_summer(state, player),

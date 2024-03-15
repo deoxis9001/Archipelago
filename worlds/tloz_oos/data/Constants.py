@@ -90,6 +90,13 @@ ESSENCES = [
     "Changing Seasons",
 ]
 
+JEWELS = [
+   "Square Jewel",
+   "Pyramid Jewel",
+   "Round Jewel",
+   "X-Shaped Jewel"
+]
+
 DUNGEON_ITEMS = [
     "Small Key",
     "Boss Key",

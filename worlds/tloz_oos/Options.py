@@ -107,8 +107,6 @@ class OracleOfSeasonsDefaultSeedType(Choice):
     - when obtaining Seed Satchel
     - when obtaining Slingshot
     - by Horon Seed Tree
-    Gale Seeds being quite crucial as a movement option, it is advised to set it as default seed to avoid any
-    potential frustration having them locked far into the seed, especially as a beginner.
     """
     display_name = "Default Seed Type"
 
@@ -118,7 +116,27 @@ class OracleOfSeasonsDefaultSeedType(Choice):
     option_mystery = 3
     option_gale = 4
 
-    default = 4
+    default = 0
+
+
+class OracleOfSeasonsDuplicateSeedTree(Choice):
+    """
+    The game contains 6 seed trees but only 5 seed types, which means two trees
+    must contain the same seed type. This option enables choosing which tree will
+    always contain a duplicate of one of the other 5 trees.
+    It is strongly advised to set this to "Tarm Ruins Tree" since it's by far the hardest tree to reach
+    (and being locked out of a useful seed type can lead to very frustrating situations).
+    """
+    display_name = "Duplicate Seed Tree"
+
+    option_horon_village = 0
+    option_woods_of_winter = 1
+    option_north_horon = 2
+    option_spool_swamp = 3
+    option_sunken_city = 4
+    option_tarm_ruins = 5
+
+    default = 5
 
 
 class OracleOfSeasonsDungeonShuffle(Choice):
@@ -383,6 +401,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     horon_village_season: OracleOfSeasonsHoronSeason
     animal_companion: OracleOfSeasonsAnimalCompanion
     default_seed: OracleOfSeasonsDefaultSeedType
+    duplicate_seed_tree: OracleOfSeasonsDuplicateSeedTree
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle

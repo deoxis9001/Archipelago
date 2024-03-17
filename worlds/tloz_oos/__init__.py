@@ -425,16 +425,21 @@ class OracleOfSeasonsWorld(World):
             self.multiworld.get_location(location_name, self.player).place_locked_item(seed_item)
             self.pre_fill_items.append(seed_item)
 
-        # Fill Horon tree with default seed
-        place_seed(SEED_ITEMS[self.options.default_seed.value], "Horon Village: Seed Tree")
+        TREES_TABLE = {
+            OracleOfSeasonsDuplicateSeedTree.option_horon_village: "Horon Village: Seed Tree",
+            OracleOfSeasonsDuplicateSeedTree.option_woods_of_winter: "Woods of Winter: Seed Tree",
+            OracleOfSeasonsDuplicateSeedTree.option_north_horon: "Holodrum Plain: Seed Tree",
+            OracleOfSeasonsDuplicateSeedTree.option_spool_swamp: "Spool Swamp: Seed Tree",
+            OracleOfSeasonsDuplicateSeedTree.option_sunken_city: "Sunken City: Seed Tree",
+            OracleOfSeasonsDuplicateSeedTree.option_tarm_ruins: "Tarm Ruins: Seed Tree",
+        }
+        duplicate_tree_name = TREES_TABLE[self.options.duplicate_seed_tree.value]
+        place_seed(self.random.choice(SEED_ITEMS), duplicate_tree_name)
 
-        # Fill all other trees randomly
-        trees = ["Woods of Winter: Seed Tree", "Holodrum Plain: Seed Tree", "Spool Swamp: Seed Tree",
-                 "Sunken City: Seed Tree", "Tarm Ruins: Seed Tree"]
-        seeds = [s for s in SEED_ITEMS]
-        self.random.shuffle(seeds)
-        while seeds and trees:
-            place_seed(seeds.pop(), trees.pop())
+        other_trees = [name for name in TREES_TABLE.values() if name != duplicate_tree_name]
+        self.random.shuffle(other_trees)
+        for i, tree in enumerate(other_trees):
+            place_seed(SEED_ITEMS[i], tree)
 
     def get_filler_item_name(self) -> str:
         return "Rupees (1)"

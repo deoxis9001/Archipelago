@@ -106,6 +106,7 @@ REGIONS = [
     "natzu east (moosh)",
     "moblin keep bridge",
     "moblin keep",
+    "moblin keep chest",
     "natzu region, across water",
     "mount cucco",
     "sunken city tree",

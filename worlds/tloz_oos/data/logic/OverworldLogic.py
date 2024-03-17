@@ -528,11 +528,11 @@ def make_holodrum_logic(player: int):
                 state.has("Swimmer's Ring", player)
             ])
         ])],
-        ["moblin keep bridge", "moblin keep", False, lambda state: all([
-            any([
-                oos_has_flippers(state, player),
-                oos_can_jump_4_wide_liquid(state, player)
-            ]),
+        ["moblin keep bridge", "moblin keep", False, lambda state: any([
+            oos_has_flippers(state, player),
+            oos_can_jump_4_wide_liquid(state, player)
+        ])],
+        ["moblin keep", "moblin keep chest", False, lambda state: any([
             oos_has_bracelet(state, player)
         ])],
         ["moblin keep", "sunken city", False, lambda state: oos_can_warp(state, player)],

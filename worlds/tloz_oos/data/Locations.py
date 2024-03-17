@@ -71,7 +71,7 @@ LOCATIONS_DATA = {
     },
     "Natzu: Chest after Moblin Keep": {
         "patcher_name": "moblin keep",
-        "region_id": "moblin keep",
+        "region_id": "moblin keep chest",
         "vanilla_item": "Piece of Heart",
         "flag_byte": 0xC75B
     },

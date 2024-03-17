@@ -129,7 +129,7 @@ def make_subrosia_logic(player: int):
         ["subrosia temple sector", "subrosia bath digging spot", False, lambda state: all([
             oos_can_jump_1_wide_pit(state, player, False),
             any([
-                oos_can_jump_4_wide_liquid(state, player),
+                oos_can_jump_3_wide_liquid(state, player),
                 oos_has_magnet_gloves(state, player)
             ]),
             oos_has_shovel(state, player)

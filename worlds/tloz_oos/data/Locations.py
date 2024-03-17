@@ -1481,6 +1481,12 @@ LOCATIONS_DATA = {
         "vanilla_item": "Gasha Seed"
     },
 
+    "Subrosia: Strange Brothers' Backyard Treasure": {
+        "patcher_name": "subrosia hide and seek",
+        "region_id": "subrosia hide and seek",
+        "vanilla_item": "Ore Chunks (50)",
+        "flag_byte": 0xC860,
+    },
     "Subrosia: Hot Bath Digging Spot": {
         "patcher_name": "subrosia bath ore digging spot",
         "region_id": "subrosia bath digging spot",

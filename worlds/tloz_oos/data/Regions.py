@@ -171,6 +171,7 @@ REGIONS = [
     "subrosian house",
     "subrosian 2d cave",
     "subrosian buried bomb flower",
+    "subrosia hide and seek",
     "temple of seasons",
     "tower of winter",
     "tower of summer",

@@ -603,6 +603,16 @@ def oos_can_break_crystal(state: CollectionState, player: int):
     ])
 
 
+def oos_can_break_sign(state: CollectionState, player: int):
+    return any([
+        oos_has_noble_sword(state, player),
+        state.has("Biggoron's Sword", player),
+        oos_has_bracelet(state, player),
+        oos_can_use_ember_seeds(state, player, False),
+        oos_has_magic_boomerang(state, player)
+    ])
+
+
 def oos_can_harvest_tree(state: CollectionState, player: int, can_use_companion: bool):
     return all([
         oos_can_use_seeds(state, player),

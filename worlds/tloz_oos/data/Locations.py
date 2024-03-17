@@ -1305,10 +1305,9 @@ LOCATIONS_DATA = {
         "flag_byte": 0xC869
     },
     "Subrosia: Sign-Loving Guy Reward": {
-        "patcher_name": "subrosian sign guy",
+        "patcher_name": "subrosian sign loving guy",
         "region_id": "subrosian sign guy",
         "vanilla_item": "Sign Ring",
-        "conditional": True,
         "flag_byte": 0xC8A9
     },
     # Maku seed is 0xC85D

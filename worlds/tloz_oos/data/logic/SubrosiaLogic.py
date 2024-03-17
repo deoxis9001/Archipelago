@@ -121,6 +121,7 @@ def make_subrosia_logic(player: int):
             state.has("Blue Ore", player),
             state.has("_opened_tower_of_autumn", player)
         ])],
+        ["subrosia furnace sector", "subrosian sign guy", False, lambda state: oos_can_break_sign(state, player)],
         ["subrosia furnace sector", "subrosian buried bomb flower", False, lambda state: all([
             oos_has_feather(state, player),
             oos_has_bracelet(state, player)

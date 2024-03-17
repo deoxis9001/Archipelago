@@ -355,6 +355,7 @@ REGIONS = [
     "golden octorok",
     "d4 miniboss room hard embers",
     "d7 entrance hard embers",
+    "subrosian sign guy",
     "subrosia bath digging spot",
     "subrosia market digging spot",
     "subrosia temple digging spot",

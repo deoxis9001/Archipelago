@@ -236,6 +236,19 @@ class OraclesOfSeasonsGoldenBeastsRequirement(Range):
     default = 1
 
 
+class OracleOfSeasonsSignGuyRequirement(Range):
+    """
+    In Subrosia, a NPC will "punish" you if you break more than 100 signs in the vanilla game by giving you an item.
+    This option lets you configure how many signs are required to obtain that item, since breaking 100 signs is not
+    everyone's cup of tea.
+    """
+    display_name = "Sign Guy Requirement"
+
+    range_start = 0
+    range_end = 250
+    default = 10
+
+
 class OracleOfSeasonsLostWoodsItemSequence(Choice):
     """
     This option defines how the "secret sequence" (both directions and seasons) leading to the Noble Sword pedestal
@@ -409,6 +422,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     treehouse_old_man_requirement: OraclesOfSeasonsTreehouseOldManRequirement
     tarm_gate_required_jewels: OraclesOfSeasonsTarmGateRequirement
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
+    sign_guy_requirement: OracleOfSeasonsSignGuyRequirement
     lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     samasa_gate_code: OracleOfSeasonsSamasaGateCode
     samasa_gate_code_length: OracleOfSeasonsSamasaGateCodeLength

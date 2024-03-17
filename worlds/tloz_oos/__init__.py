@@ -205,12 +205,14 @@ class OracleOfSeasonsWorld(World):
         self.randomize_shop_prices()
 
     def randomize_shop_prices(self):
+        prices_pool = get_prices_pool()
+        self.random.shuffle(prices_pool)
         global_prices_factor = self.options.shop_prices_factor.value / 100.0
         for key, divider in self.shop_prices.items():
-            floating_price = self.random.normalvariate(90, 30) * global_prices_factor / divider
-            for value in VALID_RUPEE_VALUES:
-                if value >= floating_price:
-                    self.shop_prices[key] = value
+            floating_price = prices_pool.pop() * global_prices_factor / divider
+            for i, value in enumerate(VALID_RUPEE_VALUES):
+                if value > floating_price:
+                    self.shop_prices[key] = VALID_RUPEE_VALUES[i-1]
                     break
 
     def location_is_active(self, location_data):

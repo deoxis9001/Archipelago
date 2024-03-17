@@ -35,3 +35,15 @@ def find_patcher_name_for_location(pretty_name: str):
         if loc_name == pretty_name:
             return data["patcher_name"] if "patcher_name" in data else ""
     raise "Could not find patcher name for unknown location '" + pretty_name + "'"
+
+
+def get_prices_pool():
+    prices_pool = [300]                 # 1%
+    prices_pool.extend([200] * 9)       # 10%
+    prices_pool.extend([100] * 40)      # 50%
+    prices_pool.extend([80] * 15)       # 65%
+    prices_pool.extend([60] * 15)       # 80%
+    prices_pool.extend([40] * 15)       # 95%
+    prices_pool.extend([20] * 4)        # 99%
+    prices_pool.append(0)               # 100%
+    return prices_pool

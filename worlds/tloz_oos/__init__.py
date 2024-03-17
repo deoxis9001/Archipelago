@@ -130,8 +130,6 @@ class OracleOfSeasonsWorld(World):
             "subrosian market 5": 2,
         }
 
-        self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Dungeon Items"]
-
     def fill_slot_data(self) -> dict:
         # Put options that are useful to the tracker inside slot data
         options = ["goal", "logic_difficulty", "required_essences", "horon_village_season",
@@ -154,6 +152,8 @@ class OracleOfSeasonsWorld(World):
         return slot_data
 
     def generate_early(self):
+        self.options.non_local_items.value -= self.item_name_groups["Dungeon Items"]
+
         if self.options.default_seasons == "randomized":
             for region in self.default_seasons:
                 self.default_seasons[region] = self.random.choice(SEASONS)
@@ -258,7 +258,10 @@ class OracleOfSeasonsWorld(World):
         self.create_event("subrosian smithy bell", "Pirate's Bell")
         self.create_event("maku seed", "Maku Seed")
 
-        self.create_event("onox beaten", "_beaten_onox")
+        if self.options.goal == OracleOfSeasonsGoal.option_beat_onox:
+            self.create_event("onox beaten", "_beaten_game")
+        elif self.options.goal == OracleOfSeasonsGoal.option_beat_ganon:
+            self.create_event("ganon beaten", "_beaten_game")
 
         self.create_event("maple trade", "Ghastly Doll")
         self.create_event("spool stump", "_reached_spool_stump")
@@ -312,7 +315,7 @@ class OracleOfSeasonsWorld(World):
 
     def set_rules(self):
         create_connections(self.multiworld, self.player)
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_onox", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
     def create_item(self, name: str) -> Item:
         ap_code = self.item_name_to_id[name]
@@ -439,6 +442,7 @@ class OracleOfSeasonsWorld(World):
             "settings": {
                 "game": "seasons",
                 "version": VERSION,
+                "goal": self.options.goal.current_key,
                 "companion": COMPANIONS[self.options.animal_companion.value],
                 "warp_to_start": self.options.warp_to_start.current_key,
                 "required_essences": self.options.required_essences.value,

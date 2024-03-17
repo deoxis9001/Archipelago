@@ -857,6 +857,12 @@ def make_holodrum_logic(player: int):
             ])
         ])],
 
+        ["onox beaten", "ganon beaten", False, lambda state: all([
+            oos_has_sword(state, player, False),
+            oos_has_slingshot(state, player),
+            oos_can_use_ember_seeds(state, player, True),
+        ])],
+
         # GOLDEN BEASTS #############################################################################################
 
         ["d0 entrance", "golden darknut", False, lambda state: all([

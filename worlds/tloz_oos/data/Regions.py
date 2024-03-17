@@ -147,6 +147,7 @@ REGIONS = [
     "maku seed",
     "d9 entrance",
     "onox beaten",
+    "ganon beaten",
     "subrosia portal 1",
     "subrosia temple sector",
     "subrosia portal 2",

@@ -7,10 +7,12 @@ class OracleOfSeasonsGoal(Choice):
     """
     The goal to accomplish in order to complete the seed.
     - Beat Onox: beat the usual final boss (same as vanilla)
+    - Beat Ganon: teleport to the Room of Rites after beating Onox, then beat Ganon (same as linked game)
     """
     display_name = "Goal"
 
     option_beat_onox = 0
+    option_beat_ganon = 1
 
     default = 0
 

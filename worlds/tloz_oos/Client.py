@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Set, Dict
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-from worlds.tloz_oos import LOCATIONS_DATA, ITEMS_DATA
+from worlds.tloz_oos import LOCATIONS_DATA, ITEMS_DATA, OracleOfSeasonsGoal
 from .Data import build_item_id_to_name_dict, build_location_name_to_id_dict
 
 if TYPE_CHECKING:
@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 ROOM_AFTER_DRAGONOX = 0x0790
 ROOM_BLAINOS_GYM = 0x03B4
+ROOM_ZELDA_ENDING = 0x059A
 
 ROM_ADDRS = {
     "game_identifier": (0x0134, 9, "ROM"),
@@ -73,20 +74,17 @@ class OracleOfSeasonsClient(BizHawkClient):
             return
 
         try:
-            # Handle giving the player items
             read_result = await bizhawk.read(ctx.bizhawk_ctx, [
-                RAM_ADDRS["game_state"],  # Current state of game (is the player actually in-game?)
-                RAM_ADDRS["received_item_index"],  # Number of received items
-                RAM_ADDRS["received_item"],  # Received item still pending?
-                RAM_ADDRS["location_flags"],  # Location flags
-                RAM_ADDRS["current_map_group"],
-                RAM_ADDRS["current_map_id"],  # Current map & id to check for goal completion
+                RAM_ADDRS["game_state"],            # Current state of game (is the player actually in-game?)
+                RAM_ADDRS["received_item_index"],   # Number of received items
+                RAM_ADDRS["received_item"],         # Received item still pending?
+                RAM_ADDRS["location_flags"],        # Location flags
+                RAM_ADDRS["current_map_group"],     # Current map group & id where the player is currently located
+                RAM_ADDRS["current_map_id"],        # ^^^
             ])
-            if read_result is None:
-                return
 
-            # Player is not in-game, don't do anything else
-            if read_result[0][0] != 2:
+            # If player is not in-game, don't do anything else
+            if read_result is None or read_result[0][0] != 2:
                 return
 
             num_received_items = int.from_bytes(read_result[1], "little")
@@ -94,77 +92,93 @@ class OracleOfSeasonsClient(BizHawkClient):
             flag_bytes = read_result[3]
             current_room = (read_result[4][0] << 8) | read_result[5][0]
 
-            # Read location flags from RAM
-            local_checked_locations = set(ctx.locations_checked)
-            local_scouted_locations = set(ctx.locations_scouted)
-            for name, location in LOCATIONS_DATA.items():
-                if "local" in location and location["local"] is True:
-                    continue
-                if "flag_byte" not in location:
-                    continue
+            await self.process_checked_locations(ctx, flag_bytes)
+            await self.process_scouted_locations(ctx, flag_bytes)
 
-                bytes_to_test = location["flag_byte"]
-                if not hasattr(bytes_to_test, "__len__"):
-                    bytes_to_test = [bytes_to_test]
+            # Process received items (only if we aren't in Blaino's Gym to prevent him from calling us cheaters)
+            if received_item_is_empty and current_room != ROOM_BLAINOS_GYM:
+                await self.process_received_items(ctx, num_received_items)
 
-                # Check all "flag_byte" to see if location has been checked
-                for byte_addr in bytes_to_test:
-                    byte_offset = byte_addr - RAM_ADDRS["location_flags"][0]
-                    bit_mask = location["bit_mask"] if "bit_mask" in location else 0x20
-                    if flag_bytes[byte_offset] & bit_mask == bit_mask:
-                        location_id = self.location_name_to_id[name]
-                        local_checked_locations.add(location_id)
-                        break
-
-                # Check "scouting_byte" to see if map has been visited for scoutable locations
-                if "scouting_byte" in location:
-                    byte_to_test = location["scouting_byte"]
-                    byte_offset = byte_to_test - RAM_ADDRS["location_flags"][0]
-                    bit_mask = location["scouting_mask"] if "scouting_mask" in location else 0x10
-                    if flag_bytes[byte_offset] & bit_mask == bit_mask:
-                        # Map has been visited, scout the location if it hasn't been already
-                        location_id = self.location_name_to_id[name]
-                        local_scouted_locations.add(location_id)
-
-            # Send locations
-            if self.local_checked_locations != local_checked_locations:
-                self.local_checked_locations = local_checked_locations
-                await ctx.send_msgs([{
-                    "cmd": "LocationChecks",
-                    "locations": list(self.local_checked_locations)
-                }])
-
-            # Scout locations
-            if self.local_scouted_locations != local_scouted_locations:
-                self.local_scouted_locations = local_scouted_locations
-                await ctx.send_msgs([{
-                    "cmd": "LocationScouts",
-                    "locations": list(self.local_scouted_locations),
-                    "create_as_hint": int(2)
-                }])
-
-            # Don't process received items if we are in Blaino's Gym to prevent him
-            # from calling us a cheater
-            if current_room == ROOM_BLAINOS_GYM:
-                return
-
-            # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
-            # fill it with the next item
-            if num_received_items < len(ctx.items_received) and received_item_is_empty:
-                next_item_name = self.item_id_to_name[ctx.items_received[num_received_items].item]
-                await bizhawk.write(ctx.bizhawk_ctx, [(0xCBFB, [
-                    ITEMS_DATA[next_item_name]["id"],
-                    ITEMS_DATA[next_item_name]["subid"] if "subid" in ITEMS_DATA[next_item_name] else 0
-                ], "System Bus")])
-
-            # Send game clear
-            game_clear = (current_room == ROOM_AFTER_DRAGONOX)
-            if not ctx.finished_game and game_clear:
-                await ctx.send_msgs([{
-                    "cmd": "StatusUpdate",
-                    "status": ClientStatus.CLIENT_GOAL
-                }])
+            if not ctx.finished_game:
+                await self.process_game_completion(ctx, flag_bytes, current_room)
 
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             pass
+
+    async def process_checked_locations(self, ctx: "BizHawkClientContext", flag_bytes):
+        local_checked_locations = set(ctx.locations_checked)
+        for name, location in LOCATIONS_DATA.items():
+            if "flag_byte" not in location:
+                continue
+
+            bytes_to_test = location["flag_byte"]
+            if not hasattr(bytes_to_test, "__len__"):
+                bytes_to_test = [bytes_to_test]
+
+            # Check all "flag_byte" to see if location has been checked
+            for byte_addr in bytes_to_test:
+                byte_offset = byte_addr - RAM_ADDRS["location_flags"][0]
+                bit_mask = location["bit_mask"] if "bit_mask" in location else 0x20
+                if flag_bytes[byte_offset] & bit_mask == bit_mask:
+                    location_id = self.location_name_to_id[name]
+                    local_checked_locations.add(location_id)
+                    break
+
+        # Send locations
+        if self.local_checked_locations != local_checked_locations:
+            self.local_checked_locations = local_checked_locations
+            await ctx.send_msgs([{
+                "cmd": "LocationChecks",
+                "locations": list(self.local_checked_locations)
+            }])
+
+    async def process_scouted_locations(self, ctx: "BizHawkClientContext", flag_bytes):
+        local_scouted_locations = set(ctx.locations_scouted)
+        for name, location in LOCATIONS_DATA.items():
+            if "scouting_byte" not in location:
+                continue
+
+            # Check "scouting_byte" to see if map has been visited for scoutable locations
+            byte_to_test = location["scouting_byte"]
+            byte_offset = byte_to_test - RAM_ADDRS["location_flags"][0]
+            bit_mask = location["scouting_mask"] if "scouting_mask" in location else 0x10
+            if flag_bytes[byte_offset] & bit_mask == bit_mask:
+                # Map has been visited, scout the location if it hasn't been already
+                location_id = self.location_name_to_id[name]
+                local_scouted_locations.add(location_id)
+
+        if self.local_scouted_locations != local_scouted_locations:
+            self.local_scouted_locations = local_scouted_locations
+            await ctx.send_msgs([{
+                "cmd": "LocationScouts",
+                "locations": list(self.local_scouted_locations),
+                "create_as_hint": int(2)
+            }])
+
+    async def process_received_items(self, ctx: "BizHawkClientContext", num_received_items: int):
+        # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
+        # fill it with the next item
+        if num_received_items < len(ctx.items_received):
+            next_item_name = self.item_id_to_name[ctx.items_received[num_received_items].item]
+            await bizhawk.write(ctx.bizhawk_ctx, [(0xCBFB, [
+                ITEMS_DATA[next_item_name]["id"],
+                ITEMS_DATA[next_item_name]["subid"] if "subid" in ITEMS_DATA[next_item_name] else 0
+            ], "System Bus")])
+
+    async def process_game_completion(self, ctx: "BizHawkClientContext", flag_bytes, current_room: int):
+        game_clear = False
+        if ctx.slot_data["goal"] == OracleOfSeasonsGoal.option_beat_onox:
+            # Room with Din's descending crystal was reached, it's a win
+            game_clear = (current_room == ROOM_AFTER_DRAGONOX)
+        elif ctx.slot_data["goal"] == OracleOfSeasonsGoal.option_beat_ganon:
+            # Room with Zelda lying down was reached, and Ganon was beaten
+            ganon_flag_offset = 0xCA9A - RAM_ADDRS["location_flags"][0]
+            ganon_was_beaten = (flag_bytes[ganon_flag_offset] & 0x80 == 0x80)
+            game_clear = (current_room == ROOM_ZELDA_ENDING) and ganon_was_beaten
+
+        if game_clear:
+            await ctx.send_msgs([{
+                "cmd": "StatusUpdate",
+                "status": ClientStatus.CLIENT_GOAL
+            }])

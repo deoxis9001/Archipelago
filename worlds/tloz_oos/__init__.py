@@ -517,7 +517,12 @@ class OracleOfSeasonsWorld(World):
         for loc in self.multiworld.get_locations(self.player):
             if loc.address is None:
                 continue
-            item_name = loc.item.name if loc.item.player == loc.player else "Archipelago Item"
+            if loc.item.player == loc.player:
+                item_name = loc.item.name
+            elif loc.item.classification in [ItemClassification.progression, ItemClassification.progression_skip_balancing]:
+                item_name = "Archipelago Progression Item"
+            else:
+                item_name = "Archipelago Item"
             loc_patcher_name = find_patcher_name_for_location(loc.name)
             if loc_patcher_name != "":
                 yamlObj["locations"][loc_patcher_name] = item_name

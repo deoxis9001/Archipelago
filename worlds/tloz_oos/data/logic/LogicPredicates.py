@@ -52,7 +52,7 @@ def oos_has_magic_boomerang(state: CollectionState, player: int):
 
 
 def oos_has_bracelet(state: CollectionState, player: int):
-    return state.has("Bracelet", player)
+    return state.has("Power Bracelet", player)
 
 
 def oos_has_shovel(state: CollectionState, player: int):
@@ -84,7 +84,7 @@ def oos_has_autumn(state: CollectionState, player: int):
 
 
 def oos_has_magnet_gloves(state: CollectionState, player: int):
-    return state.has("Magnet Gloves", player)
+    return state.has("Magnetic Gloves", player)
 
 
 def oos_has_ember_seeds(state: CollectionState, player: int):

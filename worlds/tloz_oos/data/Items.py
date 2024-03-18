@@ -45,7 +45,7 @@ ITEMS_DATA = {
         'id': 0x07,
         'subid': 0x05
     },
-    "Magnet Gloves": {
+    "Magnetic Gloves": {
         'classification': ItemClassification.progression,
         'id': 0x08
     },
@@ -80,7 +80,7 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'id': 0x15
     },
-    "Bracelet": {
+    "Power Bracelet": {
         'classification': ItemClassification.progression,
         'id': 0x16
     },

@@ -586,7 +586,7 @@ LOCATIONS_DATA = {
     "Snake's Remains: Chest in Distant Moblins Room": {
         "patcher_name": "d2 moblin chest",
         "region_id": "d2 moblin chest",
-        "vanilla_item": "Bracelet",
+        "vanilla_item": "Power Bracelet",
         "dungeon": 2,
         "flag_byte": 0xC92A
     },
@@ -813,7 +813,7 @@ LOCATIONS_DATA = {
     "Unicorn's Cave: Magnet Gloves Chest": {
         "patcher_name": "d5 magnet ball chest",
         "region_id": "d5 magnet ball chest",
-        "vanilla_item": "Magnet Gloves",
+        "vanilla_item": "Magnetic Gloves",
         "dungeon": 5,
         "flag_byte": 0xC989
     },

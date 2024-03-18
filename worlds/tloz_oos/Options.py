@@ -167,19 +167,24 @@ class OracleOfSeasonsPortalShuffle(Choice):
 
 class OracleOfSeasonsOldMenShuffle(Choice):
     """
-    Determine how the Old Men that can be found under specific bushes are handled by the randomizer
+    Determine how the Old Men which give or take rupees are handled by the randomizer.
     - Vanilla: Each Old Man gives/takes the amount of rupees it usually does in the base game
-    - Shuffled Values: The rupee values given/taken are shuffled among Old Men
+    - Shuffled Values: The amount of given/taken rupees are shuffled between Old Men
+    - Random Values: Each Old Man will give or take a random amount of rupees
+    - Random Positive Values: Each Old Man will give a random amount of rupees, but never make you pay
+    - Turn Into Locations: Each Old Man becomes a randomized check, and the total amount of rupees they usually give
+      in vanilla is shuffled into the item pool
     """
-    # - Turn Into Locations: Each Old Man becomes a randomized check, and the total amount of rupees they usually give
-    #   in vanilla is shuffled into the item pool
-    display_name = "Shuffle Old Men"
+
+    display_name = "Rupee Old Men"
 
     option_vanilla = 0
     option_shuffled_values = 1
-#    option_turn_into_locations = 2
+    option_random_values = 2
+    option_random_positive_values = 3
+    option_turn_into_locations = 4
 
-    default = 0
+    default = 3
 
 
 class OracleOfSeasonsGoldenOreSpotsShuffle(Choice):

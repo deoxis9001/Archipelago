@@ -1313,59 +1313,67 @@ LOCATIONS_DATA = {
     # Maku seed is 0xC85D
 
     "Horon Village: Old Man": {
-        "patcher_name": "old man in horon",
+        "patcher_name": "old man, horon village",
         "region_id": "old man in horon",
         "flag_byte": 0xCA05,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
     "North Horon: Old Man Near D1": {
-        "patcher_name": "old man near d1",
+        "patcher_name": "old man, near d1",
         "region_id": "old man near d1",
         "flag_byte": 0xCA03,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
     "Holodrum Plain: Old Man Near Blaino's Gym": {
-        "patcher_name": "old man near blaino",
+        "patcher_name": "old man, near blaino",
         "region_id": "old man near blaino",
         "flag_byte": 0xCA02,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
     "Goron Mountain: Old Man": {
-        "patcher_name": "old man in goron mountain",
+        "patcher_name": "old man, goron mountain",
         "region_id": "old man in goron mountain",
         "flag_byte": 0xCA01,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
     "Western Coast: Old Man": {
-        "patcher_name": "old man near western coast house",
+        "patcher_name": "old man, western coast",
         "region_id": "old man near western coast house",
         "flag_byte": 0xCA04,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
     "Woods of Winter: Old Man": {
-        "patcher_name": "old man near holly's house",
+        "patcher_name": "old man, woods of winter",
         "region_id": "old man near holly's house",
         "flag_byte": 0xCA07,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
     "Holodrum Plain: Old Man Near Mrs. Ruul's House": {
-        "patcher_name": "old man near mrs. ruul",
+        "patcher_name": "old man, ghastly stump",
         "region_id": "old man near mrs. ruul",
         "flag_byte": 0xCA08,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
     "Tarm Ruins: Old Man Near D6": {
-        "patcher_name": "old man near d6",
+        "patcher_name": "old man, tarm ruins",
         "region_id": "old man near d6",
         "flag_byte": 0xCA06,
         "bit_mask": 0x40,
+        "vanilla_item": "Rupees (100)",
         "conditional": True
     },
 

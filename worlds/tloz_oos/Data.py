@@ -47,3 +47,15 @@ def get_prices_pool():
     prices_pool.extend([20] * 4)        # 99%
     prices_pool.append(0)               # 100%
     return prices_pool
+
+
+def get_old_man_values_pool():
+    old_man_values_pool = [500, 400]            # 2%
+    old_man_values_pool.extend([300] * 5)       # 7%
+    old_man_values_pool.extend([200] * 13)      # 20%
+    old_man_values_pool.extend([100] * 40)      # 60%
+    old_man_values_pool.extend([50] * 20)       # 80%
+    old_man_values_pool.extend([25] * 15)       # 95%
+    old_man_values_pool.extend([10] * 4)        # 99%
+    old_man_values_pool.append(1)               # 100%
+    return old_man_values_pool

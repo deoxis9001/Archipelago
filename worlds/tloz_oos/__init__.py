@@ -192,10 +192,17 @@ class OracleOfSeasonsWorld(World):
                 self.random.choice(SEASONS), "left"
             ]
 
-        if self.options.shuffle_old_men == "shuffled_values":
+        if self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_shuffled_values:
             shuffled_rupees = list(self.old_man_rupee_values.values())
             self.random.shuffle(shuffled_rupees)
             self.old_man_rupee_values = dict(zip(self.old_man_rupee_values, shuffled_rupees))
+        elif self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_random_values:
+            for key in self.old_man_rupee_values.keys():
+                sign = self.random.choice([-1, 1])
+                self.old_man_rupee_values[key] = self.random.choice(get_old_man_values_pool()) * sign
+        elif self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_random_positive_values:
+            for key in self.old_man_rupee_values.keys():
+                self.old_man_rupee_values[key] = self.random.choice(get_old_man_values_pool())
 
         if self.options.samasa_gate_code == "randomized":
             self.samasa_gate_code = []
@@ -215,7 +222,7 @@ class OracleOfSeasonsWorld(World):
                     self.shop_prices[key] = VALID_RUPEE_VALUES[i-1]
                     break
 
-    def location_is_active(self, location_data):
+    def location_is_active(self, location_name, location_data):
         if "conditional" not in location_data or location_data["conditional"] is False:
             return True
 
@@ -224,6 +231,20 @@ class OracleOfSeasonsWorld(World):
             return self.options.advance_shop.value
         if region_id.startswith("subrosia") and region_id.endswith("digging spot"):
             return self.options.shuffle_golden_ore_spots != "vanilla"
+
+        RUPEE_OLD_MAN_LOCATIONS = [
+            "Horon Village: Old Man",
+            "North Horon: Old Man Near D1",
+            "Holodrum Plain: Old Man Near Blaino's Gym",
+            "Goron Mountain: Old Man",
+            "Western Coast: Old Man",
+            "Woods of Winter: Old Man",
+            "Holodrum Plain: Old Man Near Mrs. Ruul's House",
+            "Tarm Ruins: Old Man Near D6"
+        ]
+        if location_name in RUPEE_OLD_MAN_LOCATIONS:
+            return self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_turn_into_locations
+
         return False
 
     def create_location(self, region_name: str, location_name: str, local: bool):
@@ -241,7 +262,7 @@ class OracleOfSeasonsWorld(World):
 
         # Create locations
         for location_name, location_data in LOCATIONS_DATA.items():
-            if not self.location_is_active(location_data):
+            if not self.location_is_active(location_name, location_data):
                 continue
 
             is_local = "local" in location_data and location_data["local"] is True
@@ -347,7 +368,7 @@ class OracleOfSeasonsWorld(World):
                 location = self.multiworld.get_location(loc_name, self.player)
                 location.place_locked_item(item)
                 continue
-            if not self.location_is_active(loc_data):
+            if not self.location_is_active(loc_name, loc_data):
                 continue
             if "vanilla_item" not in loc_data:
                 continue
@@ -488,6 +509,7 @@ class OracleOfSeasonsWorld(World):
                 "open_advance_shop": self.options.advance_shop.current_key,
                 "character_sprite": self.options.character_sprite.current_key,
                 "character_palette": self.options.character_palette.current_key,
+                "turn_old_men_into_locations": self.options.shuffle_old_men == "turn_into_locations",
                 "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},

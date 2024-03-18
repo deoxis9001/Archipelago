@@ -265,7 +265,7 @@ LOCATION_GROUPS = {
     'Trade Sequence': [
         'Horon Village: Dr. Left Reward',
         'North Horon: Malon Trade',
-        # 'Maple Trade',
+        'Maple Trade',
         'Holodrum Plain: Mrs. Ruul Trade',
         'Subrosia: Subrosian Chef Trade',
         'Goron Mountain: Biggoron Trade',

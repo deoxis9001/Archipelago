@@ -1235,12 +1235,12 @@ LOCATIONS_DATA = {
         "vanilla_item": "Lon Lon Egg",
         "flag_byte": 0xC880
     },
-    "Maple trade": {
+    "Maple Trade": {
         "patcher_name": "maple trade",
         "region_id": "maple trade",
         "vanilla_item": "Ghastly Doll",
-        "conditional": True,  # Not yet implemented
-        # "flag_byte": 0x
+        "flag_byte": 0xC640,
+        "bit_mask": 0x08
     },
     "Holodrum Plain: Mrs. Ruul Trade": {
         "patcher_name": "mrs. ruul trade",

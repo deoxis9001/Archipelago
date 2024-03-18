@@ -420,11 +420,16 @@ class OracleOfSeasonsWorld(World):
                     logging.debug(f"Failed to shuffle dungeon items for player {self.player}. Retrying...")
 
     def pre_fill_seeds(self) -> None:
-        def place_seed(seed_name: str, location_name: str):
-            seed_item = self.create_item(seed_name)
-            self.multiworld.get_location(location_name, self.player).place_locked_item(seed_item)
-            self.pre_fill_items.append(seed_item)
-
+        # The prefill algorithm for seeds has a few constraints:
+        #   - it needs to place the "default seed" into Horon Village seed tree
+        #   - it needs to place a random seed on the "duplicate tree" (can be Horon's tree)
+        #   - it needs to place one of each seed on the 5 remaining trees
+        # This has a few implications:
+        #   - if Horon is the duplicate tree, this is the simplest case: we just place a random seed in Horon's tree
+        #     and scatter the 5 seed types on the 5 other trees
+        #   - if Horon is NOT the duplicate tree, we need to remove Horon's seed from the pool of 5 seeds to scatter
+        #     and put a random seed inside the duplicate tree. Then, we place the 4 remaining seeds on the 4 remaining
+        #     trees
         TREES_TABLE = {
             OracleOfSeasonsDuplicateSeedTree.option_horon_village: "Horon Village: Seed Tree",
             OracleOfSeasonsDuplicateSeedTree.option_woods_of_winter: "Woods of Winter: Seed Tree",
@@ -434,12 +439,29 @@ class OracleOfSeasonsWorld(World):
             OracleOfSeasonsDuplicateSeedTree.option_tarm_ruins: "Tarm Ruins: Seed Tree",
         }
         duplicate_tree_name = TREES_TABLE[self.options.duplicate_seed_tree.value]
-        place_seed(self.random.choice(SEED_ITEMS), duplicate_tree_name)
 
-        other_trees = [name for name in TREES_TABLE.values() if name != duplicate_tree_name]
-        self.random.shuffle(other_trees)
-        for i, tree in enumerate(other_trees):
-            place_seed(SEED_ITEMS[i], tree)
+        def place_seed(seed_name: str, location_name: str):
+            seed_item = self.create_item(seed_name)
+            self.multiworld.get_location(location_name, self.player).place_locked_item(seed_item)
+            self.pre_fill_items.append(seed_item)
+
+        seeds_to_place = set([name for name in SEED_ITEMS])
+
+        manually_placed_trees = ["Horon Village: Seed Tree", duplicate_tree_name]
+        trees_to_process = [name for name in TREES_TABLE.values() if name not in manually_placed_trees]
+
+        # Place default seed type in Horon Village tree
+        place_seed(SEED_ITEMS[self.options.default_seed.value], "Horon Village: Seed Tree")
+
+        # If duplicate tree is not Horon's, remove Horon seed from the pool of placeable seeds
+        if duplicate_tree_name != "Horon Village: Seed Tree":
+            seeds_to_place.remove(SEED_ITEMS[self.options.default_seed.value])
+            place_seed(self.random.choice(SEED_ITEMS), duplicate_tree_name)
+
+        # Place remaining seeds on remaining trees
+        self.random.shuffle(trees_to_process)
+        for seed in seeds_to_place:
+            place_seed(seed, trees_to_process.pop())
 
     def get_filler_item_name(self) -> str:
         return "Rupees (1)"

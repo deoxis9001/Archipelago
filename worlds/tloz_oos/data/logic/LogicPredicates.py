@@ -91,7 +91,7 @@ def oos_has_ember_seeds(state: CollectionState, player: int):
     return any([
         state.has("Ember Seeds", player),
         state.multiworld.worlds[player].options.default_seed == "ember",
-        (state.has("_hard_ember_seeds", player) and oos_option_hard_logic(state, player))
+        (state.has("_wild_ember_seeds", player) and oos_option_medium_logic(state, player))
     ])
 
 
@@ -104,7 +104,11 @@ def oos_has_pegasus_seeds(state: CollectionState, player: int):
 
 
 def oos_has_mystery_seeds(state: CollectionState, player: int):
-    return state.has("Mystery Seeds", player) or state.multiworld.worlds[player].options.default_seed == "mystery"
+    return any([
+        state.has("Mystery Seeds", player),
+        state.multiworld.worlds[player].options.default_seed == "mystery",
+        (state.has("_wild_mystery_seeds", player) and oos_option_medium_logic(state, player))
+    ])
 
 
 def oos_has_gale_seeds(state: CollectionState, player: int):
@@ -287,22 +291,17 @@ def oos_has_rod(state: CollectionState, player: int):
     ])
 
 
-def oos_has_bombs(state: CollectionState, player: int):
-    return any([
-        all([
-            state.has("Bombs (10)", player),
-            # [shovel, bracelet, break flower, flute] TODO: Handling refill?
-        ]),
-        all([
-            # With hard logic, player is expected to know they can get free bombs
-            # from D2 moblin room even if they never had bombs before
-            oos_option_hard_logic(state, player),
-            state.has("_reached_d2_bracelet_room", player),
-            any([
-                oos_has_sword(state, player),
-                oos_has_fools_ore(state, player)
-            ]),
-        ])
+def oos_has_bombs(state: CollectionState, player: int, amount: int = 1):
+    if state.has("Bombs (10)", player, amount):
+        return True
+
+    return all([
+        # With hard logic, player is expected to know they can get free bombs
+        # from D2 moblin room even if they never had bombs before
+        (amount == 1),
+        oos_option_medium_logic(state, player),
+        state.has("_reached_d2_bracelet_room", player),
+        oos_can_harvest_regrowing_bush(state, player)
     ])
 
 

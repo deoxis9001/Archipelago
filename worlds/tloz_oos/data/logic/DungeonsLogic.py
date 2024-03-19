@@ -269,7 +269,7 @@ def make_d4_logic(player: int):
         ])],
 
         ["d4 stalfos stairs", "d4 miniboss room", False, None],
-        ["d4 miniboss room", "d4 miniboss room hard embers", False, lambda state: \
+        ["d4 miniboss room", "d4 miniboss room wild embers", False, lambda state: \
             oos_can_harvest_regrowing_bush(state, player)],
 
         ["d4 miniboss room", "d4 final minecart", False, lambda state: all([
@@ -587,7 +587,7 @@ def make_d7_logic(player: int):
         ["enter d7", "poe curse owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
         ["enter d7", "d7 wizzrobe chest", False, lambda state: oos_can_kill_normal_enemy(state, player)],
         ["enter d7", "d7 bombed wall chest", False, lambda state: oos_has_bombs(state, player)],
-        ["enter d7", "d7 entrance hard embers", False, lambda state: oos_can_harvest_regrowing_bush(state, player)],
+        ["enter d7", "d7 entrance wild embers", False, lambda state: oos_can_harvest_regrowing_bush(state, player)],
 
         # 1 key
         ["enter d7", "enter poe A", False, lambda state: all([
@@ -822,11 +822,12 @@ def make_d8_logic(player: int):
             # oos_can_kill_armored_enemy(state, player),
             oos_has_bombs(state, player),
         ])],
+        ["frypolar entrance", "frypolar room", False, lambda state: oos_has_small_keys(state, player, 8, 3)],
+        ["frypolar room", "frypolar room wild mystery", False, lambda state: \
+            oos_can_harvest_regrowing_bush(state, player)],
 
         # 3 keys
-        ["frypolar entrance", "d8 ice puzzle room", False, lambda state: all([
-            oos_has_small_keys(state, player, 8, 3),
-
+        ["frypolar room", "d8 ice puzzle room", False, lambda state: all([
             # Hard-require HSS since we need it in the room right after Frypolar to hit the torches anyway
             oos_has_hyper_slingshot(state, player),
 

@@ -313,9 +313,10 @@ class OracleOfSeasonsWorld(World):
         self.create_event("golden octorok", "_beat_golden_octorok")
         self.create_event("golden moblin", "_beat_golden_moblin")
 
-        self.create_event("d4 miniboss room hard embers", "_hard_ember_seeds")
-        self.create_event("d5 armos chest", "_hard_ember_seeds")
-        self.create_event("d7 entrance hard embers", "_hard_ember_seeds")
+        self.create_event("d4 miniboss room wild embers", "_wild_ember_seeds")
+        self.create_event("d5 armos chest", "_wild_ember_seeds")
+        self.create_event("d7 entrance wild embers", "_wild_ember_seeds")
+        self.create_event("frypolar room wild mystery", "_wild_mystery_seeds")
 
         for region_name in self.old_man_rupee_values:
             self.create_event(region_name, "rupees from " + region_name)

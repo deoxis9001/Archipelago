@@ -471,9 +471,9 @@ LOCATIONS_DATA = {
         "patcher_name": "subrosian smithy bell",
         "region_id": "subrosian smithy bell",
         "vanilla_item": "Pirate's Bell",
-        "conditional": True,
-        # "randomized": False,
-        # "flag_byte": 0xC897,
+        "randomized": False,
+        "flag_byte": 0xC897,
+        "bit_mask": 0x80
     },
 
     "Hero's Cave: Topmost Chest": {

@@ -308,7 +308,7 @@ def make_d4_logic(player: int):
                 all([  # throw seeds using satchel during a jump
                     oos_option_hard_logic(state, player),
                     oos_has_feather(state, player),
-                    oos_can_use_ember_seeds(state, player, True)
+                    oos_can_use_ember_seeds(state, player, False)
                 ])
             ])
         ])],
@@ -515,7 +515,7 @@ def make_d6_logic(player: int):
                 oos_has_slingshot(state, player),
                 oos_option_medium_logic(state, player)
             ]),
-            oos_can_use_ember_seeds(state, player, True)
+            oos_can_use_ember_seeds(state, player, False)
         ])],
 
         ["d6 torch stairs", "d6 escape room", False, lambda state: oos_has_feather(state, player)],
@@ -593,7 +593,7 @@ def make_d7_logic(player: int):
         ["enter d7", "enter poe A", False, lambda state: all([
             oos_has_small_keys(state, player, 7, 1),
             oos_has_slingshot(state, player),
-            oos_can_use_ember_seeds(state, player, True)
+            oos_can_use_ember_seeds(state, player, False)
         ])],
 
         ["enter poe A", "d7 pot room", False, lambda state: all([
@@ -853,7 +853,7 @@ def make_d8_logic(player: int):
             ]),
 
             # Requirements to pass the room after Frypolar
-            oos_can_use_ember_seeds(state, player, True),
+            oos_can_use_ember_seeds(state, player, False),
         ])],
 
         ["d8 ice puzzle room", "d8 pols voice chest", False, lambda state: any([

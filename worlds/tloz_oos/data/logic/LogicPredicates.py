@@ -545,9 +545,9 @@ def oos_can_break_bush(state: CollectionState, player: int, can_summon_companion
             # not to be frustrating
             oos_option_medium_logic(state, player),
             any([
-                oos_has_bombs(state, player),
+                oos_has_bombs(state, player, 2),
                 oos_can_use_ember_seeds(state, player, False),
-                oos_can_use_gale_seeds_offensively(state, player),
+                (oos_has_slingshot(state, player) and oos_has_gale_seeds(state, player)),
             ])
         ]),
     ])
@@ -586,10 +586,17 @@ def oos_can_break_flowers(state: CollectionState, player: int, can_summon_compan
     return any([
         oos_has_sword(state, player),
         oos_has_magic_boomerang(state, player),
-        oos_has_bombs(state, player),
-        oos_can_use_ember_seeds(state, player, False),
-        (oos_has_slingshot(state, player) and oos_has_gale_seeds(state, player)),
-        (can_summon_companion and oos_has_flute(state, player))
+        (can_summon_companion and oos_has_flute(state, player)),
+        all([
+            # Consumables need at least medium logic, since they need a good knowledge of the game
+            # not to be frustrating
+            oos_option_medium_logic(state, player),
+            any([
+                oos_has_bombs(state, player, 2),
+                oos_can_use_ember_seeds(state, player, False),
+                (oos_has_slingshot(state, player) and oos_has_gale_seeds(state, player)),
+            ])
+        ]),
     ])
 
 
@@ -598,7 +605,10 @@ def oos_can_break_crystal(state: CollectionState, player: int):
         oos_has_sword(state, player),
         oos_has_bombs(state, player),
         oos_has_bracelet(state, player),
-        # state.has("expert's ring", player)
+        all([
+            oos_option_hard_logic(state, player),
+            state.has("Expert's Ring", player)
+        ])
     ])
 
 

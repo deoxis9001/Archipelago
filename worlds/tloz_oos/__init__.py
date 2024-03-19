@@ -11,8 +11,7 @@ from worlds.tloz_oos.data.Items import *
 from .Logic import create_connections
 from .Options import *
 from .data import LOCATIONS_DATA
-from .data.Constants import SEED_ITEMS, REGIONS_CONVERSION_TABLE, PORTALS_CONVERSION_TABLE, DUNGEON_NAMES, \
-    SEASONS, COMPANIONS, DIRECTIONS, DUNGEON_ITEMS, LOCATION_GROUPS, ITEM_GROUPS, VERSION, VALID_RUPEE_VALUES
+from .data.Constants import *
 from .data.Regions import REGIONS
 from .Client import OracleOfSeasonsClient  # Unused, but required to register with BizHawkClient
 
@@ -134,7 +133,8 @@ class OracleOfSeasonsWorld(World):
         # Put options that are useful to the tracker inside slot data
         options = ["goal", "logic_difficulty", "required_essences", "horon_village_season",
                    "shuffle_dungeons", "shuffle_portals", "shuffle_old_men", "treehouse_old_man_requirement",
-                   "golden_beasts_requirement", "lost_woods_item_sequence", "advance_shop", "warp_to_start"]
+                   "golden_beasts_requirement", "lost_woods_item_sequence", "advance_shop", "warp_to_start",
+                   "deathlink"]
 
         slot_data = self.options.as_dict(*options)
         slot_data["animal_companion"] = COMPANIONS[self.options.animal_companion.value]

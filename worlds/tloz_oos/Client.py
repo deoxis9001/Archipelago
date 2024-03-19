@@ -1,3 +1,4 @@
+import time
 from typing import TYPE_CHECKING, Set, Dict
 
 from NetUtils import ClientStatus
@@ -26,6 +27,7 @@ RAM_ADDRS = {
 
     "current_map_group": (0xCC49, 1, "System Bus"),
     "current_map_id": (0xCC4C, 1, "System Bus"),
+    "is_dead": (0xCC34, 1, "System Bus"),
 }
 
 
@@ -44,6 +46,11 @@ class OracleOfSeasonsClient(BizHawkClient):
         self.location_name_to_id = build_location_name_to_id_dict()
         self.local_checked_locations = set()
         self.local_scouted_locations = set()
+
+        self.set_deathlink = False
+        self.last_deathlink = None
+        self.was_alive_last_frame = False
+        self.is_expecting_received_death = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -69,9 +76,21 @@ class OracleOfSeasonsClient(BizHawkClient):
         ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
         pass
 
+    def on_package(self, ctx, cmd, args):
+        if cmd == 'Connected':
+            if 'deathlink' in args['slot_data'] and args['slot_data']['deathlink']:
+                self.set_deathlink = True
+                self.last_deathlink = time.time()
+        super().on_package(ctx, cmd, args)
+
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
             return
+
+        # Enable "DeathLink" tag if option was enabled
+        if self.set_deathlink:
+            self.set_deathlink = False
+            await ctx.update_death_link(True)
 
         try:
             read_result = await bizhawk.read(ctx.bizhawk_ctx, [
@@ -81,6 +100,7 @@ class OracleOfSeasonsClient(BizHawkClient):
                 RAM_ADDRS["location_flags"],        # Location flags
                 RAM_ADDRS["current_map_group"],     # Current map group & id where the player is currently located
                 RAM_ADDRS["current_map_id"],        # ^^^
+                RAM_ADDRS["is_dead"]
             ])
 
             # If player is not in-game, don't do anything else
@@ -91,6 +111,7 @@ class OracleOfSeasonsClient(BizHawkClient):
             received_item_is_empty = (read_result[2][0] == 0)
             flag_bytes = read_result[3]
             current_room = (read_result[4][0] << 8) | read_result[5][0]
+            is_dead = (read_result[6][0] != 0)
 
             await self.process_checked_locations(ctx, flag_bytes)
             await self.process_scouted_locations(ctx, flag_bytes)
@@ -101,6 +122,9 @@ class OracleOfSeasonsClient(BizHawkClient):
 
             if not ctx.finished_game:
                 await self.process_game_completion(ctx, flag_bytes, current_room)
+
+            if "DeathLink" in ctx.tags:
+                await self.process_deathlink(ctx, is_dead)
 
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
@@ -182,3 +206,24 @@ class OracleOfSeasonsClient(BizHawkClient):
                 "cmd": "StatusUpdate",
                 "status": ClientStatus.CLIENT_GOAL
             }])
+
+    async def process_deathlink(self, ctx: "BizHawkClientContext", is_dead):
+        if ctx.last_death_link > self.last_deathlink and not is_dead:
+            # A death was received from another player, make our player die as well
+            await bizhawk.write(ctx.bizhawk_ctx, [(RAM_ADDRS["is_dead"][0], [0xFE], "System Bus")])
+            self.is_expecting_received_death = True
+            self.last_deathlink = ctx.last_death_link
+
+        if not self.was_alive_last_frame and not is_dead:
+            # We revived from any kind of death
+            self.was_alive_last_frame = True
+        elif self.was_alive_last_frame and is_dead:
+            # Our player just died...
+            self.was_alive_last_frame = False
+            if self.is_expecting_received_death:
+                # ...because of a received deathlink, so let's not make a circular chain of deaths please
+                self.is_expecting_received_death = False
+            else:
+                # ...because of their own incompetence, so let's make their mates pay for that
+                await ctx.send_death(ctx.player_names[ctx.slot] + " might not be the Hero of Time after all.")
+                self.last_deathlink = ctx.last_death_link

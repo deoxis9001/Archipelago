@@ -867,16 +867,28 @@ def make_holodrum_logic(player: int):
 
         ["d0 entrance", "golden darknut", False, lambda state: all([
             oos_season_in_western_coast(state, player, "spring"),
-            oos_can_kill_normal_enemy(state, player),
+            any([
+                oos_has_sword(state, player),
+                oos_has_fools_ore(state, player)
+            ])
         ])],
         ["tarm ruins", "golden lynel", False, lambda state: all([
             oos_season_in_lost_woods(state, player, "summer"),
             oos_season_in_lost_woods(state, player, "winter"),
-            oos_can_kill_normal_enemy(state, player),
+            any([
+                oos_has_sword(state, player),
+                oos_has_fools_ore(state, player)
+            ])
         ])],
         ["d2 entrance", "golden moblin", False, lambda state: all([
             oos_season_in_central_woods_of_winter(state, player, "autumn"),
-            oos_can_kill_normal_enemy(state, player),
+            any([
+                oos_has_sword(state, player),
+                oos_has_fools_ore(state, player)
+            ])
         ])],
-        ["spool swamp south (summer)", "golden octorok", False, lambda state: oos_can_kill_normal_enemy(state, player)],
+        ["spool swamp south (summer)", "golden octorok", False, lambda state: any([
+            oos_has_sword(state, player),
+            oos_has_fools_ore(state, player)
+        ])],
     ]

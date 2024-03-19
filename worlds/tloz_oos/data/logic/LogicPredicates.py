@@ -657,6 +657,7 @@ def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available
         oos_has_fools_ore(state, player),
         oos_can_kill_normal_using_satchel(state, player),
         oos_can_kill_normal_using_slingshot(state, player),
+        (oos_option_medium_logic(state, player) and oos_has_bombs(state, player, 4)),
         oos_can_punch(state, player)
     ])
 

@@ -301,7 +301,7 @@ def oos_has_bombs(state: CollectionState, player: int, amount: int = 1):
         (amount == 1),
         oos_option_medium_logic(state, player),
         state.has("_reached_d2_bracelet_room", player),
-        oos_can_harvest_regrowing_bush(state, player)
+        oos_can_harvest_regrowing_bush(state, player, False)
     ])
 
 
@@ -553,11 +553,11 @@ def oos_can_break_bush(state: CollectionState, player: int, can_summon_companion
     ])
 
 
-def oos_can_harvest_regrowing_bush(state: CollectionState, player: int):
+def oos_can_harvest_regrowing_bush(state: CollectionState, player: int, allow_bombs: bool = True):
     return any([
         oos_has_sword(state, player),
         oos_has_fools_ore(state, player),
-        oos_has_bombs(state, player)
+        (allow_bombs and oos_has_bombs(state, player))
     ])
 
 

@@ -134,7 +134,7 @@ class OracleOfSeasonsWorld(World):
         options = ["goal", "logic_difficulty", "required_essences", "horon_village_season",
                    "shuffle_dungeons", "shuffle_portals", "shuffle_old_men", "treehouse_old_man_requirement",
                    "golden_beasts_requirement", "lost_woods_item_sequence", "advance_shop", "warp_to_start",
-                   "deathlink"]
+                   "death_link"]
 
         slot_data = self.options.as_dict(*options)
         slot_data["animal_companion"] = COMPANIONS[self.options.animal_companion.value]

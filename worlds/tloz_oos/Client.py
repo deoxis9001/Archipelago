@@ -78,7 +78,7 @@ class OracleOfSeasonsClient(BizHawkClient):
 
     def on_package(self, ctx, cmd, args):
         if cmd == 'Connected':
-            if 'deathlink' in args['slot_data'] and args['slot_data']['deathlink']:
+            if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
                 self.set_deathlink = True
                 self.last_deathlink = time.time()
         super().on_package(ctx, cmd, args)

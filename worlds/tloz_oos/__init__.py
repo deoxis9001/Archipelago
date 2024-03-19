@@ -510,6 +510,7 @@ class OracleOfSeasonsWorld(World):
                 "character_sprite": self.options.character_sprite.current_key,
                 "character_palette": self.options.character_palette.current_key,
                 "turn_old_men_into_locations": self.options.shuffle_old_men == "turn_into_locations",
+                "received_damage_modifier": DAMAGE_MODIFIER_VALUES[self.options.combat_difficulty.current_key],
                 "slot_name": self.multiworld.get_player_name(self.player)
              },
             "default seasons": {},

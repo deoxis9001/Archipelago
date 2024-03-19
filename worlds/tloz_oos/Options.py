@@ -357,6 +357,20 @@ class OracleOfSeasonsWarpToStart(DefaultOnToggle):
     display_name = "Warp to Start"
 
 
+class OracleOfSeasonsCombatDifficulty(Choice):
+    """
+    Modifies the damage taken during combat to make this aspect of the game easier or harder depending on the
+    type of experience you want to have
+    """
+    display_name = "Combat Difficulty"
+
+    option_peaceful = 0
+    option_easier = 1
+    option_vanilla = 2
+    option_harder = 3
+    option_insane = 4
+
+
 class OracleOfSeasonsQuickFlute(DefaultOnToggle):
     """
     When enabled, playing the flute will immobilize you during a very small amount of time compared to vanilla game.
@@ -436,6 +450,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     advance_shop: OracleOfSeasonsAdvanceShop
     fools_ore: OracleOfSeasonsFoolsOre
     warp_to_start: OracleOfSeasonsWarpToStart
+    combat_difficulty: OracleOfSeasonsCombatDifficulty
     quick_flute: OracleOfSeasonsQuickFlute
     heart_beep_interval: OracleOfSeasonsHeartBeepInterval
     character_sprite: OracleOfSeasonsCharacterSprite

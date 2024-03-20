@@ -1,7 +1,6 @@
 from BaseClasses import MultiWorld
-from worlds.tloz_oos.data.logic.DungeonsLogic import (make_d0_logic, make_d1_logic, make_d2_logic, make_d3_logic,
-                                                      make_d4_logic, make_d5_logic, make_d6_logic, make_d7_logic,
-                                                      make_d8_logic)
+from worlds.tloz_oos import LOCATIONS_DATA
+from worlds.tloz_oos.data.logic.DungeonsLogic import *
 from worlds.tloz_oos.data.logic.OverworldLogic import make_holodrum_logic
 from worlds.tloz_oos.data.logic.SubrosiaLogic import make_subrosia_logic
 
@@ -42,3 +41,37 @@ def create_connections(multiworld: MultiWorld, player: int):
             region_1.connect(region_2, None, rule)
             if is_two_way:
                 region_2.connect(region_1, None, rule)
+
+
+def apply_self_locking_rules(multiworld: MultiWorld, player: int):
+    if multiworld.worlds[player].options.accessibility == Accessibility.option_locations:
+        return
+
+    MINIMAL_REQUIRED_KEYS_TO_REACH_KEYDOOR = {
+        "Hero's Cave: Final Chest": 0,
+        "Gnarled Root Dungeon: Item in Basement": 1,
+        "Snake's Remains: Chest on Terrace": 2,
+        "Poison Moth's Lair (1F): Chest in Mimics Room": 1,
+        "Dancing Dragon Dungeon (1F): Crumbling Room Chest": 2,
+        "Dancing Dragon Dungeon (1F): Eye Diving Spot Item": 2,
+        "Unicorn's Cave: Magnet Gloves Chest": 1,
+        "Unicorn's Cave: Treadmills Basement Item": 3,
+        "Explorer's Crypt (B1F): Chest in Jumping Stalfos Room": 4,  # Not counting poe skip
+        "Explorer's Crypt (1F): Chest Right of Entrance": 1
+    }
+
+    for location_name, key_count in MINIMAL_REQUIRED_KEYS_TO_REACH_KEYDOOR.items():
+        location_data = LOCATIONS_DATA[location_name]
+        dungeon = location_data["dungeon"]
+        small_key_item_name = f"Small Key ({DUNGEON_NAMES[dungeon]})"
+        location = multiworld.get_location(location_name, player)
+        location.always_allow = make_always_allow_lambda(player, small_key_item_name, key_count)
+
+
+def make_always_allow_lambda(player: int, item_name: str, key_count: int):
+    if key_count == 0:
+        return lambda state, item: (item.player == player and item.name == item_name)
+
+    return lambda state, item: (item.player == player
+                                and item.name == item_name
+                                and state.has(item_name, player, key_count))

@@ -271,6 +271,7 @@ REGIONS = [
     "d5 gibdo/zol chest",
     "d5 stalfos room",
     "d5 magnet ball chest",
+    "d5 syger lobby",
     "d5 post syger",
     "d5 basement",
     "d5 boss",

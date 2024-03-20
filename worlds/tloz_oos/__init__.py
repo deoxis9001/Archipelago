@@ -8,7 +8,7 @@ from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import WebWorld, World
 from .Data import *
 from worlds.tloz_oos.data.Items import *
-from .Logic import create_connections
+from .Logic import create_connections, apply_self_locking_rules
 from .Options import *
 from .data import LOCATIONS_DATA
 from .data.Constants import *
@@ -339,6 +339,7 @@ class OracleOfSeasonsWorld(World):
 
     def set_rules(self):
         create_connections(self.multiworld, self.player)
+        apply_self_locking_rules(self.multiworld, self.player)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
     def create_item(self, name: str) -> Item:

@@ -370,6 +370,8 @@ class OracleOfSeasonsCombatDifficulty(Choice):
     option_harder = 3
     option_insane = 4
 
+    default = 2
+
 
 class OracleOfSeasonsQuickFlute(DefaultOnToggle):
     """

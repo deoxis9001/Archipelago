@@ -18,7 +18,10 @@ def make_d0_logic(player: int):
         ])],
 
         # 1 key
-        ["enter d0", "d0 sword chest", False, lambda state: oos_has_small_keys(state, player, 0, 1)],
+        ["enter d0", "d0 sword chest", False, lambda state: any([
+            oos_has_small_keys(state, player, 0, 1),
+            region_holds_small_key(state, player, "d0 sword chest", 0)
+        ])],
     ]
 
 
@@ -75,7 +78,10 @@ def make_d1_logic(player: int):
         # 2 keys
         ["d1 railway chest", "d1 basement", False, lambda state: all([
             oos_has_bombs(state, player),
-            oos_has_small_keys(state, player, 1, 2),
+            any([
+                oos_has_small_keys(state, player, 1, 2),
+                region_holds_small_key(state, player, "d1 basement", 1)
+            ]),
             oos_can_kill_armored_enemy(state, player)
         ])],
     ]
@@ -123,7 +129,10 @@ def make_d2_logic(player: int):
                 oos_can_kill_d2_far_moblin(state, player)
             ])
         ])],
-        ["d2 spinner", "d2 terrace chest", False, lambda state: oos_has_small_keys(state, player, 2, 3)],
+        ["d2 spinner", "d2 terrace chest", False, lambda state: any([
+            oos_has_small_keys(state, player, 2, 3),
+            region_holds_small_key(state, player, "d2 terrace chest", 2)
+        ])],
     ]
 
 
@@ -161,7 +170,10 @@ def make_d3_logic(player: int):
 
         # 2 keys
         ["d3 water room", "d3 mimic chest", False, lambda state: all([
-            oos_has_small_keys(state, player, 3, 2),
+            any([
+                oos_has_small_keys(state, player, 3, 2),
+                region_holds_small_key(state, player, "d3 mimic chest", 3)
+            ]),
             oos_can_kill_normal_enemy(state, player)
         ])],
         ["d3 mimic stairs", "d3 omuai stairs", False, lambda state: all([
@@ -215,7 +227,7 @@ def make_d4_logic(player: int):
                 ]),
                 all([  # pushing enemies in the water
                     oos_has_rod(state, player),
-                    oos_has_boomerang(state, player)  # TODO: oos_can_push_enemy?
+                    oos_has_boomerang(state, player)
                 ])
             ])
         ])],
@@ -278,21 +290,30 @@ def make_d4_logic(player: int):
         ])],
 
         # 5 keys
-        ["d4 final minecart", "d4 cracked floor room", False, lambda state: oos_has_small_keys(state, player, 4, 5)],
+        ["d4 final minecart", "d4 cracked floor room", False, lambda state: any([
+            oos_has_small_keys(state, player, 4, 5),
+            region_holds_small_key(state, player, "d4 cracked floor room", 4)
+        ])],
         ["d4 final minecart", "d4 dive spot", False, lambda state: all([
             any([  # hit distant levers
                 oos_has_magic_boomerang(state, player),
                 oos_has_slingshot(state, player)
             ]),
             oos_can_jump_2_wide_pit(state, player),
-            oos_has_small_keys(state, player, 4, 5),
+            any([
+                oos_has_small_keys(state, player, 4, 5),
+                region_holds_small_key(state, player, "d4 dive spot", 4)
+            ]),
             oos_has_flippers(state, player)
         ])],
 
-        ["d4 cracked floor room", "d4 basement stairs", False, lambda state: any([
-            oos_has_boomerang(state, player),
-            oos_has_slingshot(state, player),
-            oos_option_hard_logic(state, player)
+        ["d4 final minecart", "d4 basement stairs", False, lambda state: all([
+            oos_has_small_keys(state, player, 4, 5),
+            any([
+                oos_has_boomerang(state, player),
+                oos_has_slingshot(state, player),
+                oos_option_hard_logic(state, player)
+            ])
         ])],
 
         ["d4 basement stairs", "gohma owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
@@ -364,11 +385,6 @@ def make_d5_logic(player: int):
             oos_has_magnet_gloves(state, player),
             oos_has_cape(state, player),
             oos_can_jump_4_wide_pit(state, player),
-            all([
-                oos_option_medium_logic(state, player),
-                oos_can_jump_3_wide_liquid(state, player),
-                # Not a liquid, but technically equivalent
-            ])
         ])],
 
         ["enter d5", "d5 spiral chest", False, lambda state: any([
@@ -393,12 +409,6 @@ def make_d5_logic(player: int):
 
         ["d5 cart bay", "d5 cart chest", False, lambda state: oos_can_trigger_lever_from_minecart(state, player)],
 
-        ["enter d5", "d5 pot room", False, lambda state: all([
-            oos_has_magnet_gloves(state, player),
-            oos_has_bombs(state, player),
-            oos_has_feather(state, player)
-        ])],
-
         ["d5 cart bay", "d5 spinner chest", False, lambda state: any([
             oos_has_magnet_gloves(state, player),
             oos_can_jump_5_wide_pit(state, player)
@@ -415,6 +425,12 @@ def make_d5_logic(player: int):
             ])
         ])],
 
+        ["enter d5", "d5 pot room", False, lambda state: all([
+            oos_has_magnet_gloves(state, player),
+            oos_has_bombs(state, player),
+            oos_has_feather(state, player)
+        ])],
+
         ["d5 cart bay", "d5 pot room", False, lambda state: any([
             oos_has_feather(state, player),
             all([
@@ -425,17 +441,23 @@ def make_d5_logic(player: int):
 
         ["d5 pot room", "d5 gibdo/zol chest", False, lambda state: oos_can_kill_normal_enemy(state, player)],
 
-        ["d5 cart bay", "d5 stalfos room", False, lambda state: any([
+        ["d5 cart bay", "d5 syger lobby", False, lambda state: any([
+            oos_has_magnet_gloves(state, player),
+            oos_has_cape(state, player),
+        ])],
+        ["d5 pot room", "d5 syger lobby", False, lambda state: any([
             oos_has_magnet_gloves(state, player),
             oos_has_cape(state, player),
         ])],
 
-        ["d5 pot room", "d5 stalfos room", False, lambda state: any([
-            oos_has_magnet_gloves(state, player),
-            oos_has_cape(state, player),
-        ])],
+        ["d5 syger lobby", "d5 stalfos room", False, None],
 
         # 5 keys
+        ["d5 syger lobby", "d5 post syger", False, lambda state: all([
+            oos_has_small_keys(state, player, 5, 3),
+            oos_can_kill_armored_enemy(state, player)
+        ])],
+
         ["d5 pot room", "d5 magnet ball chest", False, lambda state: all([
             any([
                 oos_has_flippers(state, player),
@@ -445,16 +467,17 @@ def make_d5_logic(player: int):
                     oos_can_jump_3_wide_liquid(state, player),
                 ])
             ]),
-            oos_has_small_keys(state, player, 5, 5),
-        ])],
-
-        ["d5 pot room", "d5 post syger", False, lambda state: all([
-            oos_has_small_keys(state, player, 5, 5),
-            oos_can_kill_armored_enemy(state, player)
+            any([
+                oos_has_small_keys(state, player, 5, 5),
+                region_holds_small_key(state, player, "d5 magnet ball chest", 5)
+            ])
         ])],
 
         ["d5 post syger", "d5 basement", False, lambda state: all([
-            oos_has_small_keys(state, player, 5, 5),
+            any([
+                oos_has_small_keys(state, player, 5, 5),
+                region_holds_small_key(state, player, "d5 basement", 5)
+            ]),
             state.has("_dropped_d5_magnet_ball", player),
             oos_has_magnet_gloves(state, player),
             any([
@@ -671,7 +694,8 @@ def make_d7_logic(player: int):
                 any([
                     oos_can_kill_armored_enemy(state, player),
                     oos_has_shield(state, player),  # To push the darknut, the rod not really working
-                    oos_option_medium_logic(state, player) # Pull the right darknut by just going and stalling in the hole
+                    oos_option_medium_logic(state, player)
+                    # Pull the right darknut by just going and stalling in the hole
                 ])
             ]),
             all([
@@ -716,7 +740,10 @@ def make_d7_logic(player: int):
 
         # 5 keys
         ["d7 maze chest", "d7 stalfos chest", False, lambda state: all([
-            oos_has_small_keys(state, player, 7, 5),
+            any([
+                oos_has_small_keys(state, player, 7, 5),
+                region_holds_small_key(state, player, "d7 stalfos chest", 7)
+            ]),
             any([
                 oos_can_jump_5_wide_pit(state, player),
                 all([
@@ -729,7 +756,13 @@ def make_d7_logic(player: int):
 
         ["d7 stalfos chest", "shining blue owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
 
-        ["enter d7", "d7 right of entrance", False, lambda state: oos_has_small_keys(state, player, 7, 5)],
+        ["enter d7", "d7 right of entrance", False, lambda state: any([
+            oos_has_small_keys(state, player, 7, 5),
+            all([
+                oos_has_small_keys(state, player, 7, 1),
+                region_holds_small_key(state, player, "d7 right of entrance", 7)
+            ])
+        ])],
 
         ["d7 maze chest", "d7 boss", False, lambda state: all([
             oos_has_boss_key(state, player, 7),

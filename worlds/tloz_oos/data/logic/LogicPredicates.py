@@ -209,8 +209,10 @@ def oos_can_beat_required_golden_beasts(state: CollectionState, player: int):
 # Various item predicates ###########################################
 
 def oos_has_rupees(state: CollectionState, player: int, amount: int):
-    if oos_can_farm_rupees(state, player):
-        return True
+    # Rupee checks being quite approximative, being able to farm is a
+    # must-have to prevent any stupid lock
+    if not oos_can_farm_rupees(state, player):
+        return False
 
     rupees = state.count("Rupees (1)", player)
     rupees += state.count("Rupees (5)", player) * 5
@@ -218,6 +220,7 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
     rupees += state.count("Rupees (20)", player) * 20
     rupees += state.count("Rupees (50)", player) * 50
     rupees += state.count("Rupees (100)", player) * 100
+    rupees += state.count("Rupees (200)", player) * 200
 
     # Secret rooms inside D2 and D6 containing loads of rupees
     if state.has("_reached_d2_rupee_room", player):
@@ -238,10 +241,7 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
 def oos_can_farm_rupees(state: CollectionState, player: int):
     # Having Ember Seeds and a weapon or a shovel is enough to guarantee that we can reach
     # a significant amount of rupees
-    return all([
-        oos_can_use_ember_seeds(state, player, False),
-        (oos_has_sword(state, player) or oos_has_shovel(state, player))
-    ])
+    return oos_has_sword(state, player) or oos_has_shovel(state, player)
 
 
 def oos_has_ore(state: CollectionState, player: int, amount: int):

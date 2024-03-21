@@ -922,4 +922,9 @@ ITEMS_DATA = {
         'id': 0x4a,
         'subid': 0x02
     },
+    "Rupees (200)": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'id': 0x28,
+        'subid': 0x08
+    },
 }

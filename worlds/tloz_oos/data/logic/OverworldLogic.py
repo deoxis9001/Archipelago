@@ -58,11 +58,11 @@ def make_holodrum_logic(player: int):
 
         ["horon village", "horon village tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
 
-        ["horon village", "horon shop", False, lambda state: oos_can_farm_rupees(state, player)],
-        ["horon village", "advance shop", False, lambda state: oos_can_farm_rupees(state, player)],
+        ["horon village", "horon shop", False, lambda state: oos_has_rupees(state, player, 250)],
+        ["horon village", "advance shop", False, lambda state: oos_has_rupees(state, player, 500)],
         ["horon village", "member's shop", False, lambda state: all([
             state.has("Member's Card", player),
-            oos_can_farm_rupees(state, player)
+            oos_has_rupees(state, player, 750)
         ])],
 
         # WESTERN COAST ##############################################################################################
@@ -601,7 +601,7 @@ def make_holodrum_logic(player: int):
             ]),
             state.has("Mushroom", player)
         ])],
-        ["syrup trade", "syrup shop", False, lambda state: oos_can_farm_rupees(state, player)],
+        ["syrup trade", "syrup shop", False, lambda state: oos_has_rupees(state, player, 1000)],
 
         # Use Dimitri to get the tree seeds, using dimitri to get seeds being medium difficulty
         ["sunken city dimitri", "sunken city tree", False,lambda state: all([

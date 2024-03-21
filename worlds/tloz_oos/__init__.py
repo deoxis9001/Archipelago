@@ -325,8 +325,10 @@ class OracleOfSeasonsWorld(World):
         self.create_event("d7 entrance wild embers", "_wild_ember_seeds")
         self.create_event("frypolar room wild mystery", "_wild_mystery_seeds")
 
-        for region_name in self.old_man_rupee_values:
-            self.create_event(region_name, "rupees from " + region_name)
+        # Create event items to represent rupees obtained from Old Men, unless they are turned into locations
+        if self.options.shuffle_old_men != OracleOfSeasonsOldMenShuffle.option_turn_into_locations:
+            for region_name in self.old_man_rupee_values:
+                self.create_event(region_name, "rupees from " + region_name)
 
     def exclude_problematic_locations(self):
         locations_to_exclude = []
@@ -362,12 +364,12 @@ class OracleOfSeasonsWorld(World):
 
     def create_items(self):
         item_pool_adjustements = [
-            ["Gasha Seed", "Seed Satchel"],  # Add a third satchel that is usually obtained in linked games (99 seeds)
-            ["Gasha Seed", "Bombs (10)"],    # Add one more bomb compared to vanilla to reach 99 max bombs
-            ["Gasha Seed", "Rupees (50)"],   # Too many Gasha Seeds in vanilla pool, add more rupees instead
-            ["Gasha Seed", "Rupees (50)"],   # ^
-            ["Gasha Seed", "Rupees (50)"],   # ^
-            ["Gasha Seed", "Rupees (50)"],   # ^
+            ["Gasha Seed", "Seed Satchel"],     # Add a 3rd satchel that is usually obtained in linked games (99 seeds)
+            ["Gasha Seed", "Bombs (10)"],       # Add one more bomb compared to vanilla to reach 99 max bombs
+            ["Gasha Seed", "Rupees (200)"],     # Too many Gasha Seeds in vanilla pool, add more rupees and ore instead
+            ["Gasha Seed", "Ore Chunks (50)"],  # ^
+            ["Gasha Seed", "Ore Chunks (50)"],  # ^
+            ["Gasha Seed", "Ore Chunks (50)"],  # ^
         ]
 
         ring_count = 0

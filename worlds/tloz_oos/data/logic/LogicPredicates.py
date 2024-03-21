@@ -945,13 +945,18 @@ def oos_season_in_horon_village(state: CollectionState, player: int, season: str
     return oos_has_season(state, player, season)
 
 
-def region_holds_small_key(state: CollectionState, player: int, region_name: str, dungeon: int):
+def oos_self_locking_item(state: CollectionState, player: int, region_name: str, item_name: str):
     if state.multiworld.worlds[player].options.accessibility == Accessibility.option_locations:
         return False
 
     region = state.multiworld.get_region(region_name, player)
     items_in_region = [location.item for location in region.locations if location.item is not None]
     for item in items_in_region:
-        if item.name == f"Small Key ({DUNGEON_NAMES[dungeon]})" and item.player == player:
+        if item.name == item_name and item.player == player:
             return True
     return False
+
+
+def oos_self_locking_small_key(state: CollectionState, player: int, region_name: str, dungeon: int):
+    item_name = f"Small Key ({DUNGEON_NAMES[dungeon]})"
+    return oos_self_locking_item(state, player, region_name, item_name)

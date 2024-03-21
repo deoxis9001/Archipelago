@@ -63,7 +63,10 @@ def make_subrosia_logic(player: int):
         # Locations ###############################################################
 
         ["subrosia temple sector", "subrosian dance hall", False, None],
-        ["subrosia temple sector", "subrosian smithy ore", False, lambda state: state.has("Hard Ore", player)],
+        ["subrosia temple sector", "subrosian smithy ore", False, lambda state: any([
+            state.has("Hard Ore", player),
+            oos_self_locking_item(state, player, "subrosian smithy ore", "Hard Ore")
+        ])],
         ["subrosia temple sector", "subrosian smithy bell", False, lambda state: state.has("Rusty Bell", player)],
         ["subrosia temple sector", "temple of seasons", False, None],
         ["subrosia temple sector", "tower of winter", False, lambda state: any([
@@ -80,7 +83,10 @@ def make_subrosia_logic(player: int):
         ])],
 
         ["subrosia market sector", "subrosia seaside", False, lambda state: oos_has_shovel(state, player)],
-        ["subrosia market sector", "subrosia market star ore", False, lambda state: state.has("Star Ore", player)],
+        ["subrosia market sector", "subrosia market star ore", False, lambda state: any([
+            state.has("Star Ore", player),
+            oos_self_locking_item(state, player, "subrosia market star ore", "Star Ore")
+        ])],
         ["subrosia market sector", "subrosia market ore chunks", False, lambda state: oos_can_farm_ore(state, player)],
 
         ["subrosia hide and seek sector", "subrosia hide and seek", False, lambda state: oos_has_shovel(state, player)],
@@ -109,7 +115,10 @@ def make_subrosia_logic(player: int):
             oos_can_date_rosa(state, player),
             oos_has_feather(state, player)
         ])],
-        ["subrosia bridge sector", "subrosian chef trade", False, lambda state: state.has("Iron Pot", player)],
+        ["subrosia bridge sector", "subrosian chef trade", False, lambda state: any([
+            state.has("Iron Pot", player),
+            oos_self_locking_item(state, player, "subrosian chef trade", "Iron Pot")
+        ])],
 
         ["subrosia east junction", "subrosia village chest", False, lambda state: any([
             oos_has_magnet_gloves(state, player),
@@ -117,9 +126,15 @@ def make_subrosia_logic(player: int):
         ])],
 
         ["subrosia furnace sector", "great furnace", False, lambda state: all([
-            state.has("Red Ore", player),
-            state.has("Blue Ore", player),
-            state.has("_opened_tower_of_autumn", player)
+            state.has("_opened_tower_of_autumn", player),
+            any([
+                state.has("Red Ore", player),
+                oos_self_locking_item(state, player, "great furnace", "Red Ore")
+            ]),
+            any([
+                state.has("Blue Ore", player),
+                oos_self_locking_item(state, player, "great furnace", "Blue Ore")
+            ]),
         ])],
         ["subrosia furnace sector", "subrosian sign guy", False, lambda state: oos_can_break_sign(state, player)],
         ["subrosia furnace sector", "subrosian buried bomb flower", False, lambda state: all([

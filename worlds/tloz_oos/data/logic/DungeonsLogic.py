@@ -20,7 +20,7 @@ def make_d0_logic(player: int):
         # 1 key
         ["enter d0", "d0 sword chest", False, lambda state: any([
             oos_has_small_keys(state, player, 0, 1),
-            region_holds_small_key(state, player, "d0 sword chest", 0)
+            oos_self_locking_small_key(state, player, "d0 sword chest", 0)
         ])],
     ]
 
@@ -80,7 +80,7 @@ def make_d1_logic(player: int):
             oos_has_bombs(state, player),
             any([
                 oos_has_small_keys(state, player, 1, 2),
-                region_holds_small_key(state, player, "d1 basement", 1)
+                oos_self_locking_small_key(state, player, "d1 basement", 1)
             ]),
             oos_can_kill_armored_enemy(state, player)
         ])],
@@ -131,7 +131,7 @@ def make_d2_logic(player: int):
         ])],
         ["d2 spinner", "d2 terrace chest", False, lambda state: any([
             oos_has_small_keys(state, player, 2, 3),
-            region_holds_small_key(state, player, "d2 terrace chest", 2)
+            oos_self_locking_small_key(state, player, "d2 terrace chest", 2)
         ])],
     ]
 
@@ -172,7 +172,7 @@ def make_d3_logic(player: int):
         ["d3 water room", "d3 mimic chest", False, lambda state: all([
             any([
                 oos_has_small_keys(state, player, 3, 2),
-                region_holds_small_key(state, player, "d3 mimic chest", 3)
+                oos_self_locking_small_key(state, player, "d3 mimic chest", 3)
             ]),
             oos_can_kill_normal_enemy(state, player)
         ])],
@@ -292,7 +292,7 @@ def make_d4_logic(player: int):
         # 5 keys
         ["d4 final minecart", "d4 cracked floor room", False, lambda state: any([
             oos_has_small_keys(state, player, 4, 5),
-            region_holds_small_key(state, player, "d4 cracked floor room", 4)
+            oos_self_locking_small_key(state, player, "d4 cracked floor room", 4)
         ])],
         ["d4 final minecart", "d4 dive spot", False, lambda state: all([
             any([  # hit distant levers
@@ -302,7 +302,7 @@ def make_d4_logic(player: int):
             oos_can_jump_2_wide_pit(state, player),
             any([
                 oos_has_small_keys(state, player, 4, 5),
-                region_holds_small_key(state, player, "d4 dive spot", 4)
+                oos_self_locking_small_key(state, player, "d4 dive spot", 4)
             ]),
             oos_has_flippers(state, player)
         ])],
@@ -469,14 +469,14 @@ def make_d5_logic(player: int):
             ]),
             any([
                 oos_has_small_keys(state, player, 5, 5),
-                region_holds_small_key(state, player, "d5 magnet ball chest", 5)
+                oos_self_locking_small_key(state, player, "d5 magnet ball chest", 5)
             ])
         ])],
 
         ["d5 post syger", "d5 basement", False, lambda state: all([
             any([
                 oos_has_small_keys(state, player, 5, 5),
-                region_holds_small_key(state, player, "d5 basement", 5)
+                oos_self_locking_small_key(state, player, "d5 basement", 5)
             ]),
             state.has("_dropped_d5_magnet_ball", player),
             oos_has_magnet_gloves(state, player),
@@ -742,7 +742,7 @@ def make_d7_logic(player: int):
         ["d7 maze chest", "d7 stalfos chest", False, lambda state: all([
             any([
                 oos_has_small_keys(state, player, 7, 5),
-                region_holds_small_key(state, player, "d7 stalfos chest", 7)
+                oos_self_locking_small_key(state, player, "d7 stalfos chest", 7)
             ]),
             any([
                 oos_can_jump_5_wide_pit(state, player),
@@ -760,7 +760,7 @@ def make_d7_logic(player: int):
             oos_has_small_keys(state, player, 7, 5),
             all([
                 oos_has_small_keys(state, player, 7, 1),
-                region_holds_small_key(state, player, "d7 right of entrance", 7)
+                oos_self_locking_small_key(state, player, "d7 right of entrance", 7)
             ])
         ])],
 

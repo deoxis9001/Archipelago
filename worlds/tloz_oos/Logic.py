@@ -47,6 +47,7 @@ def apply_self_locking_rules(multiworld: MultiWorld, player: int):
     if multiworld.worlds[player].options.accessibility == Accessibility.option_locations:
         return
 
+    # Process self-locking keys first
     MINIMAL_REQUIRED_KEYS_TO_REACH_KEYDOOR = {
         "Hero's Cave: Final Chest": 0,
         "Gnarled Root Dungeon: Item in Basement": 1,
@@ -65,13 +66,37 @@ def apply_self_locking_rules(multiworld: MultiWorld, player: int):
         dungeon = location_data["dungeon"]
         small_key_item_name = f"Small Key ({DUNGEON_NAMES[dungeon]})"
         location = multiworld.get_location(location_name, player)
-        location.always_allow = make_always_allow_lambda(player, small_key_item_name, key_count)
+        location.always_allow = make_self_locking_item_lambda(player, small_key_item_name, key_count)
+
+    # Process other self-locking items
+    OTHER_SELF_LOCKING_ITEMS = {
+        "North Horon: Malon Trade": "Cuccodex",
+        "Maple Trade": "Lon Lon Egg",
+        "Holodrum Plain: Mrs. Ruul Trade": "Ghastly Doll",
+        "Subrosia: Subrosian Chef Trade": "Iron Pot",
+        "Goron Mountain: Biggoron Trade": "Lava Soup",
+        "Sunken City: Ingo Trade": "Goron Vase",
+        "North Horon: Yelling Old Man Trade": "Fish",
+        "Horon Village: Tick Tock Trade": "Wooden Bird",
+        "Eastern Suburbs: Guru-Guru Trade": "Engine Grease",
+        "Subrosia: Smithy Hard Ore Reforge": "Hard Ore",
+        "Sunken City: Master's Plaque Trade": "Master's Plaque",
+        "Subrosia: Market #1": "Star Ore",
+    }
+
+    for loc_name, item_name in OTHER_SELF_LOCKING_ITEMS.items():
+        location = multiworld.get_location(loc_name, player)
+        location.always_allow = make_self_locking_item_lambda(player, item_name)
+
+    # Great Furnace special case
+    location = multiworld.get_location("Subrosia: Item Smelted in Great Furnace", player)
+    location.always_allow = lambda state, item: (item.player == player and item.name in ["Red Ore", "Blue Ore"])
 
 
-def make_always_allow_lambda(player: int, item_name: str, key_count: int):
-    if key_count == 0:
+def make_self_locking_item_lambda(player: int, item_name: str, required_count: int = 0):
+    if required_count == 0:
         return lambda state, item: (item.player == player and item.name == item_name)
 
     return lambda state, item: (item.player == player
                                 and item.name == item_name
-                                and state.has(item_name, player, key_count))
+                                and state.has(item_name, player, required_count))

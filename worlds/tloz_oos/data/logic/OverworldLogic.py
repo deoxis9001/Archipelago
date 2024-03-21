@@ -11,8 +11,14 @@ def make_holodrum_logic(player: int):
         ["horon village", "horon heart piece", False, lambda state: oos_can_use_ember_seeds(state, player, False)],
         ["horon village", "dr. left reward", False, lambda state: oos_can_use_ember_seeds(state, player, True)],
         ["horon village", "old man in horon", False, lambda state: oos_can_use_ember_seeds(state, player, False)],
-        ["horon village", "old man trade", False, lambda state: state.has("Fish", player)],
-        ["horon village", "tick tock trade", False, lambda state: state.has("Wooden Bird", player)],
+        ["horon village", "old man trade", False, lambda state: any([
+            state.has("Fish", player),
+            oos_self_locking_item(state, player, "old man trade", "Fish")
+        ])],
+        ["horon village", "tick tock trade", False, lambda state: any([
+            state.has("Wooden Bird", player),
+            oos_self_locking_item(state, player, "tick tock trade", "Wooden Bird")
+        ])],
         ["horon village", "maku tree", False, lambda state: oos_has_sword(state, player, False)],
         ["horon village", "horon village SE chest", False, lambda state: all([
             oos_has_bombs(state, player),
@@ -29,7 +35,10 @@ def make_holodrum_logic(player: int):
 
         ["horon village", "maple trade", False, lambda state: all([
             oos_can_kill_normal_enemy(state, player),
-            state.has("Lon Lon Egg", player)
+            any([
+                state.has("Lon Lon Egg", player),
+                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
+            ])
         ])],
 
         ["horon village", "horon village portal", False, lambda state: any([
@@ -113,7 +122,10 @@ def make_holodrum_logic(player: int):
         ["horon village", "suburbs", True, lambda state: oos_can_use_ember_seeds(state, player, False)],
 
         ["suburbs", "windmill heart piece", False, lambda state: oos_season_in_eastern_suburbs(state, player, "winter")],
-        ["suburbs", "guru-guru trade", False, lambda state: state.has("Engine Grease", player)],
+        ["suburbs", "guru-guru trade", False, lambda state: any([
+            state.has("Engine Grease", player),
+            oos_self_locking_item(state, player, "guru-guru trade", "Engine Grease")
+        ])],
 
         ["suburbs", "eastern suburbs spring cave", False, lambda state: all([
             oos_has_bracelet(state, player),
@@ -227,7 +239,10 @@ def make_holodrum_logic(player: int):
 
         ["horon village", "d1 stump", True, lambda state: oos_can_break_bush(state, player, True)],
         ["d1 stump", "north horon", True, lambda state: oos_has_bracelet(state, player)],
-        ["d1 stump", "malon trade", False, lambda state: state.has("Cuccodex", player)],
+        ["d1 stump", "malon trade", False, lambda state: any([
+            state.has("Cuccodex", player),
+            oos_self_locking_item(state, player, "malon trade", "Cuccodex")
+        ])],
         ["d1 stump", "d1 island", True, lambda state: oos_can_break_bush(state, player, True)],
         ["d1 stump", "old man near d1", False, lambda state: oos_can_use_ember_seeds(state, player, False)],
 
@@ -343,7 +358,10 @@ def make_holodrum_logic(player: int):
 
         ["north horon", "temple remains lower stump", True, lambda state: oos_can_jump_3_wide_pit(state, player)],
 
-        ["ghastly stump", "mrs. ruul trade", False, lambda state: state.has("Ghastly Doll", player)],
+        ["ghastly stump", "mrs. ruul trade", False, lambda state: any([
+            state.has("Ghastly Doll", player),
+            oos_self_locking_item(state, player, "mrs. ruul trade", "Ghastly Doll")
+        ])],
         ["ghastly stump", "old man near mrs. ruul", False, lambda state: oos_can_use_ember_seeds(state, player, False)],
 
         ["north horon", "ghastly stump", True, lambda state: any([
@@ -566,7 +584,10 @@ def make_holodrum_logic(player: int):
             ])
         ])],
 
-        ["sunken city", "ingo trade", False, lambda state: state.has("Goron Vase", player)],
+        ["sunken city", "ingo trade", False, lambda state: any([
+            state.has("Goron Vase", player),
+            oos_self_locking_item(state, player, "ingo trade", "Goron Vase")
+        ])],
         ["sunken city", "syrup trade", False, lambda state: all([
             any([
                 oos_get_default_season(state, player, "SUNKEN_CITY") == "winter",
@@ -596,7 +617,10 @@ def make_holodrum_logic(player: int):
             ])
         ])],
 
-        ["sunken city dimitri", "master diver's reward", False, lambda state: state.has("Master's Plaque", player)],
+        ["sunken city dimitri", "master diver's reward", False, lambda state: any([
+            state.has("Master's Plaque", player),
+            oos_self_locking_item(state, player, "master diver's reward", "Master's Plaque")
+        ])],
         ["sunken city dimitri", "chest in master diver's cave", False, None],
 
         ["sunken city", "sunken city, summer cave", False, lambda state: all([
@@ -683,7 +707,10 @@ def make_holodrum_logic(player: int):
 
         ["goron mountain", "biggoron trade", False, lambda state: all([
             oos_can_jump_1_wide_liquid(state, player, False),
-            state.has("Lava Soup", player),
+            any([
+                state.has("Lava Soup", player),
+                oos_self_locking_item(state, player, "biggoron trade", "Lava Soup")
+            ])
         ])],
 
         ["goron mountain", "chest in goron mountain", False, lambda state: all([

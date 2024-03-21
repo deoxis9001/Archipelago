@@ -131,10 +131,17 @@ class OracleOfSeasonsWorld(World):
 
     def fill_slot_data(self) -> dict:
         # Put options that are useful to the tracker inside slot data
-        options = ["goal", "logic_difficulty", "required_essences", "horon_village_season",
-                   "shuffle_dungeons", "shuffle_portals", "shuffle_old_men", "treehouse_old_man_requirement",
-                   "golden_beasts_requirement", "lost_woods_item_sequence", "advance_shop", "warp_to_start",
-                   "death_link"]
+        options = ["goal", "death_link",
+                   # Logic-impacting options
+                   "logic_difficulty", "horon_village_season", "warp_to_start",
+                   "shuffle_dungeons", "shuffle_portals", "lost_woods_item_sequence",
+                   "duplicate_seed_tree", "default_seed",
+                   # Locations
+                   "shuffle_golden_ore_spots", "shuffle_old_men", "advance_shop",
+                   # Requirements
+                   "required_essences", "tarm_gate_required_jewels", "treehouse_old_man_requirement",
+                   "sign_guy_requirement", "golden_beasts_requirement",
+                   ]
 
         slot_data = self.options.as_dict(*options)
         slot_data["animal_companion"] = COMPANIONS[self.options.animal_companion.value]

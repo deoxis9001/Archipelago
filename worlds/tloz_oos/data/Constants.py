@@ -1,4 +1,4 @@
-VERSION = "0.9e"
+VERSION = "0.9f"
 
 COMPANIONS = [
     "Ricky",

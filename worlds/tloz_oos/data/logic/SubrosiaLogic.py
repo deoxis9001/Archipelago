@@ -87,7 +87,7 @@ def make_subrosia_logic(player: int):
             state.has("Star Ore", player),
             oos_self_locking_item(state, player, "subrosia market star ore", "Star Ore")
         ])],
-        ["subrosia market sector", "subrosia market ore chunks", False, lambda state: oos_can_farm_ore(state, player)],
+        ["subrosia market sector", "subrosia market ore chunks", False, lambda state: oos_has_ore_chunks(state, player, 100)],
 
         ["subrosia hide and seek sector", "subrosia hide and seek", False, lambda state: oos_has_shovel(state, player)],
         ["subrosia hide and seek sector", "tower of spring", False, lambda state: oos_has_feather(state, player)],

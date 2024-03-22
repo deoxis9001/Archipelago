@@ -222,11 +222,12 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
     rupees += state.count("Rupees (100)", player) * 100
     rupees += state.count("Rupees (200)", player) * 200
 
-    # Secret rooms inside D2 and D6 containing loads of rupees
-    if state.has("_reached_d2_rupee_room", player):
-        rupees += 150
-    if state.has("_reached_d6_rupee_room", player):
-        rupees += 90
+    # Secret rooms inside D2 and D6 containing loads of rupees, but only in medium logic
+    if oos_option_medium_logic(state, player):
+        if state.has("_reached_d2_rupee_room", player):
+            rupees += 150
+        if state.has("_reached_d6_rupee_room", player):
+            rupees += 90
 
     # Old men giving and taking rupees
     world = state.multiworld.worlds[player]

@@ -733,7 +733,9 @@ def make_d7_logic(player: int):
         ["d7 maze chest", "d7 B2F drop", False, lambda state: any([
             oos_has_magnet_gloves(state, player),
             all([
-                oos_option_medium_logic(state, player),
+                # The jumps in this room being pretty intricate, precise and counterintuitive,
+                # we chose to put that in hard logic only.
+                oos_option_hard_logic(state, player),
                 oos_can_jump_6_wide_pit(state, player)
             ])
         ])],

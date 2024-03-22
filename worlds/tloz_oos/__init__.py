@@ -147,6 +147,7 @@ class OracleOfSeasonsWorld(World):
         slot_data["animal_companion"] = COMPANIONS[self.options.animal_companion.value]
         slot_data["default_seed"] = SEED_ITEMS[self.options.default_seed.value]
 
+        slot_data["default_seasons_option"] = self.options.default_seasons.current_key
         slot_data["default_seasons"] = {}
         for region_name, season in self.default_seasons.items():
             slot_data["default_seasons"][REGIONS_CONVERSION_TABLE[region_name]] = season

@@ -43,26 +43,20 @@ def make_holodrum_logic(player: int):
 
         ["horon village", "horon village portal", False, lambda state: any([
             oos_has_magic_boomerang(state, player),
-            all([
-                oos_option_medium_logic(state, player),
-                oos_can_jump_6_wide_pit(state, player)
-            ])
+            oos_can_jump_6_wide_pit(state, player)
         ])],
         ["horon village portal", "horon village", False, lambda state: any([
             oos_can_trigger_lever(state, player),
-            all([
-                oos_option_medium_logic(state, player),
-                oos_can_jump_6_wide_pit(state, player)
-            ])
+            oos_can_jump_6_wide_pit(state, player)
         ])],
 
         ["horon village", "horon village tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
 
-        ["horon village", "horon shop", False, lambda state: oos_has_rupees(state, player, 250)],
-        ["horon village", "advance shop", False, lambda state: oos_has_rupees(state, player, 500)],
+        ["horon village", "horon shop", False, lambda state: oos_has_rupees(state, player, 200)],
+        ["horon village", "advance shop", False, lambda state: oos_has_rupees(state, player, 400)],
         ["horon village", "member's shop", False, lambda state: all([
             state.has("Member's Card", player),
-            oos_has_rupees(state, player, 750)
+            oos_has_rupees(state, player, 600)
         ])],
 
         # WESTERN COAST ##############################################################################################
@@ -601,7 +595,7 @@ def make_holodrum_logic(player: int):
             ]),
             state.has("Mushroom", player)
         ])],
-        ["syrup trade", "syrup shop", False, lambda state: oos_has_rupees(state, player, 1000)],
+        ["syrup trade", "syrup shop", False, lambda state: oos_has_rupees(state, player, 800)],
 
         # Use Dimitri to get the tree seeds, using dimitri to get seeds being medium difficulty
         ["sunken city dimitri", "sunken city tree", False,lambda state: all([

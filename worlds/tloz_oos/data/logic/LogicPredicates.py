@@ -245,13 +245,16 @@ def oos_can_farm_rupees(state: CollectionState, player: int):
     return oos_has_sword(state, player) or oos_has_shovel(state, player)
 
 
-def oos_has_ore(state: CollectionState, player: int, amount: int):
-    if oos_can_farm_ore(state, player):
-        return True
-    return False
+def oos_has_ore_chunks(state: CollectionState, player: int, amount: int):
+    if not oos_can_farm_ore_chunks(state, player):
+        return False
+
+    ore_chunks = 0
+    ore_chunks += state.count("Ore Chunks (50)", player) * 50
+    return ore_chunks >= amount
 
 
-def oos_can_farm_ore(state: CollectionState, player: int):
+def oos_can_farm_ore_chunks(state: CollectionState, player: int):
     return any([
         oos_has_shovel(state, player),
         all([

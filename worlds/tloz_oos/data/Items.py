@@ -914,7 +914,7 @@ ITEMS_DATA = {
     },
 
     "Ore Chunks (50)": {
-        'classification': ItemClassification.useful,
+        'classification': ItemClassification.progression_skip_balancing,
         'id': 0x37
     },
     "Pirate's Bell": {

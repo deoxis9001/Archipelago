@@ -192,14 +192,15 @@ class OracleOfSeasonsClient(BizHawkClient):
 
     async def process_game_completion(self, ctx: "BizHawkClientContext", flag_bytes, current_room: int):
         game_clear = False
-        if ctx.slot_data["goal"] == OracleOfSeasonsGoal.option_beat_onox:
-            # Room with Din's descending crystal was reached, it's a win
-            game_clear = (current_room == ROOM_AFTER_DRAGONOX)
-        elif ctx.slot_data["goal"] == OracleOfSeasonsGoal.option_beat_ganon:
-            # Room with Zelda lying down was reached, and Ganon was beaten
-            ganon_flag_offset = 0xCA9A - RAM_ADDRS["location_flags"][0]
-            ganon_was_beaten = (flag_bytes[ganon_flag_offset] & 0x80 == 0x80)
-            game_clear = (current_room == ROOM_ZELDA_ENDING) and ganon_was_beaten
+        if ctx.slot_data is not None:
+            if ctx.slot_data["goal"] == OracleOfSeasonsGoal.option_beat_onox:
+                # Room with Din's descending crystal was reached, it's a win
+                game_clear = (current_room == ROOM_AFTER_DRAGONOX)
+            elif ctx.slot_data["goal"] == OracleOfSeasonsGoal.option_beat_ganon:
+                # Room with Zelda lying down was reached, and Ganon was beaten
+                ganon_flag_offset = 0xCA9A - RAM_ADDRS["location_flags"][0]
+                ganon_was_beaten = (flag_bytes[ganon_flag_offset] & 0x80 == 0x80)
+                game_clear = (current_room == ROOM_ZELDA_ENDING) and ganon_was_beaten
 
         if game_clear:
             await ctx.send_msgs([{
@@ -210,7 +211,7 @@ class OracleOfSeasonsClient(BizHawkClient):
     async def process_deathlink(self, ctx: "BizHawkClientContext", is_dead):
         if ctx.last_death_link > self.last_deathlink and not is_dead:
             # A death was received from another player, make our player die as well
-            await bizhawk.write(ctx.bizhawk_ctx, [(RAM_ADDRS["is_dead"][0], [0xFE], "System Bus")])
+            await bizhawk.write(ctx.bizhawk_ctx, [(RAM_ADDRS["received_item"][0], [0xFF], "System Bus")])
             self.is_expecting_received_death = True
             self.last_deathlink = ctx.last_death_link
 

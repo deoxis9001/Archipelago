@@ -942,7 +942,8 @@ def oos_season_in_tarm_ruins(state: CollectionState, player: int, season: str):
 
 
 def oos_season_in_horon_village(state: CollectionState, player: int, season: str):
-    if state.multiworld.worlds[player].options.horon_village_season == "chaotic":
+    # With vanilla behavior, you can randomly have any season inside Horon, making any season virtually accessible
+    if state.multiworld.worlds[player].options.horon_village_season == "vanilla":
         return True
     if oos_get_default_season(state, player, "HORON_VILLAGE") == season:
         return True

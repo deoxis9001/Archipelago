@@ -151,7 +151,7 @@ class OracleOfSeasonsWorld(World):
         slot_data["default_seasons"] = {}
         for region_name, season in self.default_seasons.items():
             slot_data["default_seasons"][REGIONS_CONVERSION_TABLE[region_name]] = season
-        if self.options.horon_village_season == "chaotic":
+        if self.options.horon_village_season == "vanilla":
             slot_data["default_seasons"][REGIONS_CONVERSION_TABLE["HORON_VILLAGE"]] = "chaotic"
 
         slot_data["dungeon_entrances"] = self.dungeon_entrances
@@ -533,7 +533,7 @@ class OracleOfSeasonsWorld(World):
 
         for region_name, season in self.default_seasons.items():
             yamlObj["default seasons"][REGIONS_CONVERSION_TABLE[region_name]] = season
-        if self.options.horon_village_season == "chaotic":
+        if self.options.horon_village_season == "vanilla":
             yamlObj["default seasons"][REGIONS_CONVERSION_TABLE["HORON_VILLAGE"]] = "chaotic"
 
         for region_name, value in self.old_man_rupee_values.items():

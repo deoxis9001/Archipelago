@@ -71,15 +71,15 @@ class OracleOfSeasonsHoronSeason(Choice):
     In the vanilla game, Horon Village default season is chaotic: every time you enter it, it sets a random season.
     This nullifies every condition where a season is required inside Horon Village, since you can leave and re-enter
     again and again until you get the season that suits you.
-    - Chaotic: vanilla behavior, which makes logic less interesting inside Horon Village and sometimes expects from
-      you to leave and re-enter town a dozen times until you get the right season
+    - Vanilla: season changes randomly everytime you enter Horon Village. This makes logic less interesting
+      and sometimes expects from you to leave and re-enter town a dozen times until you get the right season
     - Normalized: Horon Village behaves like any other region in the game (it has a default season that can be changed
       using Rod of Seasons)
     Setting this option to "Normalized" makes it follow the global behavior defined in "Default Seasons" option
     """
     display_name = "Horon Village Default Season"
 
-    option_chaotic = 0
+    option_vanilla = 0
     option_normalized = 1
 
     default = 1

@@ -151,6 +151,15 @@ ITEMS_DATA = {
         'id': 0x28,
         'subid': 0x06
     },
+    "Rupees (200)": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'id': 0x28,
+        'subid': 0x08
+    },
+    "Ore Chunks (50)": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'id': 0x37
+    },
     "Heart Container": {
         'classification': ItemClassification.useful,
         'id': 0x2a
@@ -222,42 +231,47 @@ ITEMS_DATA = {
     "Boss Key (Gnarled Root Dungeon)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x01
+        'subid': 0x00
     },
     "Boss Key (Snake's Remains)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x02
+        'subid': 0x01
     },
     "Boss Key (Poison Moth's Lair)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x03
+        'subid': 0x02
     },
     "Boss Key (Dancing Dragon Dungeon)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x04
+        'subid': 0x03
     },
     "Boss Key (Unicorn's Cave)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x05
+        'subid': 0x04
     },
     "Boss Key (Ancient Ruins)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x06
+        'subid': 0x05
     },
     "Boss Key (Explorer's Crypt)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x07
+        'subid': 0x06
     },
     "Boss Key (Sword & Shield Dungeon)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
-        'subid': 0x08
+        'subid': 0x07
+    },
+    "Compass (Hero's Cave)": {
+        'classification': ItemClassification.useful,
+        'id': 0x32,
+        'subid': 0x00
     },
     "Compass (Gnarled Root Dungeon)": {
         'classification': ItemClassification.useful,
@@ -298,6 +312,11 @@ ITEMS_DATA = {
         'classification': ItemClassification.useful,
         'id': 0x32,
         'subid': 0x08
+    },
+    "Dungeon Map (Hero's Cave)": {
+        'classification': ItemClassification.useful,
+        'id': 0x33,
+        'subid': 0x00
     },
     "Dungeon Map (Gnarled Root Dungeon)": {
         'classification': ItemClassification.useful,
@@ -432,6 +451,11 @@ ITEMS_DATA = {
     "Rusty Bell": {
         'classification': ItemClassification.progression,
         'id': 0x4a
+    },
+    "Pirate's Bell": {
+        'classification': ItemClassification.progression,
+        'id': 0x4a,
+        'subid': 0x02
     },
     "Treasure Map": {
         'classification': ItemClassification.useful,
@@ -911,20 +935,5 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'id': 0x40,
         'subid': 0x07
-    },
-
-    "Ore Chunks (50)": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'id': 0x37
-    },
-    "Pirate's Bell": {
-        'classification': ItemClassification.progression,
-        'id': 0x4a,
-        'subid': 0x02
-    },
-    "Rupees (200)": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'id': 0x28,
-        'subid': 0x08
     },
 }

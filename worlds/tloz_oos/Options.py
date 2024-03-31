@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, StartInventoryPool
 
 
 class OracleOfSeasonsGoal(Choice):
@@ -449,6 +449,7 @@ class OracleOfSeasonsCharacterPalette(Choice):
 
 @dataclass
 class OracleOfSeasonsOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     goal: OracleOfSeasonsGoal
     logic_difficulty: OracleOfSeasonsLogicDifficulty
     required_essences: OracleOfSeasonsRequiredEssences

@@ -518,7 +518,8 @@ class OracleOfSeasonsWorld(World):
             place_seed(seed, trees_to_process.pop())
 
     def get_filler_item_name(self) -> str:
-        return "Rupees (1)"
+        FILLER_ITEM_NAMES = ["Rupees (1)", "Rupees (5)", "Rupees (10)", "Rupees (20)", "Rupees (30)"]
+        return self.random.choice(FILLER_ITEM_NAMES)
 
     def generate_output(self, output_directory: str):
         yamlObj = {

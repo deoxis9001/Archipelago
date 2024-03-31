@@ -206,6 +206,27 @@ class OracleOfSeasonsGoldenOreSpotsShuffle(Choice):
     default = 0
 
 
+class OracleOfSeasonsSmallKeyShuffle(Toggle):
+    """
+    If enabled, dungeon Small Keys can be found anywhere instead of being confined in their dungeon of origin.
+    """
+    display_name = "Keysanity (Small Keys)"
+
+
+class OracleOfSeasonsBossKeyShuffle(Toggle):
+    """
+    If enabled, dungeon Boss Keys can be found anywhere instead of being confined in their dungeon of origin.
+    """
+    display_name = "Keysanity (Boss Keys)"
+
+
+class OracleOfSeasonsMapCompassShuffle(Toggle):
+    """
+    If enabled, Dungeon Maps and Compasses can be found anywhere instead of being confined in their dungeon of origin.
+    """
+    display_name = "Maps & Compasses Outside Dungeon"
+
+
 class OraclesOfSeasonsTreehouseOldManRequirement(Range):
     """
     The amount of essences that you need to bring to the treehouse old man for him to give his item.
@@ -440,6 +461,9 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
     shuffle_golden_ore_spots: OracleOfSeasonsGoldenOreSpotsShuffle
+    keysanity_small_keys: OracleOfSeasonsSmallKeyShuffle
+    keysanity_boss_keys: OracleOfSeasonsBossKeyShuffle
+    keysanity_maps_compasses: OracleOfSeasonsMapCompassShuffle
     treehouse_old_man_requirement: OraclesOfSeasonsTreehouseOldManRequirement
     tarm_gate_required_jewels: OraclesOfSeasonsTarmGateRequirement
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement

@@ -97,13 +97,6 @@ JEWELS = [
    "X-Shaped Jewel"
 ]
 
-DUNGEON_ITEMS = [
-    "Small Key",
-    "Boss Key",
-    "Compass",
-    "Dungeon Map"
-]
-
 VALID_RUPEE_VALUES = [
     0, 1, 2, 5, 10, 20, 25, 30, 40, 50, 60, 70, 80, 100, 200, 300, 400, 500, 900, 999
 ]
@@ -117,7 +110,7 @@ DAMAGE_MODIFIER_VALUES = {
 }
 
 ITEM_GROUPS = {
-    "Dungeon Items": [
+    "Small Keys": [
         "Small Key (Hero's Cave)",
         "Small Key (Gnarled Root Dungeon)",
         "Small Key (Snake's Remains)",
@@ -127,7 +120,8 @@ ITEM_GROUPS = {
         "Small Key (Ancient Ruins)",
         "Small Key (Explorer's Crypt)",
         "Small Key (Sword & Shield Dungeon)",
-
+    ],
+    "Boss Keys": [
         "Boss Key (Gnarled Root Dungeon)",
         "Boss Key (Snake's Remains)",
         "Boss Key (Poison Moth's Lair)",
@@ -136,7 +130,8 @@ ITEM_GROUPS = {
         "Boss Key (Ancient Ruins)",
         "Boss Key (Explorer's Crypt)",
         "Boss Key (Sword & Shield Dungeon)",
-
+    ],
+    "Compasses": [
         "Compass (Gnarled Root Dungeon)",
         "Compass (Snake's Remains)",
         "Compass (Poison Moth's Lair)",
@@ -145,7 +140,8 @@ ITEM_GROUPS = {
         "Compass (Ancient Ruins)",
         "Compass (Explorer's Crypt)",
         "Compass (Sword & Shield Dungeon)",
-
+    ],
+    "Dungeon Maps": [
         "Dungeon Map (Gnarled Root Dungeon)",
         "Dungeon Map (Snake's Remains)",
         "Dungeon Map (Poison Moth's Lair)",
@@ -154,7 +150,7 @@ ITEM_GROUPS = {
         "Dungeon Map (Ancient Ruins)",
         "Dungeon Map (Explorer's Crypt)",
         "Dungeon Map (Sword & Shield Dungeon)"
-    ],
+    ]
 }
 
 LOCATION_GROUPS = {

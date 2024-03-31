@@ -160,7 +160,15 @@ class OracleOfSeasonsWorld(World):
         return slot_data
 
     def generate_early(self):
-        self.options.non_local_items.value -= self.item_name_groups["Dungeon Items"]
+        # Restrict non_local_items option in cases where it's incompatible with other options that enforce items
+        # to be placed locally (e.g. dungeon items with keysanity off)
+        if not self.options.keysanity_small_keys:
+            self.options.non_local_items.value -= self.item_name_groups["Small Keys"]
+        if not self.options.keysanity_boss_keys:
+            self.options.non_local_items.value -= self.item_name_groups["Boss Keys"]
+        if not self.options.keysanity_maps_compasses:
+            self.options.non_local_items.value -= self.item_name_groups["Dungeon Maps"]
+            self.options.non_local_items.value -= self.item_name_groups["Compasses"]
 
         if self.options.default_seasons == "randomized":
             for region in self.default_seasons:
@@ -401,7 +409,11 @@ class OracleOfSeasonsWorld(World):
 
             if "Ring" in item_name:
                 ring_count += 1
-            elif any([(string in item_name) for string in DUNGEON_ITEMS]):
+            elif "Small Key" in item_name and not self.options.keysanity_small_keys:
+                self.dungeon_items.append(self.create_item(item_name))
+            elif "Boss Key" in item_name and not self.options.keysanity_boss_keys:
+                self.dungeon_items.append(self.create_item(item_name))
+            elif ("Compass" in item_name or "Dungeon Map" in item_name) and not self.options.keysanity_maps_compasses:
                 self.dungeon_items.append(self.create_item(item_name))
             else:
                 self.multiworld.itempool.append(self.create_item(item_name))
@@ -427,24 +439,33 @@ class OracleOfSeasonsWorld(World):
         self.pre_fill_dungeon_items()
 
     def pre_fill_dungeon_items(self):
-        # If keysanity is off, dungeon items can only be put inside local dungeon locations,
-        # and there are not so many of those which makes them pretty crowded.
+        # If keysanity is off, dungeon items can only be put inside local dungeon locations, and there are not so many
+        # of those which makes them pretty crowded.
         # This usually ends up with generator not having anywhere to place a few small keys, making the seed unbeatable.
-        # To circumvent this, we perform a restricted pre fill here, placing only those dungeon items
+        # To circumvent this, we perform a restricted pre-fill here, placing only those dungeon items
         # before anything else.
         collection_state = self.multiworld.get_all_state(False)
 
         for i in range(0, 9):
-            dungeon_location_names = [name for name, data in LOCATIONS_DATA.items() if "dungeon" in data and data["dungeon"] == i]
-            dungeon_locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.name in dungeon_location_names]
-            dungeon_items = [item for item in self.dungeon_items if item.name.endswith(f"({DUNGEON_NAMES[i]})")]
-            for item in dungeon_items:
+            # Build a list of locations in this dungeon
+            dungeon_location_names = [name for name, loc in LOCATIONS_DATA.items()
+                                      if "dungeon" in loc and loc["dungeon"] == i]
+            dungeon_locations = [loc for loc in self.multiworld.get_locations(self.player)
+                                 if loc.name in dungeon_location_names]
+
+            # Build a list of dungeon items that are "confined" (i.e. must be placed inside this dungeon)
+            # See `create_items` to see how `self.dungeon_items` is populated depending on current options.
+            confined_dungeon_items = [item for item in self.dungeon_items if item.name.endswith(f"({DUNGEON_NAMES[i]})")]
+            if len(confined_dungeon_items) == 0:
+                continue  # This list might be empty with some keysanity options
+            for item in confined_dungeon_items:
                 collection_state.remove(item)
 
+            # Perform a prefill to place confined items inside locations of this dungeon
             for attempts_remaining in range(2, -1, -1):
                 self.random.shuffle(dungeon_locations)
                 try:
-                    fill_restrictive(self.multiworld, collection_state, dungeon_locations, dungeon_items,
+                    fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
                                      single_player_placement=True, lock=True, allow_excluded=True)
                     break
                 except FillError as exc:

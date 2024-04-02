@@ -206,6 +206,24 @@ class OracleOfSeasonsGoldenOreSpotsShuffle(Choice):
     default = 0
 
 
+class OracleOfSeasonsMasterKeys(Choice):
+    """
+    - Disabled: All dungeon keys must be obtained individually, just like in vanilla
+    - All Small Keys: Small Keys are replaced by a single Master Key for each dungeon which is capable of opening
+      every small keydoor for that dungeon
+    - All Dungeon Keys: the Master Key for each dungeon is also capable of opening the boss keydoor,
+      removing Boss Keys from the item pool
+    Master Keys placement is determined following the "Keysanity (Small Keys)" option.
+    """
+    display_name = "Master Keys"
+
+    option_disabled = 0
+    option_all_small_keys = 1
+    option_all_dungeon_keys = 2
+
+    default = 0
+
+
 class OracleOfSeasonsSmallKeyShuffle(Toggle):
     """
     If enabled, dungeon Small Keys can be found anywhere instead of being confined in their dungeon of origin.
@@ -462,6 +480,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
     shuffle_golden_ore_spots: OracleOfSeasonsGoldenOreSpotsShuffle
+    master_keys: OracleOfSeasonsMasterKeys
     keysanity_small_keys: OracleOfSeasonsSmallKeyShuffle
     keysanity_boss_keys: OracleOfSeasonsBossKeyShuffle
     keysanity_maps_compasses: OracleOfSeasonsMapCompassShuffle

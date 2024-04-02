@@ -150,6 +150,17 @@ ITEM_GROUPS = {
         "Dungeon Map (Ancient Ruins)",
         "Dungeon Map (Explorer's Crypt)",
         "Dungeon Map (Sword & Shield Dungeon)"
+    ],
+    "Master Keys": [
+        "Master Key (Hero's Cave)",
+        "Master Key (Gnarled Root Dungeon)",
+        "Master Key (Snake's Remains)",
+        "Master Key (Poison Moth's Lair)",
+        "Master Key (Dancing Dragon Dungeon)",
+        "Master Key (Unicorn's Cave)",
+        "Master Key (Ancient Ruins)",
+        "Master Key (Explorer's Crypt)",
+        "Master Key (Sword & Shield Dungeon)",
     ]
 }
 

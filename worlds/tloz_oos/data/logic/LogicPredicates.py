@@ -117,11 +117,13 @@ def oos_has_gale_seeds(state: CollectionState, player: int):
 
 
 def oos_has_small_keys(state: CollectionState, player: int, dungeon_id: int, amount: int = 1):
-    return state.has(f"Small Key ({DUNGEON_NAMES[dungeon_id]})", player, amount)
+    return (state.has(f"Small Key ({DUNGEON_NAMES[dungeon_id]})", player, amount)
+            or state.has(f"Master Key ({DUNGEON_NAMES[dungeon_id]})", player))
 
 
 def oos_has_boss_key(state: CollectionState, player: int, dungeon_id: int):
-    return state.has(f"Boss Key ({DUNGEON_NAMES[dungeon_id]})", player)
+    return (state.has(f"Boss Key ({DUNGEON_NAMES[dungeon_id]})", player)
+            or state.has(f"Master Key ({DUNGEON_NAMES[dungeon_id]})", player))
 
 
 # Options and generation predicates ###########################################

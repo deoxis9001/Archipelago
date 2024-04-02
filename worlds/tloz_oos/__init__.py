@@ -371,17 +371,8 @@ class OracleOfSeasonsWorld(World):
 
         return Item(name, classification, ap_code, self.player)
 
-    def create_items(self):
-        item_pool_adjustements = [
-            ["Gasha Seed", "Seed Satchel"],     # Add a 3rd satchel that is usually obtained in linked games (99 seeds)
-            ["Gasha Seed", "Bombs (10)"],       # Add one more bomb compared to vanilla to reach 99 max bombs
-            ["Gasha Seed", "Rupees (200)"],     # Too many Gasha Seeds in vanilla pool, add more rupees and ore instead
-            ["Gasha Seed", "Ore Chunks (50)"],  # ^
-            ["Gasha Seed", "Ore Chunks (50)"],  # ^
-            ["Gasha Seed", "Ore Chunks (50)"],  # ^
-        ]
-
-        ring_count = 0
+    def build_item_pool_dict(self):
+        item_pool_dict = {}
         for loc_name, loc_data in LOCATIONS_DATA.items():
             if "randomized" in loc_data and loc_data["randomized"] is False:
                 item = self.create_item(loc_data['vanilla_item'])
@@ -394,31 +385,70 @@ class OracleOfSeasonsWorld(World):
                 continue
 
             item_name = loc_data['vanilla_item']
-            if item_name == "Ricky's Gloves":  # Ricky's gloves are useless in current logic
-                item_name = "Progressive Sword"
-            elif item_name == "Rod of Seasons":  # No lone rod of seasons supported for now
-                item_name = "Fool's Ore" if self.options.fools_ore != "excluded" else "Gasha Seed"
-            elif item_name == "Flute":
-                item_name = COMPANIONS[self.options.animal_companion.value] + "'s Flute"
-
-            for i, pair in enumerate(item_pool_adjustements):
-                if item_name == pair[0]:
-                    item_name = pair[1]
-                    del item_pool_adjustements[i]
-                    break
-
             if "Ring" in item_name:
-                ring_count += 1
-            elif "Small Key" in item_name and not self.options.keysanity_small_keys:
-                self.dungeon_items.append(self.create_item(item_name))
-            elif "Boss Key" in item_name and not self.options.keysanity_boss_keys:
-                self.dungeon_items.append(self.create_item(item_name))
-            elif ("Compass" in item_name or "Dungeon Map" in item_name) and not self.options.keysanity_maps_compasses:
-                self.dungeon_items.append(self.create_item(item_name))
-            else:
-                self.multiworld.itempool.append(self.create_item(item_name))
+                item_name = "Random Ring"
 
-        self.create_rings(ring_count)
+            item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
+
+        # Perform adjustments on the item pool
+        item_pool_adjustements = [
+            ["Flute", COMPANIONS[self.options.animal_companion.value] + "'s Flute"],  # Put a specific flute
+            ["Ricky's Gloves", "Progressive Sword"],    # Ricky's gloves are useless in current logic
+            ["Gasha Seed", "Seed Satchel"],             # Add a 3rd satchel that is usually obtained in linked games (99 seeds)
+            ["Gasha Seed", "Bombs (10)"],               # Add one more bomb compared to vanilla to reach 99 max bombs
+            ["Gasha Seed", "Rupees (200)"],             # Too many Gasha Seeds in vanilla pool, add more rupees and ore instead
+            ["Gasha Seed", "Ore Chunks (50)"],          # ^
+            ["Gasha Seed", "Ore Chunks (50)"],          # ^
+            ["Gasha Seed", "Ore Chunks (50)"],          # ^
+        ]
+
+        fools_ore_item = "Fool's Ore"
+        if self.options.fools_ore == OracleOfSeasonsFoolsOre.option_excluded:
+            fools_ore_item = "Gasha Seed"
+        item_pool_adjustements.append(["Rod of Seasons", fools_ore_item]) # No lone rod of seasons supported for now
+
+        for i, pair in enumerate(item_pool_adjustements):
+            original_name = pair[0]
+            replacement_name = pair[1]
+            item_pool_dict[original_name] -= 1
+            item_pool_dict[replacement_name] = item_pool_dict.get(replacement_name, 0) + 1
+
+        # If Master Keys replace Small Keys, remove all Small Keys but one for every dungeon
+        removed_keys = 0
+        if self.options.master_keys != OracleOfSeasonsMasterKeys.option_disabled:
+            for small_key_name in ITEM_GROUPS["Small Keys"]:
+                removed_keys += item_pool_dict[small_key_name] - 1
+                del item_pool_dict[small_key_name]
+            for small_key_name in ITEM_GROUPS["Master Keys"]:
+                item_pool_dict[small_key_name] = 1
+        # If Master Keys replace Boss Keys, remove Boss Keys from item pool
+        if self.options.master_keys == OracleOfSeasonsMasterKeys.option_all_dungeon_keys:
+            for boss_key_name in ITEM_GROUPS["Boss Keys"]:
+                removed_keys += 1
+                del item_pool_dict[boss_key_name]
+        for i in range(removed_keys):
+            random_filler_item = self.get_filler_item_name()
+            item_pool_dict[random_filler_item] = item_pool_dict.get(random_filler_item, 0) + 1
+
+        return item_pool_dict
+
+    def create_items(self):
+        item_pool_dict = self.build_item_pool_dict()
+
+        # Create items following the dictionary that was previously constructed
+        self.create_rings(item_pool_dict["Random Ring"])
+        del item_pool_dict["Random Ring"]
+
+        for item_name, quantity in item_pool_dict.items():
+            for i in range(quantity):
+                if ("Small Key" in item_name or "Master Key" in item_name) and not self.options.keysanity_small_keys:
+                    self.dungeon_items.append(self.create_item(item_name))
+                elif "Boss Key" in item_name and not self.options.keysanity_boss_keys:
+                    self.dungeon_items.append(self.create_item(item_name))
+                elif ("Compass" in item_name or "Dungeon Map" in item_name) and not self.options.keysanity_maps_compasses:
+                    self.dungeon_items.append(self.create_item(item_name))
+                else:
+                    self.multiworld.itempool.append(self.create_item(item_name))
 
     def create_rings(self, amount):
         # Get a subset of as many rings as needed, with a potential filter on quality depending on chosen options
@@ -518,7 +548,10 @@ class OracleOfSeasonsWorld(World):
             place_seed(seed, trees_to_process.pop())
 
     def get_filler_item_name(self) -> str:
-        FILLER_ITEM_NAMES = ["Rupees (1)", "Rupees (5)", "Rupees (10)", "Rupees (20)", "Rupees (30)"]
+        FILLER_ITEM_NAMES = [
+            "Rupees (1)", "Rupees (5)", "Rupees (10)", "Rupees (20)", "Rupees (30)", "Rupees (50)",
+            "Ore Chunks (50)", "Gasha Seed", "Potion"
+        ]
         return self.random.choice(FILLER_ITEM_NAMES)
 
     def generate_output(self, output_directory: str):
@@ -539,6 +572,7 @@ class OracleOfSeasonsWorld(World):
                 "sign_guy_requirement": self.options.sign_guy_requirement.value,
                 "tarm_gate_required_jewels": self.options.tarm_gate_required_jewels.value,
                 "reveal_golden_ore_tiles": self.options.shuffle_golden_ore_spots == "shuffled_visible",
+                "master_keys": self.options.master_keys.current_key,
                 "quick_flute": self.options.quick_flute.current_key,
                 "open_advance_shop": self.options.advance_shop.current_key,
                 "character_sprite": self.options.character_sprite.current_key,

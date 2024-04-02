@@ -228,6 +228,51 @@ ITEMS_DATA = {
         'id': 0x30,
         'subid': 0x07
     },
+    "Master Key (Hero's Cave)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x00
+    },
+    "Master Key (Gnarled Root Dungeon)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x01
+    },
+    "Master Key (Snake's Remains)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x02
+    },
+    "Master Key (Poison Moth's Lair)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x03
+    },
+    "Master Key (Dancing Dragon Dungeon)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x04
+    },
+    "Master Key (Unicorn's Cave)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x05
+    },
+    "Master Key (Ancient Ruins)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x06
+    },
+    "Master Key (Explorer's Crypt)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x07
+    },
+    "Master Key (Sword & Shield Dungeon)": {
+        'classification': ItemClassification.progression,
+        'id': 0x30,
+        'subid': 0x07
+    },
     "Boss Key (Gnarled Root Dungeon)": {
         'classification': ItemClassification.progression,
         'id': 0x31,
@@ -718,7 +763,7 @@ ITEMS_DATA = {
         'ring': True
     },
     "Quicksand Ring": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.useful,
         'id': 0x2d,
         'subid': 0x27,
         'ring': True

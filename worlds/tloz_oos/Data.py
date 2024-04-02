@@ -30,13 +30,6 @@ def build_item_id_to_name_dict() -> Dict[int, str]:
     return item_id_to_name
 
 
-def find_patcher_name_for_location(pretty_name: str):
-    for loc_name, data in LOCATIONS_DATA.items():
-        if loc_name == pretty_name:
-            return data["patcher_name"] if "patcher_name" in data else ""
-    raise "Could not find patcher name for unknown location '" + pretty_name + "'"
-
-
 def get_prices_pool():
     prices_pool = [300]                 # 1%
     prices_pool.extend([200] * 7)       # 8%

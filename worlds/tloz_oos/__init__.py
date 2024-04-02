@@ -5,11 +5,13 @@ import yaml
 
 from BaseClasses import Tutorial, Region, Location, LocationProgressType
 from Fill import fill_restrictive, FillError
+from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from .Data import *
 from worlds.tloz_oos.data.Items import *
 from .Logic import create_connections, apply_self_locking_rules
 from .Options import *
+from .PatcherDataWriter import write_patcherdata_file
 from .data import LOCATIONS_DATA
 from .data.Constants import *
 from .data.Regions import REGIONS
@@ -59,75 +61,13 @@ class OracleOfSeasonsWorld(World):
         super().__init__(multiworld, player)
         self.pre_fill_items = []
         self.dungeon_items = []
-        self.default_seasons = {
-            "EYEGLASS_LAKE": "winter",
-            "NORTH_HORON": "spring",
-            "EASTERN_SUBURBS": "autumn",
-            "WOODS_OF_WINTER": "summer",
-            "SUNKEN_CITY": "summer",
-            "WESTERN_COAST": "winter",
-            "SPOOL_SWAMP": "autumn",
-            "TEMPLE_REMAINS": "winter",
-            "LOST_WOODS": "autumn",
-            "TARM_RUINS": "spring",
-            "HORON_VILLAGE": "spring"
-        }
-        self.dungeon_entrances = {
-            "d1 entrance": "enter d1",
-            "d2 entrance": "enter d2",
-            "d3 entrance": "enter d3",
-            "d4 entrance": "enter d4",
-            "d5 entrance": "enter d5",
-            "d6 entrance": "enter d6",
-            "d7 entrance": "enter d7",
-            "d8 entrance": "enter d8",
-        }
-        self.portal_connections = {
-            "eastern suburbs portal": "subrosia portal 1",
-            "spool swamp portal": "subrosia portal 2",
-            "mt. cucco portal": "subrosia portal 3",
-            "horon village portal": "subrosia portal 4",
-            "eyeglass lake portal": "subrosia portal 5",
-            "temple remains lower portal": "subrosia portal 6",
-            "temple remains upper portal": "subrosia portal 7",
-        }
-        self.lost_woods_item_sequence = [
-            "winter", "left",
-            "autumn", "left",
-            "spring", "left",
-            "summer", "left"
-        ]
-        self.old_man_rupee_values = {
-            "old man in horon": 100,
-            "old man near d1": 100,
-            "old man near blaino": 200,
-            "old man in goron mountain": 300,
-            "old man near western coast house": 300,
-            "old man near holly's house": -50,
-            "old man near mrs. ruul": -100,
-            "old man near d6": -200
-        }
-
-        self.samasa_gate_code = [2, 2, 1, 0, 0, 3, 3, 3]
-
-        self.shop_prices = {
-            "horon shop 1": 1,
-            "horon shop 2": 1,
-            "horon shop 3": 1,
-            "member shop 1": 1,
-            "member shop 2": 1,
-            "member shop 3": 1,
-            "advance shop 1": 1,
-            "advance shop 2": 1,
-            "advance shop 3": 1,
-            "syrup shop 1": 1,
-            "syrup shop 2": 1,
-            "syrup shop 3": 1,
-            "subrosian market 2": 2,
-            "subrosian market 3": 2,
-            "subrosian market 4": 2,
-            "subrosian market 5": 2,
-        }
+        self.default_seasons = DEFAULT_SEASONS.copy()
+        self.dungeon_entrances = DUNGEON_ENTRANCES.copy()
+        self.portal_connections = PORTAL_CONNECTIONS.copy()
+        self.lost_woods_item_sequence = LOST_WOODS_ITEM_SEQUENCE.copy()
+        self.old_man_rupee_values = OLD_MAN_RUPEE_VALUES.copy()
+        self.samasa_gate_code = SAMASA_GATE_CODE.copy()
+        self.shop_prices = SHOP_PRICES_DIVIDERS.copy()
 
     def fill_slot_data(self) -> dict:
         # Put options that are useful to the tracker inside slot data
@@ -160,6 +100,34 @@ class OracleOfSeasonsWorld(World):
         return slot_data
 
     def generate_early(self):
+        self.restrict_non_local_items()
+        self.randomize_default_seasons()
+        self.randomize_old_men()
+
+        if self.options.shuffle_dungeons == "shuffle":
+            shuffled_entrances = list(self.dungeon_entrances.values())
+            self.random.shuffle(shuffled_entrances)
+            self.dungeon_entrances = dict(zip(self.dungeon_entrances, shuffled_entrances))
+
+        if self.options.shuffle_portals == "shuffle":
+            self.shuffle_portals()
+
+        if self.options.lost_woods_item_sequence == "randomized":
+            # Pick 4 random seasons & directions (no direction can be "right", and last one has to be "left")
+            authorized_directions = [direction for direction in DIRECTIONS if direction != "right"]
+            self.lost_woods_item_sequence = []
+            for i in range(4):
+                self.lost_woods_item_sequence.append(self.random.choice(SEASONS))
+                self.lost_woods_item_sequence.append(self.random.choice(authorized_directions) if i < 3 else "left")
+
+        if self.options.samasa_gate_code == "randomized":
+            self.samasa_gate_code = []
+            for i in range(self.options.samasa_gate_code_length.value):
+                self.samasa_gate_code.append(self.random.randint(0, 3))
+
+        self.randomize_shop_prices()
+
+    def restrict_non_local_items(self):
         # Restrict non_local_items option in cases where it's incompatible with other options that enforce items
         # to be placed locally (e.g. dungeon items with keysanity off)
         if not self.options.keysanity_small_keys:
@@ -170,44 +138,36 @@ class OracleOfSeasonsWorld(World):
             self.options.non_local_items.value -= self.item_name_groups["Dungeon Maps"]
             self.options.non_local_items.value -= self.item_name_groups["Compasses"]
 
+    def randomize_default_seasons(self):
         if self.options.default_seasons == "randomized":
             for region in self.default_seasons:
                 self.default_seasons[region] = self.random.choice(SEASONS)
         elif self.options.default_seasons.current_key.endswith("singularity"):
-            singularities = {
-                "random_singularity": self.random.choice(SEASONS),
-                "spring_singularity": "spring",
-                "summer_singularity": "summer",
-                "winter_singularity": "winter",
-                "autumn_singularity": "autumn",
-            }
-            single_season = singularities[self.options.default_seasons.current_key]
+            single_season = self.options.default_seasons.current_key.replace("_singularity", "")
+            if single_season == "random":
+                single_season = self.random.choice(SEASONS)
             for region in self.default_seasons:
                 self.default_seasons[region] = single_season
 
-        if self.options.shuffle_dungeons == "shuffle":
-            shuffled_entrances = list(self.dungeon_entrances.values())
-            self.random.shuffle(shuffled_entrances)
-            self.dungeon_entrances = dict(zip(self.dungeon_entrances, shuffled_entrances))
+    def shuffle_portals(self):
+        shuffled_portals = list(self.portal_connections.values())
+        self.random.shuffle(shuffled_portals)
+        self.portal_connections = dict(zip(self.portal_connections, shuffled_portals))
 
-        if self.options.shuffle_portals == "shuffle":
-            def shuffle_portals():
-                shuffled_portals = list(self.portal_connections.values())
-                self.random.shuffle(shuffled_portals)
-                self.portal_connections = dict(zip(self.portal_connections, shuffled_portals))
-            shuffle_portals()
-            while self.portal_connections["temple remains upper portal"] == "subrosia portal 6":
-                shuffle_portals()
+        # If accessibility is not locations, don't perform any check on what was randomly picked
+        if self.options.accessibility != Accessibility.option_locations:
+            return
 
-        if self.options.lost_woods_item_sequence == "randomized":
-            authorized_directions = [direction for direction in DIRECTIONS if direction != "right"]
-            self.lost_woods_item_sequence = [
-                self.random.choice(SEASONS), self.random.choice(authorized_directions),
-                self.random.choice(SEASONS), self.random.choice(authorized_directions),
-                self.random.choice(SEASONS), self.random.choice(authorized_directions),
-                self.random.choice(SEASONS), "left"
-            ]
+        # If accessibility IS locations, we need to ensure that Temple Remains upper portal doesn't lead to the volcano
+        # that can be triggered to open Temple Remains cave, since it would make it unreachable forever.
+        # In that case, just swap it with a random other portal.
+        if self.portal_connections["temple remains upper portal"] == "subrosia portal 6":
+            other_portals = [key for key in PORTAL_CONNECTIONS.keys() if key != "temple remains upper portal"]
+            portal_to_swap = self.random.choice(other_portals)
+            self.portal_connections["temple remains upper portal"] = self.portal_connections[portal_to_swap]
+            self.portal_connections[portal_to_swap] = "subrosia portal 6"
 
+    def randomize_old_men(self):
         if self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_shuffled_values:
             shuffled_rupees = list(self.old_man_rupee_values.values())
             self.random.shuffle(shuffled_rupees)
@@ -219,13 +179,6 @@ class OracleOfSeasonsWorld(World):
         elif self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_random_positive_values:
             for key in self.old_man_rupee_values.keys():
                 self.old_man_rupee_values[key] = self.random.choice(get_old_man_values_pool())
-
-        if self.options.samasa_gate_code == "randomized":
-            self.samasa_gate_code = []
-            for i in range(self.options.samasa_gate_code_length.value):
-                self.samasa_gate_code.append(self.random.randint(0, 3))
-
-        self.randomize_shop_prices()
 
     def randomize_shop_prices(self):
         prices_pool = get_prices_pool()
@@ -247,17 +200,6 @@ class OracleOfSeasonsWorld(World):
             return self.options.advance_shop.value
         if region_id.startswith("subrosia") and region_id.endswith("digging spot"):
             return self.options.shuffle_golden_ore_spots != "vanilla"
-
-        RUPEE_OLD_MAN_LOCATIONS = [
-            "Horon Village: Old Man",
-            "North Horon: Old Man Near D1",
-            "Holodrum Plain: Old Man Near Blaino's Gym",
-            "Goron Mountain: Old Man",
-            "Western Coast: Old Man",
-            "Woods of Winter: Old Man",
-            "Holodrum Plain: Old Man Near Mrs. Ruul's House",
-            "Tarm Ruins: Old Man Near D6"
-        ]
         if location_name in RUPEE_OLD_MAN_LOCATIONS:
             return self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_turn_into_locations
 
@@ -304,7 +246,6 @@ class OracleOfSeasonsWorld(World):
 
         self.create_event("maple trade", "Ghastly Doll")
         self.create_event("spool stump", "_reached_spool_stump")
-        self.create_event("bomb temple remains", "_triggered_volcano")
         self.create_event("temple remains lower stump", "_reached_remains_stump")
         self.create_event("temple remains upper stump", "_reached_remains_stump")
         self.create_event("d1 stump", "_reached_eyeglass_stump")
@@ -323,6 +264,11 @@ class OracleOfSeasonsWorld(World):
         self.create_event("d8 NE crystal", "_dropped_d8_NE_crystal")
         self.create_event("d2 rupee room", "_reached_d2_rupee_room")
         self.create_event("d6 rupee room", "_reached_d6_rupee_room")
+
+        # Don't create an event for the triggerable volcano in Subrosia if portals layout make it unreachable, since
+        # events are technically progression and generator doesn't like locked progression. At all.
+        if self.portal_connections["temple remains upper portal"] != "subrosia portal 6":
+            self.create_event("bomb temple remains", "_triggered_volcano")
 
         self.create_event("golden darknut", "_beat_golden_darknut")
         self.create_event("golden lynel", "_beat_golden_lynel")
@@ -351,6 +297,11 @@ class OracleOfSeasonsWorld(World):
                     locations_to_exclude.append("Horon Village: Item Inside Maku Tree (3+ Essences)")
         if self.options.required_essences < self.options.treehouse_old_man_requirement:
             locations_to_exclude.append("Holodrum Plain: Old Man in Treehouse")
+
+        # If Temple Remains upper portal is connected to triggerable volcano portal in Subrosia, this makes a check
+        # in the bombable cave of Temple Remains unreachable forever. Exclude it in such conditions.
+        if self.portal_connections["temple remains upper portal"] == "subrosia portal 6":
+            locations_to_exclude.append("Temple Remains: Item in Cave Behind Rockslide")
 
         for name in locations_to_exclude:
             self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.EXCLUDED
@@ -555,72 +506,7 @@ class OracleOfSeasonsWorld(World):
         return self.random.choice(FILLER_ITEM_NAMES)
 
     def generate_output(self, output_directory: str):
-        yamlObj = {
-            "settings": {
-                "game": "seasons",
-                "version": VERSION,
-                "goal": self.options.goal.current_key,
-                "companion": COMPANIONS[self.options.animal_companion.value],
-                "warp_to_start": self.options.warp_to_start.current_key,
-                "required_essences": self.options.required_essences.value,
-                "fools_ore_damage": 3 if self.options.fools_ore == "balanced" else 12,
-                "heart_beep_interval": self.options.heart_beep_interval.current_key,
-                "lost_woods_item_sequence": ' '.join(self.lost_woods_item_sequence),
-                "samasa_gate_sequence": ' '.join([str(x) for x in self.samasa_gate_code]),
-                "golden_beasts_requirement": self.options.golden_beasts_requirement.value,
-                "treehouse_old_man_requirement": self.options.treehouse_old_man_requirement.value,
-                "sign_guy_requirement": self.options.sign_guy_requirement.value,
-                "tarm_gate_required_jewels": self.options.tarm_gate_required_jewels.value,
-                "reveal_golden_ore_tiles": self.options.shuffle_golden_ore_spots == "shuffled_visible",
-                "master_keys": self.options.master_keys.current_key,
-                "quick_flute": self.options.quick_flute.current_key,
-                "open_advance_shop": self.options.advance_shop.current_key,
-                "character_sprite": self.options.character_sprite.current_key,
-                "character_palette": self.options.character_palette.current_key,
-                "turn_old_men_into_locations": self.options.shuffle_old_men == "turn_into_locations",
-                "received_damage_modifier": DAMAGE_MODIFIER_VALUES[self.options.combat_difficulty.current_key],
-                "slot_name": self.multiworld.get_player_name(self.player)
-             },
-            "default seasons": {},
-            "old man rupee values": {},
-            "locations": {},
-            "shop prices": self.shop_prices
-        }
-
-        for region_name, season in self.default_seasons.items():
-            yamlObj["default seasons"][REGIONS_CONVERSION_TABLE[region_name]] = season
-        if self.options.horon_village_season == "vanilla":
-            yamlObj["default seasons"][REGIONS_CONVERSION_TABLE["HORON_VILLAGE"]] = "chaotic"
-
-        for region_name, value in self.old_man_rupee_values.items():
-            yamlObj["old man rupee values"][region_name] = value
-
-        if self.options.shuffle_dungeons != "vanilla":
-            yamlObj["dungeon entrances"] = {}
-            for entrance, dungeon in self.dungeon_entrances.items():
-                yamlObj["dungeon entrances"][entrance] = dungeon.replace("enter ", "")
-
-        if self.options.shuffle_portals != "vanilla":
-            yamlObj["subrosia portals"] = {}
-            for portal_holo, portal_sub in self.portal_connections.items():
-                yamlObj["subrosia portals"][PORTALS_CONVERSION_TABLE[portal_holo]] = PORTALS_CONVERSION_TABLE[portal_sub]
-
-        for loc in self.multiworld.get_locations(self.player):
-            if loc.address is None:
-                continue
-            if loc.item.player == loc.player:
-                item_name = loc.item.name
-            elif loc.item.classification in [ItemClassification.progression, ItemClassification.progression_skip_balancing]:
-                item_name = "Archipelago Progression Item"
-            else:
-                item_name = "Archipelago Item"
-            loc_patcher_name = find_patcher_name_for_location(loc.name)
-            if loc_patcher_name != "":
-                yamlObj["locations"][loc_patcher_name] = item_name
-
-        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.patcherdata"
-        with open(os.path.join(output_directory, filename), 'w') as f:
-            yaml.dump(yamlObj, f)
+        write_patcherdata_file(self, output_directory)
 
     def write_spoiler(self, spoiler_handle):
         spoiler_handle.write(f"\n\nDefault Seasons ({self.multiworld.player_name[self.player]}):\n")

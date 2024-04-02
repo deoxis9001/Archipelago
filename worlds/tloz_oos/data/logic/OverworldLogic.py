@@ -34,7 +34,7 @@ def make_holodrum_logic(player: int):
         ])],
 
         ["horon village", "maple trade", False, lambda state: all([
-            oos_can_kill_normal_enemy(state, player),
+            oos_can_meet_maple(state, player),
             any([
                 state.has("Lon Lon Egg", player),
                 oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")

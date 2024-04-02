@@ -872,6 +872,10 @@ def oos_can_remove_rockslide(state: CollectionState, player: int, can_summon_com
     return oos_has_bombs(state, player) or (can_summon_companion and oos_can_summon_ricky(state, player))
 
 
+def oos_can_meet_maple(state: CollectionState, player: int):
+    return oos_can_kill_normal_enemy(state, player)
+
+
 # Season in region predicates ##########################################
 
 def oos_season_in_spool_swamp(state: CollectionState, player: int, season: str):
@@ -951,6 +955,8 @@ def oos_season_in_horon_village(state: CollectionState, player: int, season: str
         return True
     return oos_has_season(state, player, season)
 
+
+# Self-locking items helper predicates ##########################################
 
 def oos_self_locking_item(state: CollectionState, player: int, region_name: str, item_name: str):
     if state.multiworld.worlds[player].options.accessibility == Accessibility.option_locations:

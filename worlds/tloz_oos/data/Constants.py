@@ -109,6 +109,91 @@ DAMAGE_MODIFIER_VALUES = {
     "insane": 4,
 }
 
+DEFAULT_SEASONS = {
+    "EYEGLASS_LAKE": "winter",
+    "NORTH_HORON": "spring",
+    "EASTERN_SUBURBS": "autumn",
+    "WOODS_OF_WINTER": "summer",
+    "SUNKEN_CITY": "summer",
+    "WESTERN_COAST": "winter",
+    "SPOOL_SWAMP": "autumn",
+    "TEMPLE_REMAINS": "winter",
+    "LOST_WOODS": "autumn",
+    "TARM_RUINS": "spring",
+    "HORON_VILLAGE": "spring"
+}
+
+DUNGEON_ENTRANCES = {
+    "d1 entrance": "enter d1",
+    "d2 entrance": "enter d2",
+    "d3 entrance": "enter d3",
+    "d4 entrance": "enter d4",
+    "d5 entrance": "enter d5",
+    "d6 entrance": "enter d6",
+    "d7 entrance": "enter d7",
+    "d8 entrance": "enter d8",
+}
+
+PORTAL_CONNECTIONS = {
+    "eastern suburbs portal": "subrosia portal 1",
+    "spool swamp portal": "subrosia portal 2",
+    "mt. cucco portal": "subrosia portal 3",
+    "horon village portal": "subrosia portal 4",
+    "eyeglass lake portal": "subrosia portal 5",
+    "temple remains lower portal": "subrosia portal 6",
+    "temple remains upper portal": "subrosia portal 7",
+}
+
+LOST_WOODS_ITEM_SEQUENCE = [
+    "winter", "left",
+    "autumn", "left",
+    "spring", "left",
+    "summer", "left"
+]
+
+OLD_MAN_RUPEE_VALUES = {
+    "old man in horon": 100,
+    "old man near d1": 100,
+    "old man near blaino": 200,
+    "old man in goron mountain": 300,
+    "old man near western coast house": 300,
+    "old man near holly's house": -50,
+    "old man near mrs. ruul": -100,
+    "old man near d6": -200
+}
+
+RUPEE_OLD_MAN_LOCATIONS = [
+    "Horon Village: Old Man",
+    "North Horon: Old Man Near D1",
+    "Holodrum Plain: Old Man Near Blaino's Gym",
+    "Goron Mountain: Old Man",
+    "Western Coast: Old Man",
+    "Woods of Winter: Old Man",
+    "Holodrum Plain: Old Man Near Mrs. Ruul's House",
+    "Tarm Ruins: Old Man Near D6"
+]
+
+SAMASA_GATE_CODE = [2, 2, 1, 0, 0, 3, 3, 3]
+
+SHOP_PRICES_DIVIDERS = {
+    "horon shop 1": 1,
+    "horon shop 2": 1,
+    "horon shop 3": 1,
+    "member shop 1": 1,
+    "member shop 2": 1,
+    "member shop 3": 1,
+    "advance shop 1": 1,
+    "advance shop 2": 1,
+    "advance shop 3": 1,
+    "syrup shop 1": 1,
+    "syrup shop 2": 1,
+    "syrup shop 3": 1,
+    "subrosian market 2": 2,
+    "subrosian market 3": 2,
+    "subrosian market 4": 2,
+    "subrosian market 5": 2,
+}
+
 ITEM_GROUPS = {
     "Small Keys": [
         "Small Key (Hero's Cave)",

@@ -7,7 +7,11 @@ def make_d0_logic(player: int):
 
         # 0 keys
         ["enter d0", "d0 key chest", False, None],
-        ["enter d0", "d0 rupee chest", False, lambda state: oos_can_break_bush(state, player, True)],
+        ["enter d0", "d0 rupee chest", False, lambda state: any([
+            oos_can_break_bush(state, player, True),
+            # If hole is removed, stairs are added inside dungeon to make the chest reachable
+            oos_option_no_d0_alt_entrance(state, player)
+        ])],
         ["enter d0", "d0 hidden 2d section", False, lambda state: any([
             oos_can_kill_normal_enemy(state, player),
             all([

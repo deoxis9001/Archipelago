@@ -231,6 +231,24 @@ class OracleOfSeasonsSmallKeyShuffle(Toggle):
     display_name = "Keysanity (Small Keys)"
 
 
+class OracleOfSeasonsD0AltEntrance(Toggle):
+    """
+    If enabled, remove the hole acting as an alternate entrance to Hero’s Cave. Stairs will be added inside the dungeon to make the chest reachable.
+    This is especially useful when shuffling dungeons, since only main dungeon entrances are shuffled.
+    If this option is not set in such a case, you could potentially have two distant entrances leading to the same dungeon.
+    """
+    display_name = "Remove Hero's Cave Alt. Entrance"
+
+
+class OracleOfSeasonsD2AltEntrance(Toggle):
+    """
+    If enabled, remove both stairs acting as alternate entrances to Snake’s Remains and connect them together inside the dungeon.
+    This is especially useful when shuffling dungeons, since only main dungeon entrances are shuffled.
+    If this option is not set in such a case, you could potentially have two distant entrances leading to the same dungeon.
+    """
+    display_name = "Remove D2 Alt. Entrance"
+
+
 class OracleOfSeasonsBossKeyShuffle(Toggle):
     """
     If enabled, dungeon Boss Keys can be found anywhere instead of being confined in their dungeon of origin.
@@ -477,6 +495,8 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     default_seed: OracleOfSeasonsDefaultSeedType
     duplicate_seed_tree: OracleOfSeasonsDuplicateSeedTree
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
+    remove_d0_alt_entrance: OracleOfSeasonsD0AltEntrance
+    remove_d2_alt_entrance: OracleOfSeasonsD2AltEntrance
     shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
     shuffle_golden_ore_spots: OracleOfSeasonsGoldenOreSpotsShuffle

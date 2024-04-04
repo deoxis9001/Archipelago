@@ -124,6 +124,7 @@ DEFAULT_SEASONS = {
 }
 
 DUNGEON_ENTRANCES = {
+    "d0 entrance": "enter d0",
     "d1 entrance": "enter d1",
     "d2 entrance": "enter d2",
     "d3 entrance": "enter d3",

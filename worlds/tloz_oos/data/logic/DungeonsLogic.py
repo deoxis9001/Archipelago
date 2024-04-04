@@ -3,8 +3,6 @@ from worlds.tloz_oos.data.logic.LogicPredicates import *
 
 def make_d0_logic(player: int):
     return [
-        ["d0 entrance", "enter d0", True, None],
-
         # 0 keys
         ["enter d0", "d0 key chest", False, None],
         ["enter d0", "d0 rupee chest", False, lambda state: any([

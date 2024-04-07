@@ -29,7 +29,7 @@ class OracleOfSeasonsWeb(WebWorld):
         ["Dinopony"]
     )
     
-    setup_en = Tutorial(
+    setup_fr = Tutorial(
         "Guide de configuration MultiWorld",
         "Un guide pour configurer Oracle of Seasons d'Archipelago sur votre PC.",
         "Français",

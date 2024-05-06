@@ -21,4 +21,4 @@ Lorsque vous le récupérez, le jeu vous informe que vous venez d'envoyer un obj
 
 ## Changements par rapport au jeu vanille
 
-- Si cette option est activée, vous pouvez vous rendre au point de départ en maintenant la touche Start enfoncée tout en quittant le menu de la carte.
+- Si cette option est activée, vous pouvez vous rendre au point de départ en maintenant les touches A+B enfoncées, puis en appuyant sur la touche start ou select.
